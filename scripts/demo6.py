@@ -55,8 +55,9 @@ def classify_fo(status, headers, set_cookie_str):
     return "FO_REJECT_OR_DEGRADE"
 
 
-async def fetch_page_async(asession, sn, cookies=None, timeout=20):
-    """异步单页请求。返回 (status, blocked, meta, content)。"""
+async def fetch_page_async(asession, sn, cookies=None, timeout=10):
+    """异步单页请求。返回 (status, blocked, meta, content)。
+    timeout 默认 10s：挂起（CF silent drop）快速判定，不做 20s 空耗。"""
     h = {
         "User-Agent": UA_FF,
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
@@ -222,7 +223,8 @@ async def main_async(args):
         f"恢复窗口 {args.recover_age}s，求解上限 {args.max_solves}", "step")
 
     while total < args.count and solves <= args.max_solves:
-        st, blocked, meta, content = await fetch_page_async(asess, sn_cursor, cookies=ck)
+        st, blocked, meta, content = await fetch_page_async(
+            asess, sn_cursor, cookies=ck, timeout=args.request_timeout)
         total += 1
         stats[st] = stats.get(st, 0) + 1
         sn = sn_cursor
@@ -234,10 +236,27 @@ async def main_async(args):
             meta_s = "  ".join(f"{k}={v}" for k, v in meta.items() if v) or "（无诊断头）"
             log(f"[{total}/{args.count}] {sn}: {st} 被拦（本段 {streaks[-1]} 通过）| {meta_s}", "bad")
             if len(content) < 1000:
-                log("连接级异常（无挑战页），冷却 60s 重建会话", "bad")
-                await asyncio.sleep(60)
+                # 连接级异常（挂起/断开）：立即重建会话重试一次，仍异常才冷却
+                log("连接级异常（无挑战页），重建会话立即重试", "bad")
                 asess = AsyncSession(impersonate=IMPERSONATE)
-                continue
+                st2, blocked2, meta2, content2 = await fetch_page_async(
+                    asess, sn, cookies=ck, timeout=args.request_timeout)
+                total += 1
+                stats[st2] = stats.get(st2, 0) + 1
+                if not blocked2:
+                    segment_passes += 1
+                    log(f"[{total}/{args.count}] {sn}: {st2} 通过（重试恢复）", "ok")
+                    await asyncio.sleep(args.skip_gap if st2 == 404 else args.gap)
+                    continue
+                if blocked2 and len(content2) >= 1000:
+                    # 重试撞上挑战页：转入下方求解流程（不重复统计段）
+                    log(f"重试 {sn}: {st2} 挑战页，转入求解", "bad")
+                    content, meta, st = content2, meta2, st2
+                else:
+                    log(f"重试仍连接异常，冷却 {args.abort_cooldown:.0f}s", "bad")
+                    await asyncio.sleep(args.abort_cooldown)
+                    asess = AsyncSession(impersonate=IMPERSONATE)
+                    continue
             # 求解：触发会话即用即弃（bridge 会污染其 jar，采集中止不用它）
             if solves >= args.max_solves:
                 break
@@ -265,7 +284,9 @@ async def main_async(args):
 
         segment_passes += 1
         if st == 404:
+            # 404 也带微间隔：无间隔连发 micro-burst 会诱发连接级惩罚
             log(f"[{total}/{args.count}] {sn}: 404 跳过，直接下一个", "info")
+            await asyncio.sleep(args.skip_gap)
             continue
         log(f"[{total}/{args.count}] {sn}: {st} 通过", "ok")
         await asyncio.sleep(args.gap)
@@ -299,8 +320,14 @@ def main():
     parser = argparse.ArgumentParser(description="生产级异步采集（bridge 求解 + 会话分离）")
     parser.add_argument("--count", type=int, default=60, help="目标请求总数")
     parser.add_argument("--gap", type=float, default=0.1, help="采集请求间隔（秒）")
+    parser.add_argument("--skip-gap", type=float, default=0.15,
+                        help="404 快速跳过间隔（秒，防 micro-burst 诱发连接惩罚）")
+    parser.add_argument("--request-timeout", type=float, default=10.0,
+                        help="单请求超时（秒，挂起快速判定）")
     parser.add_argument("--recover-age", type=float, default=30.0,
                         help="求解后恢复等待的距触发最短秒数")
+    parser.add_argument("--abort-cooldown", type=float, default=45.0,
+                        help="连接异常重试失败后的冷却秒数")
     parser.add_argument("--max-solves", type=int, default=5, help="求解次数上限")
     parser.add_argument("--sn", type=int, default=143963534, help="起始证书编号")
     args = parser.parse_args()
