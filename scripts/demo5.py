@@ -80,9 +80,28 @@ def jar_get(session, name):
     return session.cookies.get(name)
 
 
+def classify_fo(status, headers, set_cookie_str):
+    """fo 响应分类（对齐 5s v2 /fo 响应分类表）。headers 的 key 已小写化。"""
+    ct = headers.get("content-type", "")
+    has_clearance = "cf_clearance=" in set_cookie_str
+    has_chl_out_s = "cf-chl-out-s" in headers
+    if has_clearance and ("text/html" in ct or has_chl_out_s):
+        return "FO_ACCEPTED"
+    if has_clearance:
+        return "FO_ACCEPTED"
+    if "text/plain" in ct:
+        return "FO_CONTINUE"
+    return "FO_REJECT_OR_DEGRADE"
+
+
 def solve_same_session(session, challenge_body, outdir):
-    """同 session 求解：挑战页落盘 -> session 下载 orchestrate -> Node 求解 -> session 提交。
-    成功返回 (ck_dict, submit_url)；失败返回 (None, reason)。"""
+    """同 session 全链路求解（capture-only bridge 形态）。
+
+    Python 是唯一外网请求层：Node（CF_CAPTURE_ONLY=1）只生成 fo request，
+    经 stdout JSONL 输出；Python 用会话 A 真实发送并按 /fo 响应分类；
+    response envelope 经 stdin 回灌推进 JS 状态机。
+    成功返回 (ck_dict, fo_log)；失败返回 (None, reason)。
+    """
     # 1. 落盘挑战页（session 自己收到的 429 响应体）
     page_path = os.path.join(outdir, "challenge-page.html")
     html = challenge_body.decode("utf-8", errors="replace")
@@ -113,41 +132,97 @@ def solve_same_session(session, challenge_body, outdir):
     bm = f"__cf_bm={bm_val}"
     log(f"__cf_bm 取自会话 A jar（{bm_val[:20]}...）")
 
-    # 4. Node 求解
-    r = subprocess.run(
+    # 4. capture-only bridge 启动 run.js（Node 只生成，不发真实请求）
+    env = dict(os.environ)
+    env["CF_CAPTURE_ONLY"] = "1"
+    proc = subprocess.Popen(
         [NODE, os.path.join(RUNTIME_DIR, "run.js"), page_path, orch_path, bm],
-        capture_output=True, text=True, timeout=120)
-    result = None
-    for line in r.stdout.strip().splitlines():
-        if line.strip().startswith("{"):
-            try:
-                result = json.loads(line)
-            except json.JSONDecodeError:
-                pass
-    if not result or not result.get("submits"):
-        return None, "Node 求解无 submits 输出"
-    last = result["submits"][-1]
-    url = last["url"]
-    if url.startswith("/"):
-        url = "https://www.psacard.com" + url
+        stdout=subprocess.PIPE, stdin=subprocess.PIPE,
+        text=True, encoding="utf-8", errors="replace", env=env)
+    log("bridge 已启动（CF_CAPTURE_ONLY=1，Node 只生成 fo request）")
 
-    # 5. 同一 session 提交（A 的 jar 自动带 __cf_bm 并接住 cf_clearance）
-    ff_headers = {
-        "User-Agent": UA_FF,
-        "Accept": "*/*",
-        "Content-Type": "text/plain",
-    }
-    r = session.post(url, data=last["fullBody"], headers=ff_headers, timeout=30)
-    log(f"提交（会话 A.post）HTTP {r.status_code}")
+    # 5. bridge 循环：读 runtime_request -> 会话 A 发送 -> 分类 -> 回灌
+    fo_log = []
+    result = None
+    deadline = time.time() + 120
+    try:
+        while time.time() < deadline:
+            line = proc.stdout.readline()
+            if not line:
+                if proc.poll() is not None:
+                    break
+                continue
+            line = line.strip()
+            if not line.startswith("{"):
+                continue
+            try:
+                msg = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            mtype = msg.get("type")
+            if mtype == "runtime_request":
+                url = msg["url"]
+                method = msg.get("method", "POST").upper()
+                headers = {k: v for k, v in msg.get("headers", {}).items()
+                           if k.lower() not in ("cookie", "content-length", "host")}
+                body = msg.get("body", "")
+                try:
+                    if method == "POST":
+                        r = session.post(url, data=body, headers=headers, timeout=60)
+                    else:
+                        r = session.get(url, headers=headers, timeout=60)
+                except Exception as e:
+                    log(f"fo {msg['request_id']} 发送异常: {e}", "bad")
+                    return None, f"fo 发送异常: {e}"
+                sc_raw = r.headers.get("set-cookie", "") or ""
+                sc_list = [c.strip() for c in sc_raw.split(",") if "=" in c.strip()]
+                klass = classify_fo(
+                    r.status_code,
+                    {k.lower(): v for k, v in r.headers.items()}, sc_raw)
+                fo_log.append({"request_id": msg["request_id"], "method": method,
+                               "status": r.status_code, "class": klass,
+                               "body_len": len(r.content)})
+                log(f"fo {msg['request_id']} -> {r.status_code} [{klass}] "
+                    f"({len(r.content)} bytes)")
+                envelope = {
+                    "type": "response",
+                    "request_id": msg["request_id"],
+                    "status": r.status_code,
+                    "headers": {k.lower(): v for k, v in r.headers.items()},
+                    "set_cookies": sc_list,
+                    "body": r.content.decode("utf-8", errors="replace"),
+                }
+                proc.stdin.write(json.dumps(envelope, ensure_ascii=False) + "\n")
+                proc.stdin.flush()
+            elif mtype == "result":
+                result = msg
+                break
+            elif msg.get("ok") is not None and "elapsedMs" in msg:
+                result = msg  # 非 capture 形态兜底
+                break
+    finally:
+        try:
+            proc.stdin.close()
+        except Exception:
+            pass
+        try:
+            proc.wait(timeout=10)
+        except Exception:
+            proc.kill()
+
+    if not result:
+        return None, f"bridge 无 result 输出（fo 记录 {len(fo_log)} 轮）"
+    if not result.get("hasClearance"):
+        return None, f"Node 侧未观察到 clearance（fo 记录 {len(fo_log)} 轮）"
 
     # 6. 从 A jar 验证 cf_clearance
     clearance = jar_get(session, "cf_clearance")
     if not clearance:
-        return None, "提交后 jar 无 cf_clearance"
+        return None, "bridge 后 jar 无 cf_clearance"
     bm_after = jar_get(session, "__cf_bm")
     ck = {"__cf_bm": bm_after, "cf_clearance": clearance}
     log(f"会话 A jar 已持有 cf_clearance（{clearance[:20]}...）", "ok")
-    return ck, url
+    return ck, fo_log
 
 
 def main():
@@ -200,15 +275,17 @@ def main():
     outdir = os.path.join(MATERIAL_ROOT, f"demo5-{epoch}")
     os.makedirs(outdir, exist_ok=True)
     t0 = time.time()
-    ck, reason = solve_same_session(sa, challenge_body, outdir)
+    ck, extra = solve_same_session(sa, challenge_body, outdir)
     if not ck:
-        log(f"同 session 求解失败：{reason}，实验结束", "bad")
-        result["phases"]["solve"] = {"ok": False, "reason": reason}
+        log(f"同 session 求解失败：{extra}，实验结束", "bad")
+        result["phases"]["solve"] = {"ok": False, "reason": extra}
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return
-    log(f"同 session 求解完成（{time.time()-t0:.0f}s）", "ok")
+    fo_log = extra
+    log(f"同 session 求解完成（{time.time()-t0:.0f}s，{len(fo_log)} 轮 fo）", "ok")
     result["phases"]["solve"] = {"ok": True, "elapsed_s": round(time.time() - t0, 1),
-                                 "material_dir": os.path.basename(outdir)}
+                                 "material_dir": os.path.basename(outdir),
+                                 "fo_log": fo_log}
 
     # Phase 3: 会话 A 续航（jar 自动带 clearance，不再显式传 cookie）
     log(f"Phase 3: 会话 A 续航测试（{args.verify_count} 请求，jar 自动带 clearance，"

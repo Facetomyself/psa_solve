@@ -1,8 +1,11 @@
 /*
- * lib/transport.js — XHR shim（真实网络 + 记录 + cookie/响应头浏览器语义）
+ * lib/transport.js — XHR shim（真实网络 + capture 桥接 + cookie/响应头浏览器语义）
  *
  * 职责：
- *  - XHR 经 Node https 真实发请求（相对 URL 用目标 origin 解析）
+ *  - 默认：XHR 经 Node https 真实发请求（相对 URL 用目标 origin 解析）
+ *  - CF_CAPTURE_ONLY=1：XHR 不建真实连接，request record 经 stdout JSONL 输出，
+ *    由上层（Python）真实发送并回灌 response envelope（stdin）触发 XHR 事件链
+ *    —— Python 是唯一外网请求层（对齐 5s v2 bridge 协议）
  *  - 浏览器行为：同源自动附 Cookie；响应 Set-Cookie 应用（cookie jar 增量）
  *  - 完整 XHR 接口面（status/responseText/responseType/responseURL/on* 事件等）
  *  - 观测：__patchXhr（请求记录）/ __patchResponses（响应记录）供 run.js 输出
@@ -16,6 +19,19 @@ const { URL: URLImpl } = require("url");
 function install(g, cfg) {
   g.__patchXhr = [];
   g.__patchResponses = [];
+  g.__capturePending = {};
+
+  // 上层回灌 response envelope：{type, request_id, status, headers, set_cookies, body}
+  g.__deliverCapturedResponse = function (message) {
+    const cb = g.__capturePending[message.request_id];
+    if (!cb) {
+      g.__patchResponses.push({
+        url: message.request_id, error: "no pending capture for request_id" });
+      return;
+    }
+    delete g.__capturePending[message.request_id];
+    cb(message);
+  };
 
   function xhrSend(self, body) {
     const u = self._url;
@@ -28,8 +44,6 @@ function install(g, cfg) {
       g.__patchResponses.push({ url: u, error: "URL parse: " + String(e.message || e) });
       return;
     }
-    const mod = parsed.protocol === "https:" ? https : http;
-    const data = body == null ? undefined : Buffer.from(String(body));
 
     // 浏览器行为：默认 UA/Referer + 同源自动携带 document.cookie
     const headers = Object.assign({
@@ -40,6 +54,54 @@ function install(g, cfg) {
     if (cookie && !headers["Cookie"] && !headers["cookie"]) {
       headers["Cookie"] = cookie;
     }
+
+    if (cfg.CF_CAPTURE_ONLY) {
+      // capture 桥接：request record 输出 stdout，挂起等待回灌
+      const reqId = "fo-" + (g.__captureRequestId = (g.__captureRequestId || 0) + 1);
+      g.__patchResponses.push({ url: u, capture: reqId, status: "pending" });
+      process.stdout.write(JSON.stringify({
+        type: "runtime_request",
+        request_id: reqId,
+        method: self._method,
+        url: u,
+        headers,
+        body: body == null ? "" : String(body),
+      }) + "\n");
+      g.__capturePending[reqId] = (envelope) => {
+        self.status = envelope.status || 0;
+        self.statusText = String(envelope.status || "");
+        self.responseText = envelope.body || "";
+        self.response = envelope.body || "";
+        self.responseURL = u;
+        self.readyState = 4;
+        self._respHeaders = envelope.headers || {};
+        // 浏览器行为：响应 Set-Cookie 应用（cookie jar 增量语义）
+        const scArr = Array.isArray(envelope.set_cookies) ? envelope.set_cookies : [];
+        if (g.document.__cookieSet) {
+          scArr.forEach((c) => { g.document.__cookieSet(c); });
+        }
+        const scStr = scArr.join(",");
+        if (/cf_clearance=/.test(scStr)) g.__captureHasClearance = true;
+        // 回灌后 __patchResponses 的 pending 占位换成真实响应
+        for (let i = g.__patchResponses.length - 1; i >= 0; i--) {
+          if (g.__patchResponses[i].capture === envelope.request_id) {
+            g.__patchResponses[i] = {
+              url: u,
+              status: envelope.status,
+              setCookie: scStr,
+              bodyHead: (envelope.body || "").slice(0, 300),
+            };
+            break;
+          }
+        }
+        try { self.onreadystatechange && self.onreadystatechange(); } catch (e) {}
+        try { self.onload && self.onload(); } catch (e) {}
+      };
+      return;
+    }
+
+    const mod = parsed.protocol === "https:" ? https : http;
+    const data = body == null ? undefined : Buffer.from(String(body));
 
     const req = mod.request(parsed, { method: self._method, headers }, (res) => {
       const buf = [];
