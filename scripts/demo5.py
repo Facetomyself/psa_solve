@@ -235,7 +235,10 @@ def main():
     parser.add_argument("--verify-count", type=int, default=30, help="续航测试请求数")
     parser.add_argument("--verify-gap", type=float, default=0.2, help="续航测试请求间隔（秒）")
     parser.add_argument("--post-solve-wait", type=float, default=5.0,
-                        help="求解完成到续航开始的冷却秒数（与 demo2 对齐为 5，可扫参验证衰减窗口）")
+                        help="求解完成后的额外冷却秒数")
+    parser.add_argument("--min-recover-age", type=float, default=30.0,
+                        help="续航开始前距 429 触发的最短秒数（衰减窗口 ~20-30s；"
+                             "求解快时按此补足等待）")
     args = parser.parse_args()
 
     result = {"schema": "demo5-experiment.v1", "phases": {}}
@@ -257,6 +260,7 @@ def main():
             triggered = True
             challenge_body = content
             challenge_sn = sn
+            trigger_ts = time.time()
             result["phases"]["trigger"] = {
                 "requests_before": i, "sn": sn, "status": st, "meta": meta,
                 "body_bytes": len(content)}
@@ -290,9 +294,13 @@ def main():
                                  "fo_log": fo_log}
 
     # Phase 3: 会话 A 续航（jar 自动带 clearance，不再显式传 cookie）
+    # 冷却按距触发绝对时间计算：min_recover_age 兜底 + post_solve_wait 额外
+    recover_wait = max(args.post_solve_wait,
+                       args.min_recover_age - (time.time() - trigger_ts))
     log(f"Phase 3: 会话 A 续航测试（{args.verify_count} 请求，jar 自动带 clearance，"
-        f"先冷却 {args.post_solve_wait:.0f}s）", "step")
-    time.sleep(args.post_solve_wait)
+        f"恢复等待 {recover_wait:.0f}s，距触发将达 "
+        f"{recover_wait + time.time() - trigger_ts:.0f}s）", "step")
+    time.sleep(recover_wait)
     a_passes = 0
     a_first_block = None
     for i in range(args.verify_count):
