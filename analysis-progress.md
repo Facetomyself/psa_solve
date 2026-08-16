@@ -16,14 +16,64 @@ Case: `psa-cf-5s-shield-20260815`
 - serverAccepted 证据：2026-08-15 20:57 UTC（epoch 20260815-205514 材料）——引擎 fo 提交（POST /cdn-cgi/challenge-platform/h/g/fo/975026845:1786795506:.../a2b85a4b9d412442/{cH-token}）后，curl 带同一 __cf_bm 会话请求页面返回 HTTP 200、159131 bytes、真实 Next.js 页面（psa-locale/environment cookie + x-middleware-rewrite 头）。对照：无 clearance 时同请求 403 + 5.5KB 挑战页。
 - 残留项：新版本材料（205514/204641 epoch）在提交后路径有 hk call-opcode 崩溃（fq 未执行、来源未定位——提交已发出并被接受，崩溃属提交后清理路径）；旧版本材料（15:01）无此问题。作为已知局限记录。
 
-### 2026-08-16 clearance 会话绑定实验（demo2-demo5，最终横比见 findings F6）
+### 2026-08-16 clearance 会话绑定与生产链路实验（demo2-demo6 全记录，定论见 findings F6/F7）
 
-- 机制定性（官方文档 + 四源搜索求证）：PSA 的 429 + `cf-mitigated: challenge` 来自 rate limiting 规则 + managed challenge 动作（throttling 模式）；403 是 WAF/security 类规则的 block 状态码，Firefox 指纹通道当前只见 429。challenge 状态按 fixed action 语义持续（触发后 ~20-30s 内所有请求被拦）。
-- 最终横比（demo5 --endurance-subject 单变量三轮，距触发 30-34s 开始）：
-  - C 裸新会话续航 **2**；B 新会话+显式 clearance 续航 **15**（两轮复现）；A 原会话 jar 续航 **0**
-- 定论：① clearance 跨 session 有效（IP+UA+TLS 级绑定），增益 ~7 倍；② bridge 同 session 形态把 fo 响应 set-cookie 回灌进 A jar 造成污染（挑战链中间态 cookie + clearance 混带 -> 立即重新挑战），A=0 甚至低于裸 C；③ 求解通过后计数器归零生效（B 从 0 打到阈值 15）；④ 恢复等待必须按距触发绝对时间 >= 30s（求解压缩到 12s 后固定冷却会撞窗口）。
-- 生产形态定稿：**bridge 求解会话与采集会话分离**——任意会话完成 capture-only 求解收集 (__cf_bm, cf_clearance) 后，干净新会话显式携带 ck 采集；bridge 的 fo 请求不得与采集会话共享 jar。该形态已两轮复现续航 15（= 触发阈值上限）。
-- 状态：capture-only bridge（transport.js CF_CAPTURE_ONLY 分支 + run.js stdin/stdout IPC + demo5 bridge 循环 + fo 分类器）已验证通过；下一步把「求解会话/采集会话分离」形态并入采集主链，替换旧 bypass_solve。
+#### 一、机制定性（官方文档 + 四源搜索求证）
+
+- PSA 的 429 + `cf-mitigated: challenge` 来自 **rate limiting 规则 + managed challenge 动作**（throttling 模式，Free/Pro/Business 计划强制）；403 是 WAF/security 类规则 block 的状态码——Firefox 指纹通道当前只见 429（curl/Node TLS 通道才会 403）。
+- challenge 状态按 fixed action 语义持续：**触发后 ~20-30s 内所有请求被拦**（与 clearance 无关）。
+- 官方模型：pass challenge -> request counter 归零；cf_clearance tied to visitor/device（实测为 IP+UA+TLS 级）。
+
+#### 二、实验时间线（同日，同 IP、同 sn 序列、firefox 指纹）
+
+| 时间 | 实验 | 形态 | 结果 |
+|------|------|------|------|
+| 16:29 | demo2 串行求解组 | 同 session + 独立提交 clearance | 续航 [13,16,9,14] |
+| 16:34 | demo2 no-solve 对照 | 等 25s 不求解 | 稳态续航 [6,8] |
+| 17:28 | demo3 run2 | 新会话 B 带 clearance / C 裸 | B=1 / C=5 |
+| 17:33 | demo4 AB 交替 | 触发后 20s 开始 | B、C 全被拦（窗口内） |
+| 17:43 | demo5 同 session bridge | 冷却仅 2s | A 续航 5 |
+| 17:47 | demo5 同 session bridge | 冷却 5s | A 续航 15，B 对照 0 |
+| 18:52 | demo5 bridge | 求解提速后固定冷却撞窗 | A=0、B=0（恢复期仅 17s） |
+| 18:54 | demo5 | 恢复期 30s | **反转：A=1、B=15** |
+| 19:08 | demo5 subject=c | 单变量裸会话 | C=2 |
+| 20:02 | demo5 subject=b | 单变量 clearance | **B=15（复现）** |
+| 20:09 | demo5 subject=a | 单变量原会话 jar | **A=0（jar 污染）** |
+| 20:32 | demo6 生产首跑 | 异步 bridge + 会话分离 | 段 [15,16,6*,15]，669 页/h，1 次连接挂起 |
+| 22:18 | demo6 优化复跑 | 404 微间隔 + 挂起快判 + 重试 | 段 [17,8,8,9,9]，788 页/h，重试自愈 1 次 |
+
+（* 6 为连接异常截断段）
+
+#### 三、定论（横比三轮 + 生产复跑支撑）
+
+1. **clearance 跨 session 有效**（IP+UA+TLS 级绑定）：裸 C=2 vs 带 clearance B=15（两轮复现），增益约 7 倍。官方「tied to visitor/device」在本场景不含会话级绑定。
+2. **bridge 同 session 形态有 jar 污染副作用**：fo 响应 set-cookie 回灌进采集会话 jar，挑战链中间态 cookie 与 clearance 混带 -> 立即重新挑战（A=0 甚至低于裸 C=2）。demo2 旧形态（fo 走独立 cr.post）无此问题。
+3. **求解通过 = 计数器归零**：B 从 0 打到阈值（15）才再触发，与 Phase 1 触发位置一致。
+4. **恢复等待必须按距触发绝对时间 >= 30s**：求解提速（27s -> 12s）后固定冷却会撞衰减窗口。
+5. **rate limit 阈值动态衰减（F7，medium 置信）**：同 IP 当日 20+ 轮实验后，段通过数从 15-16 降到 8-9（20:32 run 15/16/15 -> 22:18 run 17/8/8/9/9）。求解成功率保持 100%，触发频率上升是 CF 侧收紧。单 IP 吞吐上限随之从 ~1000 降到 ~750-800 页/小时。
+
+#### 四、生产形态（demo6，已两轮实测）
+
+```
+干净 AsyncSession 采集（显式 ck，404 微间隔，gap 间隔）
+  -> 429 触发（挑战页 body 直接到手）
+  -> 触发会话即用即弃 capture-only bridge 异步求解
+     （asyncio subprocess + AsyncSession 发 fo + FO_CONTINUE/FO_ACCEPTED 分类 + stdin 回灌）
+  -> 恢复等待（距触发 >= 30s）
+  -> 新干净 AsyncSession + 显式 ck 继续
+异常处置：挂起 10s 快判 -> 重建会话重试一次 -> 仍失败 45s 冷却；
+重试撞挑战页直接转入求解。
+```
+
+吞吐模型（单 IP）：`段请求数(阈值) × RTT + 求解 ~13s + 恢复 ~17s` 为一个周期。
+- 阈值 15 时：~50s 周期 -> ~1000 页/h 理论上限
+- 阈值 9 时（当前 IP 状态）：~43s 周期 -> ~750-800 页/h（实测 788 已贴合）
+
+#### 五、边界与下一步
+
+- 单 IP 继续优化的代码空间已尽；提速路径：IP 冷却数小时（阈值大概率回 15）、换出口、或多 IP sticky 池轮换（每 IP 一个 demo6 worker，proxy-usage 提取 + 注入，吞吐线性扩展——高并发采集的正确姿势）。
+- F7 为 medium 置信：需不同 IP/时段对照确认阈值衰减是「当日行为累积」还是「长期趋势」。
+- demo6 的 solve_bridge_async 与主循环是采集主链的移植单元；旧 bypass_solve（demo2/3/4/5 共用形态）已被 bridge 形态取代。
 
 ## Browser / Local / Purecalc Boundary
 

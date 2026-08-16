@@ -1,7 +1,7 @@
 {
   "schema": "reverse-findings.v1",
   "caseId": "psa-cf-5s-shield-20260815",
-  "generatedAt": "2026-08-16T20:15:00Z",
+  "generatedAt": "2026-08-16T22:30:00Z",
   "status": "partial",
   "findings": [
     {
@@ -83,6 +83,20 @@
         "官方文档：cf_clearance tied to specific visitor/device（IP+UA+TLS 级）；rate limit challenge 动作 pass 后 counter 归零"
       ],
       "implication": "生产形态定稿：bridge 求解会话与采集会话分离——任意会话完成 capture-only 求解收集 (__cf_bm, cf_clearance) 后，用干净新会话显式携带该 ck 采集（B 形态，续航 ~15 即触发阈值上限）；bridge 的 fo 请求不得与采集会话共享 jar（set-cookie 污染）；求解后恢复等待按距触发绝对时间 >= 30s；单 IP 多会话并行不可行（计数器 IP 级共享，每轮清零需独立过 challenge）"
+    },
+    {
+      "id": "F7",
+      "title": "rate limit 阈值动态衰减：持续求解循环使段通过数 15 -> 8-9（IP 信誉学习）",
+      "severity": "high",
+      "confidence": "medium",
+      "location": "PSA Cloudflare rate limit（同 IP 长时间反复触发->求解->继续）",
+      "evidence": [
+        "20:32 run：段通过数 [15,16,15]（-3 段全命中阈值）",
+        "22:18 run（同 IP，间隔 ~2h 但当日已 20+ 轮实验）：段通过数 [17,8,8,9,9]，后四段稳定 8-9",
+        "22:18 run 求解成功率 4/4 100%、fo 序列标准（FO_CONTINUE->FO_ACCEPTED）、会话分离续航稳定——链路健康，触发频率上升是 CF 侧阈值收紧",
+        "单 IP 吞吐模型随之变化：15 请求/周期（~50s）-> 9 请求/周期（~43s），实测 669 -> 788 页/小时"
+      ],
+      "implication": "单 IP 长期运行会因信誉衰减被 CF 动态调低 challenge 间隔；吞吐上限由阈值决定（当前 IP 状态 ~750-800 页/小时）。突破手段：IP 冷却数小时恢复信誉、更换出口、或多 IP sticky 池轮换（每 IP 一个采集 worker，阈值互不干扰）。此条为 medium 置信——两轮对比 + 当日高强度实验背景，需不同 IP/时段对照确认是「当日行为累积」还是「长期趋势」"
     }
   ],
   "limitations": [
