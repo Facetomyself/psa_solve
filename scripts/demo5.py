@@ -261,6 +261,15 @@ def main():
         if blocked:
             meta_s = "  ".join(f"{k}={v}" for k, v in meta.items() if v) or "（无诊断头）"
             log(f"[{i+1}/{args.max_trigger}] {sn}: {st} 触发挑战 | {meta_s}", "bad")
+            if len(content) < 1000:
+                # 连接异常（status 0）或非挑战页响应：无 body 可解，不进求解链
+                log(f"被拦但无挑战页 body（{len(content)} bytes）——连接级异常，"
+                    "IP 可能被 CF 升压，建议冷却 10-15 分钟后再跑", "bad")
+                result["phases"]["trigger"] = {
+                    "requests_before": i, "sn": sn, "status": st, "meta": meta,
+                    "body_bytes": len(content), "reason": "no-challenge-body"}
+                print(json.dumps(result, ensure_ascii=False, indent=2))
+                return
             triggered = True
             challenge_body = content
             challenge_sn = sn
