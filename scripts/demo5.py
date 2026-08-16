@@ -239,6 +239,10 @@ def main():
     parser.add_argument("--min-recover-age", type=float, default=30.0,
                         help="续航开始前距 429 触发的最短秒数（衰减窗口 ~20-30s；"
                              "求解快时按此补足等待）")
+    parser.add_argument("--endurance-subject", choices=["a", "b", "c"], default="a",
+                        help="续航测试会话：a=原会话（jar 自动带 clearance）；"
+                             "b=新会话（显式携带 clearance）；c=新会话（裸，无 clearance）。"
+                             "同一轮只测一个，三轮对比消除计数器互相污染")
     args = parser.parse_args()
 
     result = {"schema": "demo5-experiment.v1", "phases": {}}
@@ -293,68 +297,50 @@ def main():
                                  "material_dir": os.path.basename(outdir),
                                  "fo_log": fo_log}
 
-    # Phase 3: 会话 A 续航（jar 自动带 clearance，不再显式传 cookie）
+    # Phase 3: 续航测试（单变量：每轮只测一个会话，三轮对比消除计数器互相污染）
     # 冷却按距触发绝对时间计算：min_recover_age 兜底 + post_solve_wait 额外
     recover_wait = max(args.post_solve_wait,
                        args.min_recover_age - (time.time() - trigger_ts))
-    log(f"Phase 3: 会话 A 续航测试（{args.verify_count} 请求，jar 自动带 clearance，"
+    subject = args.endurance_subject
+    subject_label = {"a": "会话 A（原会话 jar）", "b": "会话 B（新会话+clearance）",
+                     "c": "会话 C（新会话裸）"}[subject]
+    if subject == "a":
+        sess, cookies = sa, None
+    elif subject == "b":
+        sess, cookies = cr.Session(impersonate=IMPERSONATE), ck
+    else:
+        sess, cookies = cr.Session(impersonate=IMPERSONATE), None
+    log(f"Phase 3: {subject_label} 续航测试（{args.verify_count} 请求，"
         f"恢复等待 {recover_wait:.0f}s，距触发将达 "
         f"{recover_wait + time.time() - trigger_ts:.0f}s）", "step")
     time.sleep(recover_wait)
-    a_passes = 0
-    a_first_block = None
+    passes = 0
+    first_block = None
     for i in range(args.verify_count):
         sn = last_ok_sn + (i + 1) * 3
-        st, blocked, meta, _ = fetch_page(sa, sn)
+        st, blocked, meta, _ = fetch_page(sess, sn, cookies=cookies)
         if blocked:
-            log(f"[{i+1}/{args.verify_count}] {sn}: {st} 被拦（A 续航 {a_passes} 请求）", "bad")
-            a_first_block = {"at_request": i + 1, "sn": sn, "status": st}
+            log(f"[{i+1}/{args.verify_count}] {sn}: {st} 被拦"
+                f"（{subject.upper()} 续航 {passes} 请求）", "bad")
+            first_block = {"at_request": i + 1, "sn": sn, "status": st}
             break
-        a_passes += 1
+        passes += 1
         level = "ok" if st == 200 else "info"
         log(f"[{i+1}/{args.verify_count}] {sn}: {st}" + (" 通过" if st == 200 else " 未拦截"),
             level)
         time.sleep(args.verify_gap)
-    result["phases"]["session_A_endurance"] = {
-        "passes": a_passes, "first_block": a_first_block}
+    result["phases"]["endurance"] = {
+        "subject": subject, "passes": passes, "first_block": first_block}
 
-    # Phase 4: 新会话 B 对照（显式传 A 的 clearance）
-    log(f"Phase 4: 新会话 B 对照（显式携带 A 的 clearance，{args.verify_count} 请求）", "step")
-    sb = cr.Session(impersonate=IMPERSONATE)
-    b_passes = 0
-    b_first_block = None
-    for i in range(args.verify_count):
-        sn = last_ok_sn + (i + 1) * 3
-        st, blocked, meta, _ = fetch_page(sb, sn, cookies=ck)
-        if blocked:
-            log(f"[{i+1}/{args.verify_count}] {sn}: {st} 被拦（B 续航 {b_passes} 请求）", "bad")
-            b_first_block = {"at_request": i + 1, "sn": sn, "status": st}
-            break
-        b_passes += 1
-        level = "ok" if st == 200 else "info"
-        log(f"[{i+1}/{args.verify_count}] {sn}: {st}" + (" 通过" if st == 200 else " 未拦截"),
-            level)
-        time.sleep(args.verify_gap)
-    result["phases"]["session_B_control"] = {
-        "passes": b_passes, "first_block": b_first_block}
-
-    # 判定
+    # 判定（单变量轮次：本轮只输出续航，横比靠三轮结果）
     print()
     log("实验判定：", "step")
-    log(f"会话 A（同 session 链路）续航: {a_passes}  会话 B（跨 session 移植）续航: {b_passes}", "step")
-    if a_passes >= 10 and a_passes >= b_passes * 2:
-        verdict = "同 session 全链路有效：A 续航 >= 10 且 >= B 的 2 倍，bypass 改造方向证实"
-        log(verdict, "ok")
-    elif a_passes >= b_passes + 3:
-        verdict = "同 session 链路有增益但不显著，需多轮重复确认"
-        log(verdict, "info")
-    elif a_passes <= 3 and b_passes <= 3:
-        verdict = "双方续航都短：求解可能未被 CF 接受或计数残留，冷却后重跑"
-        log(verdict, "bad")
-    else:
-        verdict = "结果未落入预期组合，人工复核"
-        log(verdict, "bad")
-    result["verdict"] = verdict
+    log(f"{subject_label} 续航: {passes}", "step")
+    log("三轮横比（--endurance-subject a/b/c，每轮间隔冷却 5 分钟）：")
+    log("  A >= B+3 且 B >= C+3 -> clearance 有效且 jar 无污染（需再验）")
+    log("  B >= C+3 且 A 明显短 -> clearance 有效、A jar 污染确认")
+    log("  B ≈ C -> clearance 无增益，求解价值仅在计数器归零")
+    result["verdict"] = f"subject={subject} passes={passes}（单变量轮次，横比三轮定论）"
     print()
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
