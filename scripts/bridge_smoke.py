@@ -129,7 +129,6 @@ xhr.send("fo-body-smoke");
         proc.wait(timeout=10)
     except Exception:
         proc.kill()
-    srv.shutdown()
 
     ok = True
     checks = []
@@ -146,11 +145,104 @@ xhr.send("fo-body-smoke");
         print(("PASS " if passed else "FAIL ") + name)
         ok = ok and passed
 
+    # 异步冒烟段（demo6 形态：asyncio subprocess + AsyncSession 转发，复用同一 mock server）
+    import asyncio
+    if os.name == "nt":
+        asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
+    ok_async = asyncio.run(smoke_async())
+    ok = ok and ok_async
+
+    srv.shutdown()
     # 清理临时目录
     import shutil
     shutil.rmtree(TMP, ignore_errors=True)
     print("SMOKE_" + ("OK" if ok else "FAILED"))
     sys.exit(0 if ok else 1)
+
+
+async def smoke_async():
+    """异步子进程 bridge 冒烟（demo6 形态：asyncio subprocess + AsyncSession 转发）。"""
+    import asyncio
+    from curl_cffi.requests import AsyncSession
+
+    page = os.path.join(TMP, "mock_page_async.html")
+    open(page, "w", encoding="utf-8").write(
+        "<script>window._cf_chl_opt = {cHash: \"x\", cRay: \"y\"};</script>")
+    orch = os.path.join(TMP, "mock_orch_async.js")
+    open(orch, "w", encoding="utf-8").write(f"""
+var xhr = new XMLHttpRequest();
+xhr.open("POST", "/fo");
+xhr.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+xhr.onload = function() {{
+  if (xhr.status === 200) {{
+    var c = new XMLHttpRequest();
+    c.open("GET", "http://127.0.0.1:{PORT}/after");
+    c.onload = function() {{}};
+    c.send();
+  }}
+}};
+xhr.send("fo-body-async-smoke");
+""")
+
+    env = dict(os.environ)
+    env["CF_CAPTURE_ONLY"] = "1"
+    env["CF_TARGET_URL"] = f"http://127.0.0.1:{PORT}/cert/1/psa"
+    proc = await asyncio.create_subprocess_exec(
+        NODE, os.path.join(ROOT, "runtime", "run.js"), page, orch, "__cf_bm=smokebm",
+        stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE,
+        env=env)
+
+    asess = AsyncSession()
+    requests_seen = []
+    result = None
+    deadline = time.time() + 60
+    while time.time() < deadline:
+        raw_line = await proc.stdout.readline()
+        if not raw_line:
+            if proc.returncode is not None:
+                break
+            continue
+        line = raw_line.decode("utf-8", errors="replace").strip()
+        if not line.startswith("{"):
+            continue
+        try:
+            msg = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if msg.get("type") == "runtime_request":
+            requests_seen.append(msg)
+            print(f"[async-bridge] {msg['request_id']} {msg['method']} {msg['url']}")
+            r = await asess.post(msg["url"], data=msg.get("body", ""), timeout=10)
+            sc_raw = r.headers.get("set-cookie", "") or ""
+            envelope = {
+                "type": "response",
+                "request_id": msg["request_id"],
+                "status": r.status_code,
+                "headers": {k.lower(): v for k, v in r.headers.items()},
+                "set_cookies": [c.strip() for c in sc_raw.split(",") if "=" in c.strip()],
+                "body": r.content.decode("utf-8", errors="replace"),
+            }
+            proc.stdin.write(
+                (json.dumps(envelope, ensure_ascii=False) + "\n").encode("utf-8"))
+            await proc.stdin.drain()
+        elif msg.get("type") == "result":
+            result = msg
+            break
+    proc.stdin.close()
+    try:
+        await asyncio.wait_for(proc.wait(), timeout=10)
+    except Exception:
+        proc.kill()
+
+    checks = [
+        ("async bridge 两轮", len(requests_seen) == 2),
+        ("async result.hasClearance", bool(result and result.get("hasClearance"))),
+    ]
+    ok = True
+    for name, passed in checks:
+        print(("PASS " if passed else "FAIL ") + name)
+        ok = ok and passed
+    return ok
 
 
 if __name__ == "__main__":
