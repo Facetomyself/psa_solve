@@ -1,7 +1,7 @@
 {
   "schema": "reverse-findings.v1",
   "caseId": "psa-cf-5s-shield-20260815",
-  "generatedAt": "2026-08-16T17:40:00Z",
+  "generatedAt": "2026-08-16T20:15:00Z",
   "status": "partial",
   "findings": [
     {
@@ -70,20 +70,19 @@
     },
     {
       "id": "F6",
-      "title": "cf_clearance 会话上下文绑定：clearance 必须用于触发挑战的会话（同会话续航 13-16，跨 session 移植 0-1）",
+      "title": "cf_clearance 跨 session 有效（同 IP+UA+TLS）；bridge 回灌 set-cookie 污染触发会话 jar（最终横比：裸 C=2 / 带 clearance B=15 复现 / 原会话 A=0）",
       "severity": "critical",
       "confidence": "high",
       "location": "PSA Cloudflare rate limit + managed challenge（429 + cf-mitigated=challenge，HKG 边缘）",
       "evidence": [
-        "demo2 串行（16:29 run）：同会话 A 求解后续航 [13,16,9,14]；no-solve 对照稳态 [6,8]",
-        "demo3 run2（17:28）：新会话 C 裸连过 5 个；新会话 B 带 clearance 仅续航 1",
-        "demo4 AB 交替（17:33）：触发后 20s，B（带 clearance）与 C（裸）均立即被拦——challenge 状态 active 时所有请求被拦（fixed action 语义）",
-        "demo5 同 session 全链路（17:47 run）：冷却 5s 后会话 A 续航 15，新会话 B 显式携带同 clearance 续航 0",
-        "demo5 对照（17:43 run）：同链路仅冷却 2s，会话 A 续航只有 5——求解后冷却时长是第二关键变量（衰减窗口 ~20-30s）",
-        "demo2 的独立提交链 + 同 session 使用亦有效（13-16）：提交链上下文非关键，使用会话是触发会话才是关键",
-        "官方文档：cf_clearance tied to specific visitor/device；rate limit challenge 动作 pass 后 counter 归零"
+        "单变量横比（demo5 --endurance-subject，每轮距触发 30-34s 开始，消除时间漂移）：C 裸续航 2；B 新会话+clearance 续航 15（18:54 与 20:02 两轮复现）；A 原会话 jar 续航 0",
+        "B 续航 15 与 Phase 1 触发阈值（15-16）一致：求解链通过后 rate limit 计数器归零生效（官方 pass challenge -> counter reset）",
+        "A=0 < C=2：bridge 同 session 形态把 fo 响应 set-cookie 回灌进 A jar，挑战链中间态 cookie 与 clearance 混带导致立即重新挑战（jar 污染）",
+        "demo2 旧形态（fo 提交走独立 cr.post，A jar 未污染）同会话续航 [13,16,9,14]——与 jar 污染假设自洽",
+        "demo4 AB 交替（17:33）：触发后 20s 内所有请求被拦——挑战状态 active 窗口 ~20-30s，求解后恢复等待必须按距触发绝对时间 >= 30s（18:52 轮求解压缩到 12s 后固定 5s 冷却使恢复期仅 17s，续航归零）",
+        "官方文档：cf_clearance tied to specific visitor/device（IP+UA+TLS 级）；rate limit challenge 动作 pass 后 counter 归零"
       ],
-      "implication": "采集链必须保持单会话闭环：触发挑战的会话完成求解并继续使用该会话请求（demo5 全链路形态优先，demo2 形态亦可）；clearance 跨 session 移植（即使同 IP+UA+TLS）立即失效；每个并发会话需独立过 challenge，单 IP 多会话并行在该站不可行；求解后冷却 >= 5s 是必要环节"
+      "implication": "生产形态定稿：bridge 求解会话与采集会话分离——任意会话完成 capture-only 求解收集 (__cf_bm, cf_clearance) 后，用干净新会话显式携带该 ck 采集（B 形态，续航 ~15 即触发阈值上限）；bridge 的 fo 请求不得与采集会话共享 jar（set-cookie 污染）；求解后恢复等待按距触发绝对时间 >= 30s；单 IP 多会话并行不可行（计数器 IP 级共享，每轮清零需独立过 challenge）"
     }
   ],
   "limitations": [

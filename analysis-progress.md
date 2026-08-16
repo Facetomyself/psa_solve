@@ -16,15 +16,14 @@ Case: `psa-cf-5s-shield-20260815`
 - serverAccepted 证据：2026-08-15 20:57 UTC（epoch 20260815-205514 材料）——引擎 fo 提交（POST /cdn-cgi/challenge-platform/h/g/fo/975026845:1786795506:.../a2b85a4b9d412442/{cH-token}）后，curl 带同一 __cf_bm 会话请求页面返回 HTTP 200、159131 bytes、真实 Next.js 页面（psa-locale/environment cookie + x-middleware-rewrite 头）。对照：无 clearance 时同请求 403 + 5.5KB 挑战页。
 - 残留项：新版本材料（205514/204641 epoch）在提交后路径有 hk call-opcode 崩溃（fq 未执行、来源未定位——提交已发出并被接受，崩溃属提交后清理路径）；旧版本材料（15:01）无此问题。作为已知局限记录。
 
-### 2026-08-16 clearance 会话绑定实验（demo2-demo5，见 findings F6）
+### 2026-08-16 clearance 会话绑定实验（demo2-demo5，最终横比见 findings F6）
 
-- 机制定性（官方文档 + 四源搜索求证）：PSA 的 429 + `cf-mitigated: challenge` 来自 rate limiting 规则 + managed challenge 动作（throttling 模式）；403 是 WAF/security 类规则的 block 状态码，Firefox 指纹通道当前只见 429。challenge 状态按 fixed action 语义持续（期间所有请求被拦），时间衰减是独立通道（触发后 ~20-30s 新会话可过）。
-- 判决数据（demo5 两轮对照，唯一变量是求解后冷却时长）：
-  - 冷却 2s：会话 A 续航 5
-  - 冷却 5s：会话 A 续航 **15**（17:47 run，落入 demo2 历史区间 [13,16,9,14]）
-  - 同轮新会话 B 显式携带同 clearance：续航 0（三组实验跨 session 移植恒为 0-1）
-- 结论：① clearance 必须用于**触发挑战的那个会话**（提交链上下文非关键——demo2 独立提交 + 同 session 使用亦有效）；跨 session 移植即使同 IP+UA+TLS 也立即失效。② 求解后冷却 >= 5s 是第二关键变量（衰减窗口 ~20-30s）。③ 单 IP 多会话并行在该站不可行：每个会话要独立过 challenge，并发 burst 无解。
-- 状态：demo5 同 session 全链路（挑战页=业务会话 429 响应、orchestrate 同会话下载、A.post 提交、jar 自动携带）已验证通过；下一步把该形态并入采集主链，替换旧 bypass_solve。
+- 机制定性（官方文档 + 四源搜索求证）：PSA 的 429 + `cf-mitigated: challenge` 来自 rate limiting 规则 + managed challenge 动作（throttling 模式）；403 是 WAF/security 类规则的 block 状态码，Firefox 指纹通道当前只见 429。challenge 状态按 fixed action 语义持续（触发后 ~20-30s 内所有请求被拦）。
+- 最终横比（demo5 --endurance-subject 单变量三轮，距触发 30-34s 开始）：
+  - C 裸新会话续航 **2**；B 新会话+显式 clearance 续航 **15**（两轮复现）；A 原会话 jar 续航 **0**
+- 定论：① clearance 跨 session 有效（IP+UA+TLS 级绑定），增益 ~7 倍；② bridge 同 session 形态把 fo 响应 set-cookie 回灌进 A jar 造成污染（挑战链中间态 cookie + clearance 混带 -> 立即重新挑战），A=0 甚至低于裸 C；③ 求解通过后计数器归零生效（B 从 0 打到阈值 15）；④ 恢复等待必须按距触发绝对时间 >= 30s（求解压缩到 12s 后固定冷却会撞窗口）。
+- 生产形态定稿：**bridge 求解会话与采集会话分离**——任意会话完成 capture-only 求解收集 (__cf_bm, cf_clearance) 后，干净新会话显式携带 ck 采集；bridge 的 fo 请求不得与采集会话共享 jar。该形态已两轮复现续航 15（= 触发阈值上限）。
+- 状态：capture-only bridge（transport.js CF_CAPTURE_ONLY 分支 + run.js stdin/stdout IPC + demo5 bridge 循环 + fo 分类器）已验证通过；下一步把「求解会话/采集会话分离」形态并入采集主链，替换旧 bypass_solve。
 
 ## Browser / Local / Purecalc Boundary
 
