@@ -1,0 +1,97 @@
+{
+  "schema": "reverse-findings.v1",
+  "caseId": "psa-cf-5s-shield-20260815",
+  "generatedAt": "2026-08-16T17:40:00Z",
+  "status": "partial",
+  "findings": [
+    {
+      "id": "F1",
+      "title": "CF 挑战从抽样轻量升级为强制 managed challenge（8 月 9 日 → 8 月 15 日）",
+      "severity": "critical",
+      "confidence": "high",
+      "location": "PSA Cloudflare edge（NRT/HKG）",
+      "evidence": [
+        "旧 trace ×5（rt_20260809*）主文档全部 200、cf-mitigated 全 ABSENT",
+        "新 trace 主文档前强制挑战（1.1s managed 求解）；curl 403 + Cf-Mitigated: challenge",
+        "d6/d8 生产观测 91-92% cf-mitigated"
+      ],
+      "implication": "采集器（curl_cffi）无 JS 求解能力，任何 proxy/region/SID 优化都无法恢复高成功率"
+    },
+    {
+      "id": "F2",
+      "title": "真实提交链模板（fo flow，Turnstile non-interactive）",
+      "severity": "high",
+      "confidence": "high",
+      "location": "/cdn-cgi/challenge-platform/h/g/fo/{id}:{ts}:{hash}/{ray}/{token}",
+      "evidence": [
+        "Reqable 抓包：psacard.com 与 challenges.cloudflare.com 各一次 fo POST",
+        "引擎复现：3 次 fo POST（同模板逐段一致）+ eb/managed POST"
+      ],
+      "implication": "提交 URL 六段结构；引擎已完整复现该模板"
+    },
+    {
+      "id": "F3",
+      "title": "三环境缺口阶梯（Node < iv8 < RuyiDOM）",
+      "severity": "high",
+      "confidence": "high",
+      "location": "orchestrate 求解链",
+      "evidence": [
+        "iv8 domPanel：document.createElementNS=undefined",
+        "Node v8trace：补桩后崩溃点后移但缺口面过大",
+        "RuyiDOM：走最深，最终 errors=0 + serverAccepted"
+      ],
+      "implication": "RuyiDOM（真实 Gecko）是唯一成功的补环境执行层"
+    },
+    {
+      "id": "F4",
+      "title": "环境缺口定稿：UpvLO0 / ZHfDS6 / setTimeout 变长参数（均已修复）",
+      "severity": "critical",
+      "confidence": "high",
+      "location": "runProgram VM 程序 + P7 提交轮询器",
+      "evidence": [
+        "yR opcode 崩溃：window[\"UpvLO0\"].call(window, base64$base64) → XOR 流解密器（jcLw7 同构，程序字节码重建源码）",
+        "ye opcode 崩溃：window[\"ZHfDS6\"].call(window, 函数源码) → 原生 eval 别名（程序 toString 对比）",
+        "setTimeout(P7,100,Ii,Ic) 第 3/4 参被诊断包装器丢弃 → arguments 全量透传"
+      ],
+      "implication": "三个功能性缺口补齐后求解链完整闭环；最小补丁定稿 code.js"
+    },
+    {
+      "id": "F5",
+      "title": "serverAccepted：引擎解答被真实 CF 服务器验证接受",
+      "severity": "info",
+      "confidence": "high",
+      "location": "epoch 20260815-205514（ray a2b85a4b9d412442）",
+      "evidence": [
+        "引擎 fo 提交（完整 URL + $ 分隔指纹载荷）经真实网络发出",
+        "curl 带同一 __cf_bm 会话请求页面：HTTP 200 + 159131 bytes 真实 Next.js 页面（x-middleware-rewrite: /en-US/cert/143963534/psa）",
+        "对照：无 clearance 同请求 403 + 5.5KB 挑战页"
+      ],
+      "implication": "补环境路线对 CF managed challenge 可行；落地方式为引擎执行（纯算不可行——VM 字节码 + 行为指纹）"
+    },
+    {
+      "id": "F6",
+      "title": "cf_clearance 会话上下文绑定：clearance 必须用于触发挑战的会话（同会话续航 13-16，跨 session 移植 0-1）",
+      "severity": "critical",
+      "confidence": "high",
+      "location": "PSA Cloudflare rate limit + managed challenge（429 + cf-mitigated=challenge，HKG 边缘）",
+      "evidence": [
+        "demo2 串行（16:29 run）：同会话 A 求解后续航 [13,16,9,14]；no-solve 对照稳态 [6,8]",
+        "demo3 run2（17:28）：新会话 C 裸连过 5 个；新会话 B 带 clearance 仅续航 1",
+        "demo4 AB 交替（17:33）：触发后 20s，B（带 clearance）与 C（裸）均立即被拦——challenge 状态 active 时所有请求被拦（fixed action 语义）",
+        "demo5 同 session 全链路（17:47 run）：冷却 5s 后会话 A 续航 15，新会话 B 显式携带同 clearance 续航 0",
+        "demo5 对照（17:43 run）：同链路仅冷却 2s，会话 A 续航只有 5——求解后冷却时长是第二关键变量（衰减窗口 ~20-30s）",
+        "demo2 的独立提交链 + 同 session 使用亦有效（13-16）：提交链上下文非关键，使用会话是触发会话才是关键",
+        "官方文档：cf_clearance tied to specific visitor/device；rate limit challenge 动作 pass 后 counter 归零"
+      ],
+      "implication": "采集链必须保持单会话闭环：触发挑战的会话完成求解并继续使用该会话请求（demo5 全链路形态优先，demo2 形态亦可）；clearance 跨 session 移植（即使同 IP+UA+TLS）立即失效；每个并发会话需独立过 challenge，单 IP 多会话并行在该站不可行；求解后冷却 >= 5s 是必要环节"
+    }
+  ],
+  "limitations": [
+    "TLS 指纹是决定性变量：Node 20 TLS 被 CF 标记为非浏览器（触发挑战 + 验证拒）；提交/验证必须用 Firefox 指纹（curl_cffi impersonate=firefox 已验证 200 直通）",
+    "新版本材料 RuyiDOM 诊断路径存在提交后 hk 崩溃；Node 补环境路径无此问题",
+    "字符串表 ZZ 偏移非全局统一（_cf_chl_opt 在 entry 1371→键 1846），静态解码需按函数族确认",
+    "材料时效窗口约 5-10 分钟（token 过期 CF 拒收）",
+    "Node 求解链缺 eb 提交分支（j[Jx(1853)] 状态机 call:0）；fo 两轮 + clearance 已足够通过验证（多次实证），eb 触发链定位记录在案",
+    "行为指纹字段（性能基准/时间戳）为 Node 真实值而非浏览器值——CF 当前校验组合下通过，收紧期可能成为下一个变量"
+  ]
+}

@@ -1,0 +1,81 @@
+{
+ "schema": "web-reverse-case.v1",
+ "caseId": "psa-cf-5s-shield-20260815",
+ "objective": "PSA Cloudflare 5s 盾无感求解：补环境执行 managed challenge JS，自动生成挑战提交并获取 cf_clearance，不触发交互式 Turnstile",
+ "caseClass": "challenge",
+ "status": "completed",
+ "projectRoot": "D:\\reverse_ENV\\workspace\\psa_solve",
+ "evidenceRoot": "evidence/web/",
+ "sensitivity": "private-redacted",
+ "routes": [
+  "ruyitrace"
+ ],
+ "stages": [
+  {
+   "name": "recon",
+   "status": "pass"
+  },
+  {
+   "name": "browser-control",
+   "status": "skipped"
+  },
+  {
+   "name": "browser-evidence",
+   "status": "pass"
+  },
+  {
+   "name": "local-evidence",
+   "status": "pending"
+  },
+  {
+   "name": "environment-patch",
+   "status": "running"
+  },
+  {
+   "name": "deobfuscation",
+   "status": "pending"
+  },
+  {
+   "name": "protocol-recovery",
+   "status": "triage-only"
+  },
+  {
+   "name": "parity",
+   "status": "pending"
+  }
+ ],
+ "activeRuns": {
+  "ruyitrace": "rt_20260815060651_eb196ed770",
+  "v8trace": null,
+  "iv8": null
+ },
+ "contractRefs": {
+  "workflowArtifacts": "contracts/workflow-artifacts.v1.json",
+  "parameterLineage": "contracts/request-parameter-lineage.v1.json",
+  "riskControlPlan": null,
+  "riskControlReceipt": null
+ },
+ "handoffPath": null,
+ "notes": [],
+ "artifacts": [
+  {
+   "schema": "evidence-pointer.v1",
+   "caseId": "psa-cf-5s-shield-20260815",
+   "plane": "ruyitrace",
+   "runId": "rt_20260815060651_eb196ed770",
+   "artifactId": "receipt-399daaf7dc35",
+   "path": "evidence/web/ruyitrace/rt_20260815060651_eb196ed770/receipt.json",
+   "sha256": "399daaf7dc35e4b7489aed07db3c60cf0c69d80bdfb0e0da5f78fedfadc8df7e",
+   "bytes": 58990,
+   "mediaType": "application/json",
+   "recordCount": 170,
+   "sensitivity": "private-redacted",
+   "redaction": "not-applicable"
+  }
+ ],
+ "limitations": [
+  "ruyitrace receipt pointer sha256 自引用不一致（MCP 侧 bug），browser fact 手动登记；integrity pass / rootSha256 已记录"
+ ],
+ "createdAt": "2026-08-15T06:06:41Z",
+ "updatedAt": "2026-08-15T20:00:00Z"
+}

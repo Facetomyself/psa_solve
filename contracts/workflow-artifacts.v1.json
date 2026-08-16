@@ -1,0 +1,72 @@
+{
+  "schema": "workflow-artifacts.v1",
+  "caseId": "psa-cf-5s-shield-20260815",
+  "status": "draft",
+  "inputBaseline": {
+    "sourceHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "browserEvidence": {
+      "schema": "evidence-pointer.v1",
+      "caseId": "psa-cf-5s-shield-20260815",
+      "plane": "ruyitrace",
+      "runId": "rt_template_001",
+      "artifactId": "browser-input-baseline",
+      "path": "evidence/web/ruyitrace/rt_template_001/browser-input-baseline.json",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "bytes": 0,
+      "mediaType": "application/json",
+      "sensitivity": "public-synthetic",
+      "redaction": "synthetic"
+    },
+    "canonicalInput": {
+      "schema": "evidence-pointer.v1",
+      "caseId": "psa-cf-5s-shield-20260815",
+      "plane": "v8trace",
+      "runId": "v8_template_001",
+      "artifactId": "canonical-input",
+      "path": "evidence/web/v8trace/v8_template_001/canonical-input.json",
+      "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "bytes": 0,
+      "mediaType": "application/json",
+      "sensitivity": "public-synthetic",
+      "redaction": "synthetic"
+    },
+    "redaction": "synthetic"
+  },
+  "requestShapes": [],
+  "requestRoutes": [],
+  "dynamicStates": [],
+  "responsePipelines": [],
+  "transportAdmissions": [],
+  "resources": [],
+  "challenges": [],
+  "environmentCoverage": [],
+  "environmentPatchGate": {
+    "status": "not-ready",
+    "patchScope": "external-host-only",
+    "vmHandlerPatch": "forbidden",
+    "opcodeHandlerPatch": "forbidden",
+    "bytecodeDispatchPatch": "forbidden",
+    "wasmInternalPatch": "forbidden",
+    "patchCoverageIds": [],
+    "scopeEvidence": {
+      "schema": "evidence-pointer.v1",
+      "caseId": "psa-cf-5s-shield-20260815",
+      "plane": "ruyitrace",
+      "runId": "rt_template_001",
+      "artifactId": "environment-patch-scope",
+      "path": "evidence/web/ruyitrace/rt_template_001/environment-patch-scope.json",
+      "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "bytes": 0,
+      "mediaType": "application/json",
+      "sensitivity": "public-synthetic",
+      "redaction": "synthetic"
+    }
+  },
+  "fingerprintProfiles": [],
+  "statefulFlows": [],
+  "experiments": [],
+  "minimalFacts": [],
+  "limitations": [
+    "Populate only from current evidence; historical request values and browser state are not inputs."
+  ]
+}

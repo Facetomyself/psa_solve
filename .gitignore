@@ -1,0 +1,9 @@
+# 挑战材料（每轮 epoch：挑战页 HTML + orchestrate JS + manifest）——不进 Git
+challenge-material/
+
+# 原始 evidence（仅 manifest/contract 进 Git）
+evidence/
+
+# Python 缓存
+__pycache__/
+*.pyc

@@ -1,0 +1,69 @@
+{
+  "schema": "request-parameter-lineage.v1",
+  "caseId": "psa-cf-5s-shield-20260815",
+  "status": "draft",
+  "objective": "替换为本 case 的请求参数谱系目标",
+  "targetOrigins": [
+    "https://example.invalid"
+  ],
+  "endpoints": [
+    {
+      "id": "replace-endpoint-id",
+      "method": "POST",
+      "path": "/replace-path",
+      "payloadShape": "form",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_template_001",
+        "artifactId": "request-shape",
+        "path": "evidence/web/ruyitrace/rt_template_001/request-shape.json",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "bytes": 0,
+        "mediaType": "application/json",
+        "sensitivity": "public-synthetic",
+        "redaction": "synthetic"
+      },
+      "parameters": [
+        {
+          "name": "replace-parameter-name",
+          "location": "form",
+          "classification": "unknown",
+          "requiredByServer": true,
+          "lineage": {
+            "sourceKind": "unknown",
+            "transform": {
+              "kind": "unknown",
+              "reference": "待定位的 writer/builder/callsite",
+              "inputParameters": []
+            },
+            "evidence": {
+              "schema": "evidence-pointer.v1",
+              "caseId": "psa-cf-5s-shield-20260815",
+              "plane": "ruyitrace",
+              "runId": "rt_template_001",
+              "artifactId": "parameter-lineage",
+              "path": "evidence/web/ruyitrace/rt_template_001/parameter-lineage.json",
+              "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "bytes": 0,
+              "mediaType": "application/json",
+              "sensitivity": "public-synthetic",
+              "redaction": "synthetic"
+            }
+          },
+          "verification": {
+            "browserObserved": "not-run",
+            "localReproduced": "not-run",
+            "serverAccepted": "not-run"
+          },
+          "sensitivity": "private-redacted"
+        }
+      ]
+    }
+  ],
+  "executionReadiness": "not-ready",
+  "limitations": [
+    "模板中的 synthetic pointer 必须替换为当前 case 的脱敏 evidence pointer。"
+  ]
+}
