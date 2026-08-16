@@ -62,7 +62,8 @@ def main():
     orch = os.path.join(TMP, "mock_orch.js")
     open(orch, "w", encoding="utf-8").write(f"""
 var xhr = new XMLHttpRequest();
-xhr.open("POST", "http://127.0.0.1:{PORT}/fo");
+// 第一轮用相对 URL：capture 分支必须按 target origin 解析为绝对地址
+xhr.open("POST", "/fo");
 xhr.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
 xhr.onload = function() {{
   if (xhr.status === 200) {{
@@ -77,6 +78,7 @@ xhr.send("fo-body-smoke");
 
     env = dict(os.environ)
     env["CF_CAPTURE_ONLY"] = "1"
+    env["CF_TARGET_URL"] = f"http://127.0.0.1:{PORT}/cert/1/psa"
     proc = subprocess.Popen(
         [NODE, os.path.join(ROOT, "runtime", "run.js"), page, orch, "__cf_bm=smokebm"],
         stdout=subprocess.PIPE, stdin=subprocess.PIPE,
@@ -134,6 +136,8 @@ xhr.send("fo-body-smoke");
     checks.append(("runtime_request 两轮", len(requests_seen) == 2))
     checks.append(("第一轮 POST /fo body 完整", requests_seen and
                    requests_seen[0]["body"] == "fo-body-smoke"))
+    checks.append(("相对 URL 已解析为绝对地址", requests_seen and
+                   requests_seen[0]["url"] == f"http://127.0.0.1:{PORT}/fo"))
     checks.append(("第二轮 GET /after（onload 事件链推进）", len(requests_seen) == 2 and
                    requests_seen[1]["method"] == "GET"))
     checks.append(("result.hasClearance", bool(result and result.get("hasClearance"))))

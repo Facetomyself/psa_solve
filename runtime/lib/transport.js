@@ -57,13 +57,14 @@ function install(g, cfg) {
 
     if (cfg.CF_CAPTURE_ONLY) {
       // capture 桥接：request record 输出 stdout，挂起等待回灌
+      // url 输出解析后的绝对地址（与真实分支语义一致：相对 URL 按 target origin 解析）
       const reqId = "fo-" + (g.__captureRequestId = (g.__captureRequestId || 0) + 1);
-      g.__patchResponses.push({ url: u, capture: reqId, status: "pending" });
+      g.__patchResponses.push({ url: parsed.href, capture: reqId, status: "pending" });
       process.stdout.write(JSON.stringify({
         type: "runtime_request",
         request_id: reqId,
         method: self._method,
-        url: u,
+        url: parsed.href,
         headers,
         body: body == null ? "" : String(body),
       }) + "\n");

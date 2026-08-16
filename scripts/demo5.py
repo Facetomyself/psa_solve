@@ -162,6 +162,8 @@ def solve_same_session(session, challenge_body, outdir):
             mtype = msg.get("type")
             if mtype == "runtime_request":
                 url = msg["url"]
+                if url.startswith("/"):
+                    url = "https://www.psacard.com" + url  # 防御：相对 URL 兜底
                 method = msg.get("method", "POST").upper()
                 headers = {k: v for k, v in msg.get("headers", {}).items()
                            if k.lower() not in ("cookie", "content-length", "host")}
