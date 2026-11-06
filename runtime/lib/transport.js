@@ -33,6 +33,62 @@ function install(g, cfg) {
     cb(message);
   };
 
+  function hasHeader(headers, name) {
+    const want = String(name).toLowerCase();
+    return Object.keys(headers || {}).some((key) => String(key).toLowerCase() === want);
+  }
+
+  function documentOrigin() {
+    if (g.location && g.location.origin) return String(g.location.origin);
+    return String((cfg.TARGET && cfg.TARGET.origin) || "");
+  }
+
+  function siteLabel(hostname) {
+    const parts = String(hostname || "").toLowerCase().split(".").filter(Boolean);
+    if (parts.length <= 2) return parts.join(".");
+    return parts.slice(-2).join(".");
+  }
+
+  function fetchSite(parsed) {
+    let doc;
+    try { doc = new URLImpl(documentOrigin()); }
+    catch (e) { return "cross-site"; }
+    if (doc.origin === parsed.origin) return "same-origin";
+    if (doc.protocol === parsed.protocol && siteLabel(doc.hostname) && siteLabel(doc.hostname) === siteLabel(parsed.hostname)) {
+      return "same-site";
+    }
+    return "cross-site";
+  }
+
+  function acceptLanguageValue() {
+    const nav = g.navigator || {};
+    const listed = Array.isArray(nav.languages)
+      ? nav.languages.map((item) => String(item || "").trim()).filter(Boolean)
+      : [];
+    const primary = listed[0] || (nav.language ? String(nav.language).trim() : "");
+    if (!primary) return "";
+    const parts = listed.length ? listed.slice() : [primary];
+    const base = primary.split("-")[0];
+    const hasBase = parts.some((item) => item.split(";")[0].toLowerCase() === base.toLowerCase()
+      && item.split(";")[0].toLowerCase() !== primary.toLowerCase());
+    if (base && !hasBase && base.toLowerCase() !== primary.toLowerCase()) parts.push(base + ";q=0.9");
+    return parts.join(",");
+  }
+
+  function applyAutomaticRequestHeaders(self, parsed) {
+    const headers = self._headers;
+    const origin = documentOrigin();
+    if (origin && !hasHeader(headers, "origin")) headers.Origin = origin;
+    if (!hasHeader(headers, "sec-fetch-dest")) headers["Sec-Fetch-Dest"] = "empty";
+    if (!hasHeader(headers, "sec-fetch-mode")) headers["Sec-Fetch-Mode"] = "cors";
+    if (!hasHeader(headers, "sec-fetch-site")) headers["Sec-Fetch-Site"] = fetchSite(parsed);
+    // XHR sets Accept to */* when the caller did not.
+    if (!hasHeader(headers, "accept")) headers.Accept = "*/*";
+    // Firefox sends this from navigator.language when the caller did not.
+    const lang = acceptLanguageValue();
+    if (lang && !hasHeader(headers, "accept-language")) headers["Accept-Language"] = lang;
+  }
+
   function xhrSend(self, body) {
     const u = self._url;
     if (!u) return;
@@ -44,6 +100,8 @@ function install(g, cfg) {
       g.__patchResponses.push({ url: u, error: "URL parse: " + String(e.message || e) });
       return;
     }
+
+    applyAutomaticRequestHeaders(self, parsed);
 
     // 浏览器行为：默认 UA/Referer + 同源自动携带 document.cookie
     const headers = Object.assign({
@@ -71,8 +129,16 @@ function install(g, cfg) {
       g.__capturePending[reqId] = (envelope) => {
         self.status = envelope.status || 0;
         self.statusText = String(envelope.status || "");
-        self.responseText = envelope.body || "";
-        self.response = envelope.body || "";
+        // 无损搬运：driver 发 body_b64（latin1 字符串化），兼容旧 body 字段。
+        // 证据：utf-8/replace 桥接把非 UTF-8 字节变 U+FFFD，VM opcode 流被毁
+        //（ruyijs 走真实字节流无此问题）。XHR responseText 按 latin1 还原字节。
+        if (typeof envelope.body_b64 === "string") {
+          const buf = Buffer.from(envelope.body_b64, "base64");
+          self.responseText = buf.toString("latin1");
+        } else {
+          self.responseText = envelope.body || "";
+        }
+        self.response = self.responseText;
         self.responseURL = u;
         self.readyState = 4;
         self._respHeaders = envelope.headers || {};
@@ -95,8 +161,17 @@ function install(g, cfg) {
             break;
           }
         }
-        try { self.onreadystatechange && self.onreadystatechange(); } catch (e) {}
-        try { self.onload && self.onload(); } catch (e) {}
+        try { self.onreadystatechange && self.onreadystatechange(); }
+        catch (e) {
+          if (cfg.CF_DIAGNOSTICS) process.stderr.write(
+            "[diag] xhr onreadystatechange threw: " + String(e && e.name || "") + ": " +
+            String(e && e.message || "") + " | " + String(e && e.stack || e).slice(0, 1200) + "\n");
+        }
+        try { self.onload && self.onload(); }
+        catch (e) {
+          if (cfg.CF_DIAGNOSTICS) process.stderr.write(
+            "[diag] xhr onload threw: " + String(e && e.stack || e).slice(0, 1200) + "\n");
+        }
       };
       return;
     }
@@ -125,6 +200,7 @@ function install(g, cfg) {
         g.__patchResponses.push({
           url: u,
           status: res.statusCode,
+          bodyLength: text.length,
           setCookie: String(sc || ""),
           bodyHead: text.slice(0, 300),
         });
@@ -187,6 +263,10 @@ function install(g, cfg) {
     send(b) {
       if (g.__patchXhr.length) g.__patchXhr[g.__patchXhr.length - 1].body = String(b || "");
       g.__lastSubmitAt = Date.now();
+      // XHR send(USVString) sets this when the caller did not.
+      if (typeof b === "string" && !hasHeader(this._headers, "content-type")) {
+        this._headers["Content-Type"] = "text/plain;charset=UTF-8";
+      }
       xhrSend(this, b);
     }
     abort() {}

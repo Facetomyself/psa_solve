@@ -28,6 +28,8 @@ ROOT = r"D:\reverse_ENV\workspace\psa_solve"
 RUNTIME_DIR = os.path.join(ROOT, "runtime")
 MATERIAL_ROOT = os.path.join(ROOT, "challenge-material")
 NODE = r"D:\reverse_ENV\tools\node\node.exe"
+RUYIJS_PY = r"D:\reverse_ENV\temp\ruyijs-test-env\Scripts\python.exe"
+RUYIJS_SOLVER = os.path.join(RUNTIME_DIR, "solve_ruyijs.py")
 TARGET = "https://www.psacard.com/cert/{sn}/psa"
 UA_FF = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0"
 IMPERSONATE = "firefox"
@@ -80,6 +82,44 @@ async def fetch_page_async(asession, sn, cookies=None, timeout=10):
             "content-length": r.headers.get("content-length", ""),
         }
     return r.status_code, blocked, meta, r.content
+
+
+async def solve_ruyijs_async(outdir):
+    """ruyijs 自含求解（对照 run2_022 已验证链）。子进程隔离，cookie 经临时文件传递。
+    成功返回 (ck, meta)；失败返回 (None, reason)。UA 用生产 UA_FF 保持 clearance 绑定一致。"""
+    cookie_path = os.path.join(outdir, "ruyijs-cookies.json")
+    env = dict(os.environ)
+    env.pop("HTTP_PROXY", None); env.pop("HTTPS_PROXY", None)
+    env.pop("http_proxy", None); env.pop("https_proxy", None)
+    proc = await asyncio.create_subprocess_exec(
+        RUYIJS_PY, "-I", RUYIJS_SOLVER, "--out", cookie_path, UA_FF,
+        stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, env=env)
+    try:
+        out, err = await asyncio.wait_for(proc.communicate(), timeout=300)
+    except asyncio.TimeoutError:
+        proc.kill()
+        return None, "ruyijs 求解超时 300s"
+    summary = {}
+    try:
+        text = out.decode("utf-8", errors="replace")
+        start = text.index("{")
+        summary = json.loads(text[start:])
+    except Exception:
+        pass
+    if proc.returncode != 0 or not summary.get("hasCfClearance"):
+        reason = summary.get("error") or f"exit={proc.returncode}"
+        return None, f"ruyijs 求解失败: {reason}"
+    try:
+        cookies = json.loads(open(cookie_path, encoding="utf-8").read())
+    finally:
+        try:
+            os.remove(cookie_path)
+        except OSError:
+            pass
+    ck = {k: v for k, v in cookies.items() if k in ("__cf_bm", "cf_clearance", "env", "psa-locale")}
+    meta = (f"{summary.get('foRounds', '?')} fo 轮, {summary.get('wallS', '?')}s, "
+            f"certOk={summary.get('certOk')}")
+    return ck, meta
 
 
 async def solve_bridge_async(session, challenge_body, outdir):
@@ -160,14 +200,18 @@ async def solve_bridge_async(session, challenge_body, outdir):
                     return None, f"fo 发送异常: {e}"
                 sc_raw = r.headers.get("set-cookie", "") or ""
                 sc_list = [c.strip() for c in sc_raw.split(",") if "=" in c.strip()]
+                # 诊断：只记 host+path，剥 query（token 不落日志）
+                from urllib.parse import urlsplit
+                _u = urlsplit(url)
+                _path = _u.netloc + _u.path
                 klass = classify_fo(
                     r.status_code, {k.lower(): v for k, v in r.headers.items()},
                     sc_raw)
                 fo_log.append({"request_id": msg["request_id"], "method": method,
-                               "status": r.status_code, "class": klass,
+                               "path": _path, "status": r.status_code, "class": klass,
                                "body_len": len(r.content)})
-                log(f"fo {msg['request_id']} -> {r.status_code} [{klass}] "
-                    f"({len(r.content)} bytes)")
+                log(f"fo {msg['request_id']} {method} {_path} (req {len(str(body))}B) "
+                    f"-> {r.status_code} [{klass}] ({len(r.content)} bytes)")
                 envelope = {
                     "type": "response",
                     "request_id": msg["request_id"],
@@ -194,6 +238,8 @@ async def solve_bridge_async(session, challenge_body, outdir):
             await asyncio.wait_for(proc.wait(), timeout=10)
         except Exception:
             proc.kill()
+    log(f"bridge 退出: code={proc.returncode} requests={len(fo_log)} "
+        f"result={'yes' if result else 'no'}", "step")
 
     if not result or not result.get("hasClearance"):
         return None, f"bridge 未产出 clearance（fo {len(fo_log)} 轮）"
@@ -264,8 +310,11 @@ async def main_async(args):
             epoch = datetime.now().strftime("%Y%m%d-%H%M%S")
             outdir = os.path.join(MATERIAL_ROOT, f"demo6-{epoch}-{solves}")
             os.makedirs(outdir, exist_ok=True)
-            log("429 挑战 -> capture-only bridge 异步求解", "step")
-            ck_new, reason = await solve_bridge_async(asess, content, outdir)
+            log(f"{args.solver} 求解 -> 异步执行", "step")
+            if getattr(args, "solver", "ruyijs") == "ruyijs":
+                ck_new, reason = await solve_ruyijs_async(outdir)
+            else:
+                ck_new, reason = await solve_bridge_async(asess, content, outdir)
             solve_durations.append(time.time() - t_trig)
             if not ck_new:
                 log(f"求解失败：{reason}，冷却 60s", "bad")
@@ -274,8 +323,8 @@ async def main_async(args):
                 continue
             solves += 1
             ck = ck_new
-            log(f"求解成功（{solve_durations[-1]:.0f}s，"
-                f"fo {len(reason)} 轮），clearance 已收集", "ok")
+            fo_n = f"fo {len(reason)} 轮" if isinstance(reason, list) else reason
+            log(f"求解成功（{solve_durations[-1]:.0f}s，{fo_n}），clearance 已收集", "ok")
             wait = max(5.0, args.recover_age - (time.time() - t_trig))
             log(f"恢复等待 {wait:.0f}s（距触发将达 {args.recover_age}s）")
             await asyncio.sleep(wait)
@@ -329,6 +378,8 @@ def main():
     parser.add_argument("--abort-cooldown", type=float, default=45.0,
                         help="连接异常重试失败后的冷却秒数")
     parser.add_argument("--max-solves", type=int, default=5, help="求解次数上限")
+    parser.add_argument("--solver", choices=["ruyijs", "bridge"], default="ruyijs",
+                        help="挑战求解器：ruyijs 自含引擎（默认）或 capture-only bridge")
     parser.add_argument("--sn", type=int, default=143963534, help="起始证书编号")
     args = parser.parse_args()
 

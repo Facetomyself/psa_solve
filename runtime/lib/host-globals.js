@@ -28,7 +28,7 @@ function install(g, cfg) {
 
   // ---- 屏幕/视口 ----
   g.innerWidth = 1920;
-  g.innerHeight = 1080;
+  g.innerHeight = 939;  // 对齐 RuyiTrace rt_20260929103550_341b734038 浏览器事实
   g.outerWidth = 1920;
   g.outerHeight = 1080;
   g.devicePixelRatio = 1;
@@ -71,6 +71,55 @@ function install(g, cfg) {
   g.history = { replaceState: () => {}, pushState: () => {}, go: () => {}, back: () => {} };
 
   // ---- navigator ----
+  function gpuLimits() {
+    return {
+      maxTextureDimension1D: 8192,
+      maxTextureDimension2D: 8192,
+      maxTextureDimension3D: 2048,
+      maxBindGroups: 4,
+      maxBindingsPerBindGroup: 1000,
+      maxBufferSize: 268435456,
+      maxComputeWorkgroupSizeX: 256,
+      maxComputeWorkgroupSizeY: 256,
+      maxComputeWorkgroupSizeZ: 64,
+      maxComputeInvocationsPerWorkgroup: 256,
+    };
+  }
+  function gpuDevice() {
+    return {
+      features: new Set(["texture-compression-bc"]),
+      limits: gpuLimits(),
+      queue: {
+        submit() {},
+        writeBuffer() {},
+        onSubmittedWorkDone() { return Promise.resolve(); },
+      },
+      createBuffer() {
+        return {
+          destroy() {},
+          getMappedRange() { return new ArrayBuffer(0); },
+          mapAsync() { return Promise.resolve(); },
+          unmap() {},
+        };
+      },
+      createShaderModule() { return {}; },
+      createCommandEncoder() {
+        return {
+          finish() { return {}; },
+          beginComputePass() {
+            return { setPipeline() {}, dispatchWorkgroups() {}, end() {} };
+          },
+          beginRenderPass() { return { end() {} }; },
+        };
+      },
+      createComputePipeline() { return {}; },
+      createRenderPipeline() { return {}; },
+      createBindGroup() { return {}; },
+      createBindGroupLayout() { return {}; },
+      createPipelineLayout() { return {}; },
+      destroy() {},
+    };
+  }
   g.navigator = {
     userAgent: cfg.CF_USER_AGENT,
     language: "en-US",
@@ -82,6 +131,40 @@ function install(g, cfg) {
     cookieEnabled: true,
     maxTouchPoints: 0,
     doNotTrack: null,
+    gpu: {
+      requestAdapter() {
+        return Promise.resolve({
+          features: new Set(["texture-compression-bc"]),
+          limits: gpuLimits(),
+          isFallbackAdapter: false,
+          requestDevice() { return Promise.resolve(gpuDevice()); },
+        });
+      },
+      getPreferredCanvasFormat() { return "bgra8unorm"; },
+    },
+  };
+
+  // ---- atob/btoa（对齐 ruyijs 引擎的宽容语义）----
+  // 证据链（2026-11-06 bridge diag）：
+  // 1) Node 内建 atob 不剥空白 → FO r1 响应处理抛 InvalidCharacterError；
+  // 2) 修正后链推进（FO 响应即下一阶段 orchestrate，被注入执行），但其解码器
+  //    喂给 atob 的字符超出 WHATWG 字母表（含 URL-safe 变体），说明 ruyijs 引擎
+  //    atob 为宽容型（非法字符丢弃后解码）。Node 补环境按宽容语义对齐。
+  g.atob = function (input) {
+    const s = String(input).replace(/[^A-Za-z0-9+/\-_]/g, "");
+    return Buffer.from(s, "base64").toString("latin1");
+  };
+  g.btoa = function (input) {
+    const s = String(input);
+    for (let i = 0; i < s.length; i++) {
+      if (s.charCodeAt(i) > 0xff) {
+        const err = typeof DOMException === "function"
+          ? new DOMException("Out of range", "InvalidCharacterError")
+          : Object.assign(new Error("Out of range"), { name: "InvalidCharacterError" });
+        throw err;
+      }
+    }
+    return Buffer.from(s, "latin1").toString("base64");
   };
 
   // ---- performance ----
@@ -99,10 +182,10 @@ function install(g, cfg) {
     measure: () => {},
   };
 
-  // ---- 事件全局（no-op） ----
-  g.addEventListener = () => {};
-  g.removeEventListener = () => {};
-  g.dispatchEvent = () => true;
+  // ---- 事件全局（window / document 共用同一组方法，按 this 分桶） ----
+  g.addEventListener = addEventListener;
+  g.removeEventListener = removeEventListener;
+  g.dispatchEvent = dispatchEvent;
   g.postMessage = () => {};
 
   // ---- DOM 类构造函数（instanceof/原型检查面） ----
@@ -110,10 +193,16 @@ function install(g, cfg) {
     "HTMLElement", "HTMLDocument", "HTMLHtmlElement", "HTMLHeadElement",
     "HTMLBodyElement", "HTMLDivElement", "HTMLAnchorElement", "HTMLSpanElement",
     "HTMLScriptElement", "HTMLStyleElement", "HTMLLinkElement", "HTMLInputElement",
+    "HTMLFormElement",
     "HTMLCanvasElement", "HTMLIFrameElement", "HTMLImageElement", "Image",
     "Document", "DocumentFragment", "CharacterData", "Text", "Comment", "Attr",
     "CSSStyleDeclaration", "EventTarget", "Element", "Node", "Event",
     "MouseEvent", "ErrorEvent", "MessageEvent", "SVGElement", "SVGSVGElement",
+    // FO 下一阶段脚本（swc 编译）实扫描面：2026-11-06 diag 实测
+    // ReferenceError: HTMLCollection is not defined → 补集合/遍历一族
+    "HTMLCollection", "NodeList", "NamedNodeMap", "DOMTokenList",
+    "HTMLAllCollection", "HTMLFormControlsCollection", "HTMLOptionsCollection",
+    "DOMStringMap", "DOMStringList", "RadioNodeList",
     "RTCPeerConnection", "webkitRTCPeerConnection", "RTCSessionDescription",
     "RTCIceCandidate", "MediaStream", "MediaStreamTrack",
   ];
@@ -132,6 +221,59 @@ function install(g, cfg) {
   g.ANTT9 = function () {};
   g.qOeu1 = function () {};
   g.PnHD6 = function () {};
+}
+
+const listenerBuckets = new WeakMap();
+
+function eventReceiver(target) {
+  if (target === null || (typeof target !== "object" && typeof target !== "function")) return globalThis;
+  return target;
+}
+
+function bucketsFor(target) {
+  const key = eventReceiver(target);
+  let buckets = listenerBuckets.get(key);
+  if (!buckets) {
+    buckets = new Map();
+    listenerBuckets.set(key, buckets);
+  }
+  return buckets;
+}
+
+function addEventListener(type, listener) {
+  if (typeof listener !== "function" && !(listener && typeof listener.handleEvent === "function")) return;
+  const key = String(type);
+  const buckets = bucketsFor(this);
+  let list = buckets.get(key);
+  if (!list) {
+    list = [];
+    buckets.set(key, list);
+  }
+  if (list.indexOf(listener) !== -1) return;
+  list.push(listener);
+}
+
+function removeEventListener(type, listener) {
+  const buckets = listenerBuckets.get(eventReceiver(this));
+  if (!buckets) return;
+  const list = buckets.get(String(type));
+  if (!list) return;
+  const index = list.indexOf(listener);
+  if (index >= 0) list.splice(index, 1);
+}
+
+function dispatchEvent(event) {
+  const receiver = eventReceiver(this);
+  const buckets = listenerBuckets.get(receiver);
+  if (!buckets) return true;
+  const type = event && event.type != null ? String(event.type) : "";
+  const list = buckets.get(type);
+  if (!list || !list.length) return true;
+  for (const listener of list.slice()) {
+    if (typeof listener === "function") listener.call(receiver, event);
+    else listener.handleEvent(event);
+  }
+  return true;
 }
 
 module.exports = { install };

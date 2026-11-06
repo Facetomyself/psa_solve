@@ -7,3 +7,6 @@ evidence/
 # Python 缓存
 __pycache__/
 *.pyc
+
+# FO 载荷原始捕获（加密指纹串，仅本地 diff 用）
+diagnostics/*/fo-bodies/
