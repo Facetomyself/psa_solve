@@ -10,3 +10,6 @@ __pycache__/
 
 # FO 载荷原始捕获（加密指纹串，仅本地 diff 用）
 diagnostics/*/fo-bodies/
+diagnostics/*/fo-bodies/
+diagnostics/ruyijs-api-log-*/api-log/
+diagnostics/ruyijs-api-log-*/summary.json
