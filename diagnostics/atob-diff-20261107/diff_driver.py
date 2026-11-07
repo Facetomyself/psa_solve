@@ -252,6 +252,9 @@ async def run_node() -> dict:
                 parts = urlsplit(url)
                 fo_rounds.append({"method": method, "path": parts.netloc + parts.path,
                                   "status": rr.status_code, "resp_len": len(rr.content)})
+                # FO POST 响应体落盘（第二层输入溯源用，gitignore 域）
+                if method == "POST" and "/cdn-cgi/" in url:
+                    (OUT_DIR / f"bridge-fo-resp-{len(fo_rounds) - 1}.bin").write_bytes(rr.content)
                 envelope = {"type": "response", "request_id": msg["request_id"],
                             "status": rr.status_code,
                             "headers": {k.lower(): v for k, v in rr.headers.items()},
