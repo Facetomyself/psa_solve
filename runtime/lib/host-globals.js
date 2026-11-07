@@ -176,17 +176,63 @@ function install(g, cfg) {
   // getEntriesByType×3 / getEntries×2 —— mark 必须有状态可读回，clearMarks
   // 必须存在（缺失即 TypeError 断链）。语义对齐浏览器：mark 入条目表，
   // clearMarks(name?) 按名删或全删，getEntries* 从条目表读。
+  //
+  // 2026-11-07 消变体对拍定站（n=759 分叉根因）：orchestrate 遍历
+  // performance.getEntries() 逐条调用处理函数（读 entryType/name/
+  // requestStart/responseStart 等并编码进 FO 载荷），随后注册
+  // PerformanceObserver({entryTypes:['resource','navigation']})。
+  // ruyijs 引擎为 load_page 生成 navigation + 6 条 resource 条目；
+  // Node 侧原实现 getEntries 只有 mark 表 → 返回 [] → 条目处理电路
+  // 整段跳过 → atob 调用序列错位。故补 navigation/resource 条目表：
+  // 条目由 run.js 在页面/脚本加载与 XHR 完成时经 __perfRecord 打点产生，
+  // 数值取真实时钟（挑战接受真实浏览器级时序范围，不硬编码）。
   const perfMarks = [];
+  const perfNav = [];
+  const perfResources = [];
+  const perfObservers = [];
+  const PERF_TYPES = { mark: perfMarks, navigation: perfNav, resource: perfResources };
+  function perfEntry(type, init) {
+    const e = Object.assign({
+      name: "",
+      entryType: type,
+      startTime: perfNow(),
+      duration: 0,
+    }, init || {});
+    const bucket = PERF_TYPES[type] || perfMarks;
+    bucket.push(e);
+    // observer 投递（异步，对齐浏览器队列语义；observe 时已存在的条目不投递，
+    // 除非 buffered:true —— 挑战代码的 wS 走的是主动 getEntries 遍历，不依赖此路）
+    for (const ob of perfObservers) {
+      if (!ob._types || ob._types.indexOf(type) === -1) continue;
+      const cb = ob._cb;
+      setTimeout(() => {
+        try { cb.call(ob, [{ getEntries: () => [e] }], ob); } catch (err) {}
+      }, 0);
+    }
+    return e;
+  }
+  g.__perfRecord = perfEntry;
+  function allPerfEntries() {
+    return perfNav.concat(perfResources, perfMarks)
+      .sort((a, b) => a.startTime - b.startTime);
+  }
   g.performance = {
     now: perfNow,
     timeOrigin: 0,
-    getEntries: () => perfMarks.slice(),
-    getEntriesByType: (t) => (String(t) === "mark" ? perfMarks.slice() : []),
-    getEntriesByName: (n) => perfMarks.filter((e) => e.name === String(n)),
+    getEntries: () => allPerfEntries(),
+    getEntriesByType: (t) => {
+      const type = String(t);
+      const bucket = PERF_TYPES[type];
+      return bucket ? bucket.slice() : [];
+    },
+    getEntriesByName: (n, t) => {
+      const name = String(n);
+      const pool = t != null && PERF_TYPES[String(t)] ? PERF_TYPES[String(t)] : allPerfEntries();
+      return pool.filter((e) => e.name === name);
+    },
     mark: (name) => {
-      perfMarks.push({
+      perfEntry("mark", {
         name: String(name == null ? "" : name),
-        entryType: "mark",
         startTime: perfNow(),
         duration: 0,
       });
@@ -204,6 +250,34 @@ function install(g, cfg) {
     measure: () => {},
     clearMeasures: () => {},
   };
+  g.PerformanceObserver = class PerformanceObserver {
+    constructor(cb) {
+      this._cb = typeof cb === "function" ? cb : function () {};
+      this._types = null;
+      this._observed = false;
+    }
+    observe(opts) {
+      const o = opts && typeof opts === "object" ? opts : {};
+      if (Array.isArray(o.entryTypes)) {
+        this._types = o.entryTypes.map(String);
+      } else if (o.type != null) {
+        this._types = [String(o.type)];
+      }
+      if (!this._observed) {
+        perfObservers.push(this);
+        this._observed = true;
+      }
+    }
+    disconnect() {
+      const i = perfObservers.indexOf(this);
+      if (i !== -1) perfObservers.splice(i, 1);
+      this._observed = false;
+    }
+    takeRecords() { return []; }
+  };
+  g.PerformanceEntry = function PerformanceEntry() {};
+  g.PerformanceNavigationTiming = function PerformanceNavigationTiming() {};
+  g.PerformanceResourceTiming = function PerformanceResourceTiming() {};
 
   // ---- 事件全局（window / document 共用同一组方法，按 this 分桶） ----
   g.addEventListener = addEventListener;

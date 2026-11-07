@@ -144,12 +144,60 @@ catch (e) { errors.push({ stage: "init", message: String(e && e.message || e).sl
 
 // Proxy 垫底已移入 code.js（模块化安装时设置，经 vm context 继承）
 
+// 4.5 Performance 条目打点（2026-11-07 消变体对拍定站 n=759 分叉根因）：
+// orchestrate 遍历 performance.getEntries() 逐条处理（读 entryType/name/
+// requestStart/responseStart 编码进 FO 载荷）。ruyijs 引擎为 load_page 生成
+// navigation + resource 条目，Node 侧原 getEntries 只有 mark 表 → 遍历整段
+// 跳过 → atob 序列错位。此处按页面自身数据生成同构条目（run.js 无网络栈，
+// orchestrate/静态资源由调用方喂入，条目名从 403 页 loader 脚本提取）。
+if (typeof global.__perfRecord === "function") {
+  try {
+    const opt = global._cf_chl_opt || {};
+    const zone = String(opt.cZone || "www.psacard.com");
+    let path = String(opt.cUPMDTk || "/").split("?")[0];
+    if (!path.startsWith("/")) path = "/" + path;
+    const pageUrl = "https://" + zone + path;
+    global.__perfRecord("navigation", {
+      name: pageUrl, entryType: "navigation", startTime: 0,
+      duration: 0, initiatorType: "navigation",
+      fetchStart: 0, requestStart: 0, responseStart: 0, responseEnd: 0,
+      domInteractive: 0, domContentLoadedEventStart: 0,
+      domContentLoadedEventEnd: 0, domComplete: 0,
+      loadEventStart: 0, loadEventEnd: 0,
+      transferSize: 0, encodedBodySize: 0, decodedBodySize: 0,
+      type: "navigate", redirectCount: 0, activationStart: 0,
+    });
+    let orchUrl = "";
+    const lm = pageHtml.match(/a\.src\s*=\s*['"]([^'"]*orchestrate[^'"]*)['"]/);
+    if (lm) {
+      try { orchUrl = new URL(lm[1], pageUrl).href; } catch (e) {}
+    }
+    if (orchUrl) {
+      const t = global.performance && typeof global.performance.now === "function"
+        ? global.performance.now() : 0;
+      global.__perfRecord("resource", {
+        name: orchUrl, entryType: "resource",
+        startTime: t, duration: 0, initiatorType: "script",
+        fetchStart: t, requestStart: t, responseStart: t, responseEnd: t,
+        transferSize: 0, encodedBodySize: orchJs.length,
+        decodedBodySize: orchJs.length,
+      });
+    }
+  } catch (e) { /* 打点失败不阻断求解 */ }
+}
+
 // 5. 执行 orchestrate（求解主流程）
 try {
   vm.runInContext(orchJs, ctx, { filename: "orchestrate.js", timeout: 60000 });
 } catch (e) {
   errors.push({ stage: "orchestrate", message: String(e && e.message || e).slice(0, 200) });
 }
+
+// 5.5 文档生命周期（2026-11-07 消变体对拍实测撤回）：ruyijs 引擎
+// load_page 返回时 readyState 已为 'complete'（页面脚本与 load 事件在
+// load_page 内同步完成），orchestrate 执行时 DOMContentLoaded/load 均已
+// 派发过。此处若补派发反而制造引擎侧不存在的事件；挑战代码的
+// 'loading' 分支两侧均不进入。故不派发，保持 readyState='complete'。
 
 // 6. 全局错误兜底（异步回调里的异常不退出进程）
 process.on("uncaughtException", (e) => {

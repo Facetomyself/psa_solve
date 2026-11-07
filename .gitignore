@@ -14,3 +14,18 @@ diagnostics/*/fo-bodies/
 diagnostics/ruyijs-api-log-*/api-log/
 diagnostics/ruyijs-api-log-*/summary.json
 diagnostics/ruyijs-api-log-*/atob-values/
+diagnostics/atob-diff-*/challenge-page.html
+diagnostics/atob-diff-*/chl-page-orchestrate.js
+diagnostics/atob-diff-*/ruyijs-atob.jsonl
+diagnostics/atob-diff-*/bridge-atob.jsonl
+# 消变体回放材料（含会话 ray/cH token 与挑战字节流——只留脚本，不留材料）
+diagnostics/atob-diff-*/replay-materials/
+diagnostics/atob-diff-*/ruyijs-replay-atob.jsonl
+diagnostics/atob-diff-*/bridge-replay-atob.jsonl
+diagnostics/atob-diff-*/ruyijs-pair-atob.jsonl
+diagnostics/atob-diff-*/bridge-pair-atob.jsonl
+diagnostics/atob-diff-*/ruyijs-pair-apilog.jsonl
+diagnostics/atob-diff-*/ruyijs-pair-netlog.json
+diagnostics/atob-diff-*/bridge-fo-resp-*.bin
+diagnostics/atob-diff-*/diag-script-*.js
+diagnostics/atob-diff-*/report.json

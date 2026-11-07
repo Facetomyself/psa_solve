@@ -49,7 +49,10 @@ function install(g) {
 
   const file = process.env.CF_ATOB_TRACE_FILE ||
     "atob-trace-" + Date.now() + ".jsonl";
-  process.on("exit", () => {
+  // 周期增量落盘：Node 被外部 kill（timeout/驱动收尾）时不触发 exit handler，
+  // 只靠 exit 落盘会丢全部记录（2026-11-07 replay 实测 NO-TRACE）。
+  // 每 2s 全量重写；exit handler 兜底最后一次。
+  function flush() {
     try {
       const fs = require("fs");
       const lines = [];
@@ -61,7 +64,10 @@ function install(g) {
       }));
       fs.writeFileSync(file, lines.join("\n") + "\n", "utf8");
     } catch (e) { /* 落盘失败不影响主流程 */ }
-  });
+  }
+  const timer = setInterval(flush, 2000);
+  if (timer.unref) timer.unref();
+  process.on("exit", flush);
 }
 
 module.exports = { install };

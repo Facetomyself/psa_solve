@@ -291,6 +291,12 @@ function install(g, cfg) {
     body: bodyEl,
     documentElement: makeElement("html"),
     title: "Just a moment...",
+    // 2026-11-07 消变体对拍实测：ruyijs 引擎 load_page 返回时
+    // document.readyState === 'complete'（页面脚本与 load 事件在 load_page 内
+    // 已同步完成）。挑战代码的 'loading' → addEventListener('DOMContentLoaded')
+    // 分支在两侧均不进入；此前怀疑的 'loading' 差异不成立。
+    // 对照记录留档：readyState='loading' 版本使 Node 走事件等待分支，
+    // atob 序列同位前缀从 825 降至 722（反向验证 'complete' 正确）。
     readyState: "complete",
     location: g.location,
     defaultView: g,
