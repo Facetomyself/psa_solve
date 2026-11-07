@@ -13,3 +13,4 @@ diagnostics/*/fo-bodies/
 diagnostics/*/fo-bodies/
 diagnostics/ruyijs-api-log-*/api-log/
 diagnostics/ruyijs-api-log-*/summary.json
+diagnostics/ruyijs-api-log-*/atob-values/
