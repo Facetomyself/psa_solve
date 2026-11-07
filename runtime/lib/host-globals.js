@@ -172,14 +172,37 @@ function install(g, cfg) {
     const [s, ns] = process.hrtime();
     return s * 1000 + ns / 1e6;
   };
+  // ruyijs ApiMonitor 证据（2026-11-07）：挑战脚本调用 mark×5 / clearMarks×4 /
+  // getEntriesByType×3 / getEntries×2 —— mark 必须有状态可读回，clearMarks
+  // 必须存在（缺失即 TypeError 断链）。语义对齐浏览器：mark 入条目表，
+  // clearMarks(name?) 按名删或全删，getEntries* 从条目表读。
+  const perfMarks = [];
   g.performance = {
     now: perfNow,
     timeOrigin: 0,
-    getEntries: () => [],
-    getEntriesByType: () => [],
-    getEntriesByName: () => [],
-    mark: () => {},
+    getEntries: () => perfMarks.slice(),
+    getEntriesByType: (t) => (String(t) === "mark" ? perfMarks.slice() : []),
+    getEntriesByName: (n) => perfMarks.filter((e) => e.name === String(n)),
+    mark: (name) => {
+      perfMarks.push({
+        name: String(name == null ? "" : name),
+        entryType: "mark",
+        startTime: perfNow(),
+        duration: 0,
+      });
+    },
+    clearMarks: (name) => {
+      if (name == null) {
+        perfMarks.length = 0;
+        return;
+      }
+      const target = String(name);
+      for (let i = perfMarks.length - 1; i >= 0; i--) {
+        if (perfMarks[i].name === target) perfMarks.splice(i, 1);
+      }
+    },
     measure: () => {},
+    clearMeasures: () => {},
   };
 
   // ---- 事件全局（window / document 共用同一组方法，按 this 分桶） ----
@@ -209,6 +232,25 @@ function install(g, cfg) {
   for (const name of domClasses) {
     if (typeof g[name] === "undefined") g[name] = function () {};
   }
+  // ruyijs ApiMonitor 证据（2026-11-07）：挑战脚本读 Event.isTrusted×8。
+  // Firefox 语义：脚本构造（new Event）的事件 isTrusted===false，仅 UA 生成
+  // 的事件为 true（host-async.js 的 parentEvent 已按 true 给消息事件）。
+  // 空构造器缺 type/isTrusted → 读出 undefined 即分歧。
+  g.Event = function (type, init) {
+    const opts = init && typeof init === "object" ? init : {};
+    this.type = String(type == null ? "" : type);
+    this.bubbles = !!opts.bubbles;
+    this.cancelable = !!opts.cancelable;
+    this.isTrusted = false;
+    this.target = null;
+    this.currentTarget = null;
+    this.defaultPrevented = false;
+    this.eventPhase = 0;
+    this.timeStamp = perfNow();
+  };
+  g.Event.prototype.preventDefault = function () {};
+  g.Event.prototype.stopPropagation = function () {};
+  g.Event.prototype.stopImmediatePropagation = function () {};
   g.AudioContext = undefined;
   g.OfflineAudioContext = undefined;
   g.SharedWorker = undefined;
