@@ -63,7 +63,21 @@ ATOBSRC = """(function () {
   var wrapper = function (input) {
     var s = String(input);
     var out = orig.call(globalThis, s);
-    try { __psaSink(s, String(out)); } catch (e) {}
+    try { __psaSink('d', s, String(out)); } catch (e) {}
+    return out;
+  };
+  wrapper.__psaHooked = true;
+  return wrapper;
+})()"""
+
+BTOSRC = """(function () {
+  var cur = globalThis.btoa;
+  if (cur && cur.__psaHooked) return cur;
+  var orig = cur;
+  var wrapper = function (input) {
+    var s = String(input);
+    var out = orig.call(globalThis, s);
+    try { __psaSink('e', s, String(out)); } catch (e) {}
     return out;
   };
   wrapper.__psaHooked = true;
@@ -76,16 +90,27 @@ def sha16(data: bytes) -> str:
 
 
 def shape(seq: list) -> dict:
-    """序列形状：尺寸数组 + 每对输出哈希（不回显原值）。"""
+    """序列形状：方向 + 尺寸数组 + 每对输出哈希（不回显原值）。
+    元素格式：'d\\x02<i>\\x01<o>'（方向 d=decode/e=encode）。"""
     sizes = []
     ohash = []
     marks = []
+    dirs = []
     for item in seq:
-        inp, _, out = item.partition("\u0001")
+        head, _, out = item.partition("\u0001")
+        direction, _, inp = head.partition("\u0002")
+        if not _:
+            inp = head  # 无方向前缀时退化为纯输入
+            direction = "d"
         sizes.append([len(inp), len(out)])
         ohash.append(sha16(out.encode("utf-8", "surrogatepass")))
-        marks.append("!" if out.startswith("!") else "")
-    return {"n": len(seq), "sizes": sizes, "ohash": ohash, "marks": marks}
+        # 异常标记只认 catch 分支格式 '!'+异常名（字母开头）；正常解码产物
+        # 首字节可能恰为 0x21('!')（如 latin1 二进制），不能当异常。
+        marks.append("!" if (out.startswith("!") and len(out) > 1 and
+                             out[1].isalpha()) else "")
+        dirs.append(direction)
+    return {"n": len(seq), "sizes": sizes, "ohash": ohash, "marks": marks,
+            "dirs": dirs}
 
 
 # ---------------------------------------------------------------- A: ruyijs
@@ -101,9 +126,9 @@ def run_ruyijs() -> dict:
     pairs = []
     cert_ok = False
 
-    def sink(inp, outp):
+    def sink(direction, inp, outp):
         if len(pairs) < 20000:
-            pairs.append(str(inp) + "\u0001" + str(outp))
+            pairs.append(direction + "\u0002" + str(inp) + "\u0001" + str(outp))
         return True
 
     ctx = ruyijs.Context(timeout=400.0, mode="debug")
@@ -111,7 +136,7 @@ def run_ruyijs() -> dict:
         ctx.configure_fingerprint(FINGERPRINT)
         ctx.configure_clock("system")
         ctx.expose(sink, "__psaSink")
-        ctx.native("atob", ATOBSRC)
+        ctx.native("atob", ATOBSRC); ctx.native("btoa", BTOSRC)
         ctx.navigate(TARGET)
         try:
             ctx.advance(10000, max_tasks=100000)
@@ -121,7 +146,7 @@ def run_ruyijs() -> dict:
         last_progress = time.monotonic()
         while time.monotonic() < deadline:
             try:
-                ctx.native("atob", ATOBSRC)
+                ctx.native("atob", ATOBSRC); ctx.native("btoa", BTOSRC)
             except Exception:
                 pass
             for fn, kw in (("checkpoint", {}), ("drain_timers", {"max_tasks": 8192})):
@@ -155,11 +180,19 @@ def run_ruyijs() -> dict:
         except Exception:
             pass
 
+    # 方向前缀（d\x02/e\x02）拆到 dir 字段；顺带落 net_log 时间线
+    rows = []
+    for i, p in enumerate(pairs):
+        head = p.split("\u0001", 1)
+        direction = "d"
+        payload = head[0]
+        if "\u0002" in payload:
+            direction, payload = payload.split("\u0002", 1)
+        rows.append({"n": i, "dir": direction, "i": payload,
+                     "o": head[1] if len(head) > 1 else "?"})
     (OUT_DIR / "ruyijs-atob.jsonl").write_text(
-        "\n".join(json.dumps({"n": i, "i": p.split("\u0001")[0],
-                              "o": p.split("\u0001", 1)[1] if "\u0001" in p else "?"})
-                  for i, p in enumerate(pairs)), encoding="utf-8")
-    return {"certOk": cert_ok, "pairs": pairs}
+        "\n".join(json.dumps(r) for r in rows), encoding="utf-8")
+    return {"certOk": cert_ok, "pairs": [(r["i"], r["o"]) for r in rows]}
 
 
 # ---------------------------------------------------------------- B: Node bridge
@@ -296,11 +329,15 @@ def load_trace(path: Path) -> list:
         except json.JSONDecodeError:
             continue
         if isinstance(row, dict) and not row.get("__summary") and "i" in row:
-            pairs.append(str(row["i"]) + "\u0001" + str(row.get("o", "?")))
+            direction = str(row.get("dir", "d"))
+            pairs.append(direction + "\u0002" + str(row["i"]) + "\u0001" +
+                         str(row.get("o", "?")))
     return pairs
 
 
 def compare(a: list, b: list) -> dict:
+    # a: run_ruyijs 返回的 (i, o) 元组列表；b: load_trace 的方向前缀字符串
+    a = ["d\u0002" + i + "\u0001" + o for i, o in a]
     sa, sb = shape(a), shape(b)
     report = {
         "ruyijsCalls": sa["n"], "nodeCalls": sb["n"],
