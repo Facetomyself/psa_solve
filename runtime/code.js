@@ -44,6 +44,9 @@ patches.install(g);
 // 5. XHR transport（观测 + 提交）
 transport.install(g, cfg);
 
+// 5.5 atob I/O 记录器（CF_ATOB_TRACE=1，对拍 driver 用——见 lib/atob-trace.js）
+require("./lib/atob-trace.js").install(g);
+
 // 6. VM Proxy 垫底：orchestrate 的 Proxy 探测可能以 null/undefined 为 target
 //    （外部宿主面补丁——探测行为在 Node 环境无可观察对象）
 (function () {
