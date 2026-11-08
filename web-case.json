@@ -1,81 +1,90 @@
 {
- "schema": "web-reverse-case.v1",
- "caseId": "psa-cf-5s-shield-20260815",
- "objective": "PSA Cloudflare 5s 盾无感求解：补环境执行 managed challenge JS，自动生成挑战提交并获取 cf_clearance，不触发交互式 Turnstile",
- "caseClass": "challenge",
- "status": "completed",
- "projectRoot": "D:\\reverse_ENV\\workspace\\psa_solve",
- "evidenceRoot": "evidence/web/",
- "sensitivity": "private-redacted",
- "routes": [
-  "ruyitrace"
- ],
- "stages": [
-  {
-   "name": "recon",
-   "status": "pass"
+  "schema": "web-reverse-case.v1",
+  "caseId": "psa-cf-5s-shield-20260815",
+  "objective": "PSA Cloudflare managed challenge：先用 ruyijs 跑页面脚本求解，同一会话拿到 cf_clearance 后提交证书页并回读 200。纯 Node 补环境留作后续扩展。当前现场是点击挑战。",
+  "caseClass": "challenge",
+  "status": "patching",
+  "projectRoot": "D:\\reverse_ENV\\workspace\\psa_solve",
+  "evidenceRoot": "evidence/web/",
+  "sensitivity": "private-redacted",
+  "routes": [
+    "ruyitrace",
+    "ruyijs",
+    "iv8"
+  ],
+  "localJsEngine": "ruyijs",
+  "stages": [
+    {
+      "name": "recon",
+      "status": "pass"
+    },
+    {
+      "name": "browser-control",
+      "status": "skipped"
+    },
+    {
+      "name": "browser-evidence",
+      "status": "pass"
+    },
+    {
+      "name": "local-evidence",
+      "status": "pending"
+    },
+    {
+      "name": "environment-patch",
+      "status": "pending"
+    },
+    {
+      "name": "deobfuscation",
+      "status": "pending"
+    },
+    {
+      "name": "protocol-recovery",
+      "status": "triage-only"
+    },
+    {
+      "name": "parity",
+      "status": "pending"
+    }
+  ],
+  "activeRuns": {
+    "ruyitrace": "rt_20261102184003_209bfef648",
+    "v8trace": null,
+    "iv8": "iv8_20260929_offline_01",
+    "ruyijs": "rj_20261102170743_02229090"
   },
-  {
-   "name": "browser-control",
-   "status": "skipped"
+  "contractRefs": {
+    "workflowArtifacts": "contracts/workflow-artifacts.v1.json",
+    "parameterLineage": "contracts/request-parameter-lineage.v1.json",
+    "riskControlPlan": null,
+    "riskControlReceipt": null
   },
-  {
-   "name": "browser-evidence",
-   "status": "pass"
-  },
-  {
-   "name": "local-evidence",
-   "status": "pending"
-  },
-  {
-   "name": "environment-patch",
-   "status": "running"
-  },
-  {
-   "name": "deobfuscation",
-   "status": "pending"
-  },
-  {
-   "name": "protocol-recovery",
-   "status": "triage-only"
-  },
-  {
-   "name": "parity",
-   "status": "pending"
-  }
- ],
- "activeRuns": {
-  "ruyitrace": "rt_20260815060651_eb196ed770",
-  "v8trace": null,
-  "iv8": null
- },
- "contractRefs": {
-  "workflowArtifacts": "contracts/workflow-artifacts.v1.json",
-  "parameterLineage": "contracts/request-parameter-lineage.v1.json",
-  "riskControlPlan": null,
-  "riskControlReceipt": null
- },
- "handoffPath": null,
- "notes": [],
- "artifacts": [
-  {
-   "schema": "evidence-pointer.v1",
-   "caseId": "psa-cf-5s-shield-20260815",
-   "plane": "ruyitrace",
-   "runId": "rt_20260815060651_eb196ed770",
-   "artifactId": "receipt-399daaf7dc35",
-   "path": "evidence/web/ruyitrace/rt_20260815060651_eb196ed770/receipt.json",
-   "sha256": "399daaf7dc35e4b7489aed07db3c60cf0c69d80bdfb0e0da5f78fedfadc8df7e",
-   "bytes": 58990,
-   "mediaType": "application/json",
-   "recordCount": 170,
-   "sensitivity": "private-redacted",
-   "redaction": "not-applicable"
-  }
- ],
- "limitations": [
-  "ruyitrace receipt pointer sha256 自引用不一致（MCP 侧 bug），browser fact 手动登记；integrity pass / rootSha256 已记录"
- ],
- "createdAt": "2026-08-15T06:06:41Z",
- "updatedAt": "2026-08-15T20:00:00Z"
+  "handoffPath": null,
+  "notes": [
+    "2026-10-05: rt_20261005125421_1d84c46dcd is an observational supplement, not a promoted canonical baseline. See agent-notes/trace-compare-20261005.md; activeRuns remains aligned with the existing receipt and workflow contracts.",
+    "2026-11-02: branch feat/ruyijs-solve; localJsEngine=ruyijs for solve; Node env-patch is later expansion."
+  ],
+  "artifacts": [
+    {
+      "schema": "evidence-pointer.v1",
+      "caseId": "psa-cf-5s-shield-20260815",
+      "plane": "ruyitrace",
+      "runId": "rt_20260929103550_341b734038",
+      "artifactId": "receipt-529d484c35f9",
+      "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/receipt.json",
+      "sha256": "529d484c35f90ac2bdcab9a3ab332822b04df1263a5fd30ee63e4a8831407f65",
+      "bytes": 123346,
+      "mediaType": "application/json",
+      "recordCount": 369,
+      "sensitivity": "private-redacted",
+      "redaction": "not-applicable"
+    }
+  ],
+  "limitations": [
+    "旧 RuyiTrace receipt pointer 已替换为当前 rt_20260929103550_341b734038 的 integrity-pass receipt；当前 pointer 校验通过",
+    "卡点：本地清关正文类 3488 不建表单，没有证书 document POST。有头正文类 3792 会提交。experimentHygiene=stop-search。serverAccepted 仍为 false。",
+    "iv8 0.1.4 离线复跑 diverged：location 是 page-host，orchestrate 定时器 TypeError，forms 0。不是 browser fact，也不是 serverAccepted。"
+  ],
+  "createdAt": "2026-08-15T06:06:41Z",
+  "updatedAt": "2026-11-02T19:58:13Z"
 }

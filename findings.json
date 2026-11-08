@@ -1,7 +1,7 @@
 {
   "schema": "reverse-findings.v1",
   "caseId": "psa-cf-5s-shield-20260815",
-  "generatedAt": "2026-08-16T22:30:00Z",
+  "generatedAt": "2026-10-03T08:16:02Z",
   "status": "partial",
   "findings": [
     {
@@ -97,6 +97,271 @@
         "单 IP 吞吐模型随之变化：15 请求/周期（~50s）-> 9 请求/周期（~43s），实测 669 -> 788 页/小时"
       ],
       "implication": "单 IP 长期运行会因信誉衰减被 CF 动态调低 challenge 间隔；吞吐上限由阈值决定（当前 IP 状态 ~750-800 页/小时）。突破手段：IP 冷却数小时恢复信誉、更换出口、或多 IP sticky 池轮换（每 IP 一个采集 worker，阈值互不干扰）。此条为 medium 置信——两轮对比 + 当日高强度实验背景，需不同 IP/时段对照确认是「当日行为累积」还是「长期趋势」"
+    },
+    {
+      "id": "F8",
+      "title": "Firefox RuyiTrace 已覆盖真实 challenge 外部链，但本地 RuyiDOM 未复现 form 分支",
+      "severity": "critical",
+      "confidence": "high",
+      "location": "rt_20260929103550_341b734038；最后一次 cf-chl-out 响应之后",
+      "evidence": [
+        "receipt integrity=pass；369 artifacts / 1,137,181 records；writer 无 dropped_* / io_errors",
+        "真实链：cert GET 403 → orchestrate GET 200 → 5×FO POST 200 → cf_clearance 名 → cert document POST 200",
+        "本地 causal observer：forms=0、submits=0、certDocumentPostObserved=false，最终 h2/p/ol 诊断 DOM"
+      ],
+      "implication": "当前根因是 RuyiDOM 对第五跳响应/envelope、KP 回调或 session 绑定的语义/执行分叉，不是 Firefox trace 采集丢失；localReproduced 与 requestBoundaryAligned 保持 false"
+    },
+    {
+      "id": "F9",
+      "title": "Chromium headed trace 只能作为内核对照，不能升格为 browser fact",
+      "severity": "high",
+      "confidence": "high",
+      "location": "evidence/web/v8trace-chromium/headed-20261003/capture",
+      "evidence": [
+        "capture integrity=partial、baselineEligible=false、无 receipt；关键 page-host FO response body unavailable",
+        "可见 5×FO → form → cert Document POST 200，但未保存可逐字段对齐的 FO envelope",
+        "cf_clearance 只保留 cookie 名称，无同 lease 业务 readback"
+      ],
+      "implication": "Chromium 证明另一内核存在 form 分支，但不能解释 Gecko noform 分支、不能提供可复放 token，也不能把证书 POST 200 当成 serverAccepted"
+    },
+    {
+      "id": "F10",
+      "title": "patched Node V8Trace 未到达请求边界，不能反推 Gecko 补丁",
+      "severity": "high",
+      "confidence": "high",
+      "location": "v8-20261003021537-lhw7em",
+      "evidence": [
+        "1421 records / 1679 events 后 TypeError 退出",
+        "39 个 stub DOM miss；无 FO/XHR/Document request boundary，仅 node:net open"
+      ],
+      "implication": "Node 诊断只能做旁路侧写；不能把 miss 或 TypeError 直接转成 code.js、RuyiDOM host patch 或响应语义结论"
+    },
+    {
+      "id": "F11",
+      "title": "当前业务验收仍未闭合，旧历史 serverAccepted 不能覆盖当前 lease",
+      "severity": "critical",
+      "confidence": "high",
+      "location": "contracts/auto-decision-facts.json；contracts/workflow-artifacts.v1.json",
+      "evidence": [
+        "当前 serverAccepted=false、localReproduced=false、requestBoundaryAligned=false",
+        "独立同 lease 约 5 秒 business-readback 200 未被合同标识或验收",
+        "合同已按 challenge 迁移到 revision 2，migrate-contracts --check 返回 ready；web_case.py next --preview 当前回到 refuse_host_enumeration / turnGate=blocked"
+      ],
+      "implication": "合同完整性已修复；下一步仍需获得新的外部边界证据或切换 browser-worker 路线。本地自然出现 cert document POST 后才做独立 business-readback，之前不得写 serverAccepted 或继续宿主枚举"
+    },
+    {
+      "id": "F12",
+      "title": "Node V8Trace 的首个边界是异步 TypeError，不是浏览器 API 的已证缺口",
+      "severity": "critical",
+      "confidence": "high",
+      "location": "v8-20261003021537-lhw7em；Iw → IF",
+      "evidence": [
+        "1421 records / 1679 events，目标退出码 1；三个旧 challenge-fast run 也是同一 TypeError 形态",
+        "throw 前 yQYB9 槽写入 JSArray，随后写入 bXxEG=navigation；request_summary 的 send_count=0、reached_request_boundary=false",
+        "没有 XHR/fetch response、Worker message、form/document boundary"
+      ],
+      "implication": "trace 只能证明当前 Node 输入/运行时的值形状和异步执行面不完整，不能把 yQYB9 直接补成函数或把 39 个 miss 当成补丁清单"
+    },
+    {
+      "id": "F13",
+      "title": "Node runner 的 stub 先天截断了动态资源、跨 realm 和响应驱动链",
+      "severity": "critical",
+      "confidence": "high",
+      "location": "v8trace_orchestrate_runner.js",
+      "evidence": [
+        "window=self=global；createElement 固定返回 SCRIPT 桩，动态 script/iframe 没有加载或执行",
+        "XHR 没有 readyState/status/response/response headers/异步回调，fetch 永远返回空 body 假 200",
+        "Worker 直接 throw，PerformanceObserver/resource entries、Blob/FileReader、postMessage realm 闭环均缺失"
+      ],
+      "implication": "当前 trace 无法回答 yQYB9/KP 的注册来源，也无法到达 FO response→DOM→form；先重建 runtime 边界，再谈单个 host patch"
+    },
+    {
+      "id": "F14",
+      "title": "RuyiDOM 可迁移的是行为合同，不是 opaque response 或会话值",
+      "severity": "high",
+      "confidence": "high",
+      "location": "rt_20260929103550_341b734038 与 causal-observer a7e045b6",
+      "evidence": [
+        "可迁移：五段 FO 角色/顺序、状态/header-name 类、Cookie 名谱系、pre-FO UUID/performance/RTC/iframe 调用顺序",
+        "不可迁移：cf_clearance、__cf_bm、FO body、3488/3792 opaque response、Firefox profile、异会话 replay",
+        "本地 3488/noform 是响应/session 分支差异，Node 现阶段连 response boundary 都未建立"
+      ],
+      "implication": "Node 不能通过回灌 RuyiDOM 的 body 或 cookie 值完成纯补环境；必须建立同一 fresh session 的请求→响应→callback 闭环"
+    },
+    {
+      "id": "F15",
+      "title": "纯 Node 交付合同尚未具备 parity 前置条件",
+      "severity": "critical",
+      "confidence": "high",
+      "location": "contracts/workflow-artifacts.v1.json",
+      "evidence": [
+        "environmentPatchGate.status=not-ready、patchCoverageIds=[]、scope 仍是 external-host-only",
+        "dynamicFields、clocks/randomness、cookie/storage、resourceHash、output canonicalization 尚未形成完整 canonical input",
+        "当前 Node trace 没有 request boundary，因此无法产出 parity-result 或独立 business readback"
+      ],
+      "implication": "完成纯 Node 方案前必须先补齐输入合同和可观测边界；把环境 gate 直接改成 ready 会掩盖未定位的执行缺口"
+    },
+    {
+      "id": "F16",
+      "title": "param-env 与 callback-chain canary 仍不能选出第一 external-host patch",
+      "severity": "high",
+      "confidence": "high",
+      "location": "v8-20261003093112-o9509m / v8-20261003093211-o37wfl",
+      "evidence": [
+        "param-env：1411 records，0 request/worker/callback，Iw → IF → TypeError",
+        "callback-chain：1448 records，只确认 timer callback register+enter，IF 内没有 host call boundary",
+        "yQYB9 仍只是内部数组写入，未知 receiver/property/args/return 未解析"
+      ],
+      "implication": "前三轮确有设置缺口；param-complete 已补上 property/source 观测并把第一候选收敛到 performance.getEntries。下一步仍需按 Gecko 事实补齐返回对象，不能从 net.open 或 crypto miss 选择补丁"
+    },
+    {
+      "id": "F17",
+      "title": "开启 param-complete 后已定位首个可验证 Node host gap：performance.getEntries",
+      "severity": "critical",
+      "confidence": "high",
+      "location": "v8-20261003100221-c54ooe；throw context seq 33151",
+      "evidence": [
+        "param-complete 实际产出 33291 records，get/has/reflect/source/raw 已开启，trace index complete",
+        "throw context 链：_cf_chl_opt → yQYB9 → performance → getEntries → undefined → TypeError",
+        "RuyiDOM/Firefox 事实已有 performance.getEntries function；Node runner 仅提供 performance.now/timing"
+      ],
+      "implication": "trace 工具能力正常，之前主要是 profile 没开；第一单变量补丁应围绕 performance.getEntries 的真实返回 entry、descriptor 和时序，不能直接返回空数组"
+    },
+    {
+      "id": "F18",
+      "title": "performance.getEntries 单变量 canary 已越过首个 Node TypeError，但尚未形成真实资源列表",
+      "severity": "high",
+      "confidence": "high",
+      "location": "v8-20261003111529-qeznxd 至 v8-20261003115013-erm6yx",
+      "evidence": [
+        "getEntries() 调用计数从 0 到 1；旧 `getEntries is not a function` 消失",
+        "top、classList、动态节点 insert/query/parentNode 按 trace 逐层推进",
+        "所有 canary 仍 send_count=0、reached_request_boundary=false，entries 使用空快照"
+      ],
+      "implication": "这是执行边界诊断，不是完成态补环境；下一步需要同一 source 的动态资源/VM 输出和真实 resource ledger，不能把空 Array 固化"
+    },
+    {
+      "id": "F19",
+      "title": "Node runner 与 RuyiDOM fresh orchestrate source 不一致，后续 free identifier 不能直接定性为 host gap",
+      "severity": "critical",
+      "confidence": "high",
+      "location": "challenge-material/chl-page-orchestrate-fresh.js vs rt_20260928061614_ee71af43b2/chl-page-orchestrate.js",
+      "evidence": [
+        "Node 旧 source：229681 bytes；RuyiDOM fresh source：238694 bytes，sha256 前缀不同",
+        "旧 source canary 报 WHtx4 未定义；匹配 fresh source canary 报 PQak3 未定义",
+        "两者均出现在推进过 DOM/performance 后，且不存在于原始静态材料中的声明"
+      ],
+      "implication": "必须先锁定与 browser fact 同一 fresh source 和 resource 版本，再判断 free identifier 是动态 runProgram/资源输出还是宿主缺口"
+    },
+    {
+      "id": "F20",
+      "title": "RuyiDOM bridge 的资源加载/Window mirror 尚未迁移到 Node runner",
+      "severity": "critical",
+      "confidence": "high",
+      "location": "diagnostics/ruyidom_bridge.js；matched Node canary v8-20261003121849-1ykah1",
+      "evidence": [
+        "RuyiDOM bridge 真实顺序：orchestrate resource → Turnstile api.js resource → Window/global mirror → 3×FO shape",
+        "matched Node runner 直接 eval orchestrate，未执行 Turnstile api.js、未建立资源 loader 或跨 realm mirror",
+        "同 source 仍在 PQak3 free identifier 停止，send_count=0"
+      ],
+      "implication": "纯 Node 下一阶段应先迁移资源执行和 realm/context 合同；继续补 classList/selector 只会把 runner 推向不可验收的 synthetic DOM"
+    },
+    {
+      "id": "F21",
+      "title": "Turnstile API resource 已在 Node canary 执行，但 fresh source 仍缺动态 PQak3 上下文",
+      "severity": "critical",
+      "confidence": "high",
+      "location": "v8-20261003130747-4pwon9 / v8-20261003131931-dbzjwx",
+      "evidence": [
+        "落盘 turnstile-api.js 资源在补 HTMLScriptElement/currentScript.src 后 `turnstileEval=ok`",
+        "getEntriesByType() 补丁后首个 Performance API 错误消失",
+        "同一 fresh source 仍报 PQak3 undefined，send_count=0、request boundary=0"
+      ],
+      "implication": "资源 API 已接通；剩余缺口转为动态 eval/runProgram/跨 realm 生成链，不能继续把 PQak3 硬编码成函数或常量"
+    },
+    {
+      "id": "F22",
+      "title": "RuyiDOM 的 Window/global mirror 是 Node 下一阶段的已证行为面",
+      "severity": "critical",
+      "confidence": "high",
+      "location": "diagnostics/ruyidom_bridge.js；agent-notes/20260928-ruyidom-bridge.md",
+      "evidence": [
+        "RuyiDOM bridge 记录 xdiN1/sloppy global mirror、Window receiver 归属和 native-like toString 保护",
+        "mirror 完成后 bridge 观测到 Worker/iframe/blob/randomUUID/createOffer/getEntries 与 3×FO 形状",
+        "Node source-aligned resource canary TurnstileEval=ok，但 PQak3 仍 undefined、FO=0"
+      ],
+      "implication": "Node 应先重建跨 realm/global mirror 的对象身份和赋值方向，再判断 PQak3/runProgram 输出；不能把 mirror 现象简化成 window.PQak3 常量"
+    },
+    {
+      "id": "F23",
+      "title": "PQak3 的 producer 尚未取证，静态 source 已排除直接 host API 定义",
+      "severity": "critical",
+      "confidence": "high",
+      "location": "rt_20260928061614_ee71af43b2/chl-page-orchestrate.js；resource canary v8-20261003131931-dbzjwx",
+      "evidence": [
+        "fresh source 中 PQak3 仅出现一次，位于字节/摘要处理调用参数，未见 var/let/const/function/class/window 定义",
+        "旧 source 同位置使用 WHtx4；名称随 source hash/版本变化",
+        "fresh source 存在 runProgram/间接 eval 标记；Turnstile resource eval 已达到 ok，仍未生成 PQak3"
+      ],
+      "implication": "下一步必须记录动态 eval/Function source、realm、runProgram return、global mirror define/read；不能把 PQak3 硬编码成函数或常量"
+    },
+    {
+      "id": "F24",
+      "title": "Turnstile iframe challenge realm 才是当前 Node 缺口，不是 API resource",
+      "severity": "critical",
+      "confidence": "high",
+      "location": "RuyiTrace 000010_GET_200 iframe HTML；v8-20261003152520-xgv5ln",
+      "evidence": [
+        "iframe HTML inline script 238636 bytes，包含 PQak3/xdiN1/runProgram；turnstile-api.js 86732 bytes 不含这些 producer 事实",
+        "Node frame canary 执行 inline script 后 frameEval=ok、_cf_chl_opt 21→37，随后真实读取 PQak3，但 framePqOwn=false",
+        "runProgram toString 为 59 字符 VM wrapper，xdiN1 为队列写入函数，BGgf6/SSvM5/HxNX2 为 identity/trusted-types helper，均不含 PQak3",
+        "Node 未建立独立 frame realm、DOM/parent message、FO response callback，因此没有 FO/request boundary"
+      ],
+      "implication": "下一阶段必须实现 iframe realm 与 response-driven loader；禁止把 PQak3 伪造成 window API、禁止回放 opaque FO body、environmentPatchGate 继续保持 not-ready"
+    },
+    {
+      "id": "F25",
+      "title": "生产 runtime 独立 iframe realm 执行了 inline script，但没有真实定义 PQak3",
+      "severity": "critical",
+      "confidence": "high",
+      "location": "runtime/lib/iframe-realm.js；runtime/run.js frame",
+      "evidence": [
+        "离线 node run.js frame 执行 iframe inline script 238636 bytes，SHA-256 05102bb5158cd0ba9a41329021f124cad8778a9a556db9a0e802b11c07115262",
+        "frameEval=ok，chlOptKeys=37，framePqType=undefined，framePqOwn=false，parent 窗口同样没有 PQak3 own property",
+        "随后 TypeError（is not a constructor）；parentPostMessageCount=0，sendCount=0，boundary=boundary-unchanged",
+        "未伪造 PQak3，未投递 MessageEvent，未回放 FO body，未改 environmentPatchGate"
+      ],
+      "implication": "独立 realm 不是 PQak3 的 define。抛错名与 own/type 未变，停止相邻 host 字段；serverAccepted 与 requestBoundaryAligned 继续为 false"
+    },
+    {
+      "id": "F26",
+      "title": "Fresh Firefox trace 证明同 run body/div receiver 来源，并观察到 submit 与 POST 时序；local source 未对齐",
+      "severity": "high",
+      "confidence": "high",
+      "location": "rt_20261005125421_1d84c46dcd",
+      "evidence": [
+        "Turnstile API attachShadow receiver=HTMLDivElement，challenge iframe receiver=HTMLBodyElement，均返回 ShadowRoot；本 run 无 HTMLScriptElement.attachShadow",
+        "orchestrate 调用 HTMLFormElement.submit 一次，随后同一 trace 的 cert document POST 返回 200",
+        "receipt integrity=pass，395 artifacts，1,352,457 indexed records；窄 detail 已落盘但未完成解码配对；iframe complete=false、dropped_gate=611、17 函数达到1024阈值、sources_unavailable=3",
+        "新 iframe source hash eee05641... 与旧 local 05102bb... 不同；POST originCallId=0/no_source_context，submit→POST 不具有完整因果 correlation",
+        "独立同 lease 业务 readback 未执行，因此不能写 serverAccepted"
+      ],
+      "implication": "Node mirror 的 HTMLScriptElement receiver 不能直接作为 browser host gap；RuyiDOM 的 forms=0 仍是本地 execution divergence，localReproduced、requestBoundaryAligned、serverAccepted 保持 false"
+    },
+    {
+      "id": "F27",
+      "title": "Canonical iframe source/call site 与 browser BODY receiver 已对齐，本地 receiver provenance 仍缺",
+      "severity": "high",
+      "confidence": "high",
+      "location": "rt_20260929103550_341b734038 / runtime/realm-probe-result.json",
+      "evidence": [
+        "旧 canonical iframe inline source 长度 238636、UTF-8 SHA-256 05102bb... 与 local realm probe 原始 source hash 一致",
+        "浏览器 document column 减去 19390 字符 HTML 前缀后，get body 与 attachShadow 都落在 local 唯一 x[...] call expression",
+        "browser get body 返回 HTMLBodyElement 与下一条 attachShadow receiver identity 相同；return 为 ShadowRoot",
+        "local probe 仍只记录 constructor.name=HTMLScriptElement，无 receiver===document.body、tag、ownerDocument 或 creation identity",
+        "现有 runner 静态 body factory 默认 SCRIPT；该缺陷与 local label 一致，但尚未证明完整失败因果或授权修正"
+      ],
+      "implication": "下一步若 dispatcher 允许，只能验证 document factory/typing 单 surface；不能给 HTMLScriptElement 添加 attachShadow，不能跨 session 回放响应，也不能把 browser POST 200 当 Node parity/serverAccepted"
     }
   ],
   "limitations": [
