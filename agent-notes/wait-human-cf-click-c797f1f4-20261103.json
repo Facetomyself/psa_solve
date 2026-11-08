@@ -1,0 +1,29 @@
+{
+  "schema": "wait-human-cf-click.v1",
+  "runId": "rt_20261102184003_209bfef648",
+  "captureState": "running",
+  "challengePassed": true,
+  "certPageVisible": true,
+  "foPostStatus": 200,
+  "clicked": false,
+  "blocker": null,
+  "handles": {
+    "workerPid": 35932,
+    "browserPid": 61096,
+    "mcpProject": "psa_solve",
+    "caseId": "psa-cf-5s-shield-20260815",
+    "profile": "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\ruyitrace\\rt_20261102184003_209bfef648\\runtime\\profile"
+  },
+  "observation": {
+    "capturePhase": "capturing",
+    "mcpHttpUrls": "omitted",
+    "windowTitle": "Cert Verification 67417377 — Mozilla Firefox",
+    "httpPathSummary": {
+      "challengePlatformSeen": true,
+      "certGetStatus": 403,
+      "certPostStatus": 200,
+      "certDocumentPostStatus": null
+    },
+    "clickSkippedReason": "cert-page-already-visible"
+  }
+}

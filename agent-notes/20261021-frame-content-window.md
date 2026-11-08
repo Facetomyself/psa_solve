@@ -1,0 +1,9 @@
+# contentWindow 比较占位之后的官方 baseline
+
+2026-10-21。revision 8 之后 `next` 给出 `repair_submit_host_behavior`，`turnGate=blocked`。约束是 `tool-evidence-required`、`ai-notes-are-not-facts`、`same-scope`、`submit-callsite-only`、`one-host-behavior`、`no-completion-facts`、`goal-incomplete-does-not-override`。官方停点仍是第 2 行第 3028 列，不是 `HTMLFormElement.submit` 第 1 行第 75507 列。
+
+这一拍只加了 `installFrameWindowPrimitive`。页面自己的 `Function` 替换 `HTMLIFrameElement.prototype.contentWindow`。原 getter 保留。getter 本身，或得到的窗口做 `<` 比较时抛出 `SecurityError`，或消息含 `The operation is insecure`，就返回 `{valueOf:()=>0, toString:()=>''}`。健康窗口原样返回。不改 Location 的 `toString` / `valueOf`，不包 `Object.prototype`，不调用 `evalInSandbox`。调用放在 `installPageLocationPrimitive` 之后、`orig.apply` 之前。`test_shipped_frame_content_window_comparison_survives_security_error` 通过，打印 `frame-window-primitive-ok 5`。原有 Location 回归仍通过。helper sha256 `40a98a9f2e93ce20c5c97bd697d5929fbac9cc5d10c3a8cf0b885cd6705faf57`。scope 重签为 `688e9a44f3f136a35790f39a71fa3820a5da37816d85fa3143c38c9a245da555`，`87371cc117dae175f403155ef09371f86ab7c77311fb76107afd9811e42eebd3` 与 baseline `722438ae8653483b92ae8cf163d7f956` 留在 priorScope。`load_scope` 通过。
+
+官方 baseline `64d3a40503ef4c47a7cf22a67e9c4956`：exitCode=1，timedOut=false，pid 38316，约 9.1s。诊断仍是第 2 行第 3028 列，matched false，base `object`。side 仍是 kind `other`、class `other`、line 2、column 3028，finished false。raw 222 字节，sha256 `534609ca23a0472c035bc74092454398420761e448eb632583db28adac35ac2c`，与 `722438ae` 字节相同。side sha256 `685ff13888535deb1104f0743711177d14997cc5b1732d278f6317eb4345855e`，也与上一张相同。探针 sha256 `ed08631525b793bdcad7edaaa4a38f5850bafaee1160df8f357ab6df69ea4831`。事件只有 `host-diagnostic` 和 `summary`。没有 `host-observation`，没有请求行，没有到第 75507 列。没有证书 document POST，也没有同租约回读。
+
+`serverAccepted`、`localReproduced`、`requestBoundaryAligned` 保持 false。`experimentHygiene` 仍是 `ok`。`contentWindow` 占位没有移动官方列号，也没有改变 raw。

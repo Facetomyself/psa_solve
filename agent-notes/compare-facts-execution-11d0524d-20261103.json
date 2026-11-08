@@ -1,0 +1,543 @@
+{
+  "schema": "web-reverse-compare-facts-execution.v1",
+  "decisionId": "11d0524df33ae0306e462563cd0d03a6",
+  "action": "compare_facts",
+  "skill": "web-reverse",
+  "task": "D:\\reverse_ENV\\workspace\\psa_solve",
+  "verifiedAt": "2026-11-02T19:27:27Z",
+  "handles": {
+    "ruyijsRunId": "rj_20261102191503_7445d1cb",
+    "browserRunId": "rt_20261102184003_209bfef648",
+    "frozenLiveRunNotRePaired": "rj_20261102170743_02229090",
+    "frozenBrowserRunNotRePaired": "rt_20260929103550_341b734038",
+    "isolatedRunIdNotRePaired": "rj_20261102153528_cc268870",
+    "priorLiveRunNotRePaired": "rj_20261102163249_c6d25972",
+    "oldRuyijsRunIdKeptOnDisk": "rj_20261102062310_d7463f5c",
+    "oldRuyidomSubmitSessionNotRePaired": "01a157d3-c8c9-76e3-83ec-35eb8dcbb741",
+    "contextHandle": null,
+    "executionHandle": null,
+    "sessionId": "01a19ac1-28c9-7f60-bb3a-4af694731647",
+    "inputDigest": "da3496b375f8b7ac59e32d861b2fc40d4d4d5cc246b500bf6ab417dc537bc69c"
+  },
+  "inputs": {
+    "pairing": null,
+    "pairingNote": "filenames-only on this capture; evidence/planner-pair-request-families-20261102.json belongs to rt_20260929103550_341b734038 and was not reused",
+    "requestMeta": "evidence/web/ruyijs/rj_20261102191503_7445d1cb/request-meta.json",
+    "requestMetaSha256": "a557dcd6c9a5aadfdb288164be3e8a5c1473f1af5a133058ed706d68b4372a2c",
+    "analysis": "evidence/web/ruyijs/rj_20261102191503_7445d1cb/analysis.json",
+    "analysisSha256": "1377bb2c39ceb749958c350c9785a03b34509932899a0c43360278469217ac90",
+    "evidenceRun": "evidence/web/ruyijs/rj_20261102191503_7445d1cb/evidence-run.json",
+    "evidenceRunSha256": "9d337de92bbb11f126c9bd68ae58efd669eacf6e2999c0f325075dc698a59142",
+    "liveEmitReceipt": "evidence/ruyijs-live-emit-25ddea8d-20261103.json",
+    "liveEmitReceiptSha256": "797b0ccba6a40e51902d51d5d95767236a6309466a7a8e41655523149206d1b5",
+    "httpPacketDir": "evidence/web/ruyitrace/rt_20261102184003_209bfef648/raw/http_packet",
+    "browserEvidenceRun": "evidence/web/ruyitrace/rt_20261102184003_209bfef648/evidence-run.json",
+    "browserEvidenceRunSha256": "c04ea708647ebb1a54f7501794576716d9d2f6518865a243beb9d30f10661efe",
+    "browserCertPacketFilename": "000014_POST_200_www.psacard.com_cert_67417377_psa_fcb61999_pid61096_480000019.http_packet.json",
+    "browserCertPacketSha256": "de7f589153ec0771128dada6d3f2298cfaa57ebe1bea5e7e948fb5431fced058",
+    "facts": "contracts/auto-decision-facts.json",
+    "factsSha256": "22c6c8bfa9b7f80efbfd93313993245573266156d3001ea1263dd1f8930e93d9",
+    "factsRevision": 70,
+    "classificationOnDisk": "contracts/host-evidence/classification.json",
+    "classificationOnDiskSha256": "cdb3ad2cc52c70e439d6233a7eb8463c7572cbe22ff7f308223e9f2dfbb81507",
+    "classificationOnDiskBoundTo": {
+      "adapter": "ruyijs-live-emit-v1",
+      "ruyijsRunId": "rj_20261102170743_02229090",
+      "browserRunId": "rt_20260929103550_341b734038",
+      "notThisPairing": true
+    },
+    "lastSummary": "diagnostics/ruyijs-live-emit-20261103/last-summary.json",
+    "lastSummarySha256": "be627d4b7b9c539f696c39c615de6e227f27a6a9842c2ca5cae7cdd3039175c6",
+    "priorLiveCompareNotReused": "evidence/compare-facts-execution-5cde43c1-20261102.json",
+    "priorLiveCompareSha256": "cbf8bf40cc78334dd0fc60f7343792d42e6ec34c99e0939bc1dcbb1d8501e958",
+    "httpPacketFilenameCount": 180,
+    "httpPacketJsonCount": 177,
+    "readMode": "filenames-only",
+    "analysisVersion": 2,
+    "outputSha256": "0c31653e0a62aa19dce772b2ec30ecc72e15cd36ec944bd5ad9d0aacd18b66c2",
+    "isolationSink": null,
+    "emitMode": "live-necko",
+    "liveFetch": true,
+    "analysisIsolationUnchanged": true,
+    "twoLaunchAgree": true,
+    "twoLaunchNote": "two live-emit launches compared on ok/emit.mode/request counts",
+    "orchestrateBodySha256": "a95962c94c8b060919f9c361a2522ff83d078dc34329a25aa0f420136c8449af",
+    "orchestrateShaPrefix": "a95962c94c8b0609",
+    "frozenOrchestrateShaPrefix": "06e1a7a4",
+    "freshOrchestrateNotFrozen": true
+  },
+  "familyTable": {
+    "fo-post": {
+      "role": "challenge-output",
+      "resourceDrift": false,
+      "browser": {
+        "method": "POST",
+        "pathPrefix": "/cdn-cgi/challenge-platform/",
+        "status": [
+          200,
+          200,
+          200,
+          200
+        ],
+        "count": 4,
+        "seqs": [
+          4,
+          6,
+          11,
+          13
+        ],
+        "filenameToken": "_fo_",
+        "filenameMethodStatus": "POST_200"
+      },
+      "local": {
+        "method": "POST",
+        "pathPrefix": "/cdn-cgi/challenge-platform/",
+        "status": [
+          400,
+          200
+        ],
+        "count": 2,
+        "present": true,
+        "matched": false,
+        "egress": "necko",
+        "requestBodyBytes": [
+          3202,
+          1346
+        ]
+      },
+      "liveVsBrowserStatus": "400-then-200-vs-200"
+    },
+    "cert-document-post": {
+      "role": "challenge-output",
+      "resourceDrift": false,
+      "browser": {
+        "method": "POST",
+        "pathPrefix": "/cert/",
+        "status": [
+          200
+        ],
+        "count": 1,
+        "seqs": [
+          14
+        ],
+        "filenameToken": "_cert_",
+        "filenameMethodStatus": "POST_200"
+      },
+      "local": {
+        "method": null,
+        "pathPrefix": null,
+        "status": null,
+        "count": 0,
+        "present": false
+      },
+      "liveVsBrowserStatus": "absent-vs-200",
+      "outputNotReached": true
+    }
+  },
+  "pairingConfirmation": {
+    "liveRunPaired": true,
+    "frozenLive70743NotRePairedAsThisRun": true,
+    "frozenBrowserSep29NotRePairedAsThisCapture": true,
+    "isolatedNotRePairedAsLive": true,
+    "priorLive63249NotRePairedAsThisRun": true,
+    "oldRuyidomSubmitNotRePaired": true,
+    "challengeOutputIsResourceDrift": false,
+    "inputResourcesUnreplayed": false,
+    "activeRunId": "rj_20261102191503_7445d1cb",
+    "sourceRunId": "rt_20261102184003_209bfef648",
+    "certDocumentPostSeq": 14,
+    "requestMetaSkippedFamilies": [
+      "analytics",
+      "next-chunks",
+      "osano",
+      "jsd",
+      "fo-post",
+      "cert-document-post"
+    ],
+    "skippedFamilySetEqualToRequestMeta": true,
+    "replayedRoles": [
+      "orchestrate",
+      "turnstile-api",
+      "turnstile-api-bare",
+      "turnstile-rch"
+    ],
+    "preCertInputGets": [
+      {
+        "seq": 1,
+        "family": "cert-document-get",
+        "filenameMethodStatus": "GET_403",
+        "role": "load_page-html"
+      },
+      {
+        "seq": 2,
+        "family": "orchestrate",
+        "filenameMethodStatus": "GET_200",
+        "role": "put_resource"
+      },
+      {
+        "seq": 3,
+        "family": "turnstile-api",
+        "filenameMethodStatus": "GET_200",
+        "role": "put_resource"
+      },
+      {
+        "seq": 5,
+        "family": "turnstile-rch",
+        "filenameMethodStatus": "GET_200",
+        "role": "put_resource"
+      }
+    ],
+    "challengeOutputFamilies": {
+      "fo-post": {
+        "count": 4,
+        "methods": [
+          "POST"
+        ],
+        "minSeq": 4,
+        "seqs": [
+          4,
+          6,
+          11,
+          13
+        ],
+        "relativeToCertPost": "output",
+        "filenameMatch": true,
+        "filenameToken": "_fo_",
+        "liveNetEvents": [
+          {
+            "requestId": "4",
+            "method": "POST",
+            "pathPrefix": "/cdn-cgi/challenge-platform/",
+            "status": 400,
+            "matched": false,
+            "requestBodyBytes": 3202
+          },
+          {
+            "requestId": "5",
+            "method": "POST",
+            "pathPrefix": "/cdn-cgi/challenge-platform/",
+            "status": 200,
+            "matched": false,
+            "requestBodyBytes": 1346
+          }
+        ],
+        "liveEgress": "necko",
+        "resourceDrift": false
+      },
+      "cert-document-post": {
+        "count": 1,
+        "methods": [
+          "POST"
+        ],
+        "minSeq": 14,
+        "seqs": [
+          14
+        ],
+        "relativeToCertPost": "output",
+        "filenameMatch": true,
+        "filenameToken": "_cert_",
+        "liveNetEvent": null,
+        "livePostCertCount": 0,
+        "resourceDrift": false
+      }
+    },
+    "postSolveFamilies": {
+      "next-chunks": {
+        "count": 32,
+        "methods": [
+          "GET"
+        ],
+        "minSeq": 17,
+        "relativeToCertPost": "post-solve",
+        "filenameMatch": true
+      },
+      "osano": {
+        "count": 8,
+        "methods": [
+          "GET",
+          "OPTIONS",
+          "POST"
+        ],
+        "minSeq": 46,
+        "relativeToCertPost": "post-solve",
+        "filenameMatch": true
+      },
+      "jsd": {
+        "count": 3,
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "minSeq": 52,
+        "relativeToCertPost": "post-solve",
+        "filenameMatch": true
+      }
+    },
+    "skippedNonOutputBeforeCert": [],
+    "filenameNotes": [
+      "readMode=filenames-only; no packet bodies/cookies/URLs opened",
+      "GET cert seq 1 GET_403 is load_page html, not a skipped GET and not resource-drift",
+      "GET orchestrate seq 2 GET_200 put_resource; orchestrateBodySha256 a95962c94c8b0609 is fresh vs frozen 06e1a7a4",
+      "FO POST seqs 4,6,11,13 and cert-document-post seq 14 are challenge OUTPUTS, not resource-drift",
+      "seq 7 GET_0 brunhild _i_ and seq 8 GET_401 _pat_ are pre-cert other, not skippedFamilies, not missing challenge GET inputs",
+      "seq 88/123 GET_200 _cert_ are post-solve other, not the document submit",
+      "live request-meta resourceCount=4 matches replayedRoles",
+      "frozen live-emit rj_20261102170743_02229090 and old RuyiDOM HTMLFormElement.submit not re-paired"
+    ]
+  },
+  "liveNetEventsPairing": {
+    "source": "analysis.netEvents",
+    "redaction": "method/hostHash/pathPrefix/status/length only",
+    "requestCount": 5,
+    "matchedCount": 2,
+    "unmatchedCount": 3,
+    "unknownCount": 0,
+    "postCertCount": 0,
+    "events": [
+      {
+        "requestId": "1",
+        "method": "GET",
+        "pathPrefix": "/cdn-cgi/challenge-platform/",
+        "status": 200,
+        "matched": true,
+        "requestBodyBytes": 0,
+        "browserFamily": "orchestrate",
+        "browserSeq": 2,
+        "browserFilenameMethodStatus": "GET_200",
+        "role": "put_resource"
+      },
+      {
+        "requestId": "2",
+        "method": "GET",
+        "pathPrefix": "/other",
+        "status": 200,
+        "matched": false,
+        "requestBodyBytes": 0,
+        "browserFamily": null,
+        "notFoPost": true,
+        "notCertDocumentPost": true,
+        "resourceDrift": false,
+        "namesHostApi": false
+      },
+      {
+        "requestId": "3",
+        "method": "GET",
+        "pathPrefix": "/other",
+        "status": 200,
+        "matched": true,
+        "requestBodyBytes": 0,
+        "browserFamily": "turnstile-api",
+        "browserSeq": 3,
+        "browserFilenameMethodStatus": "GET_200",
+        "role": "put_resource"
+      },
+      {
+        "requestId": "4",
+        "method": "POST",
+        "pathPrefix": "/cdn-cgi/challenge-platform/",
+        "status": 400,
+        "matched": false,
+        "requestBodyBytes": 3202,
+        "browserFamily": "fo-post",
+        "browserSeqs": [
+          4,
+          6,
+          11,
+          13
+        ],
+        "browserFilenameMethodStatus": "POST_200",
+        "liveVsBrowserStatus": "400-vs-200",
+        "role": "challenge-output",
+        "egress": "necko",
+        "resourceDrift": false
+      },
+      {
+        "requestId": "5",
+        "method": "POST",
+        "pathPrefix": "/cdn-cgi/challenge-platform/",
+        "status": 200,
+        "matched": false,
+        "requestBodyBytes": 1346,
+        "browserFamily": "fo-post",
+        "browserSeqs": [
+          4,
+          6,
+          11,
+          13
+        ],
+        "browserFilenameMethodStatus": "POST_200",
+        "liveVsBrowserStatus": "200-vs-200",
+        "role": "challenge-output",
+        "egress": "necko",
+        "resourceDrift": false
+      }
+    ],
+    "absentChallengeOutputs": [
+      {
+        "family": "cert-document-post",
+        "browserSeq": 14,
+        "browserFilenameMethodStatus": "POST_200",
+        "livePostCertCount": 0,
+        "resourceDrift": false
+      }
+    ]
+  },
+  "unmatchedClassification": {
+    "unmatchedCount": 3,
+    "matchedCount": 2,
+    "unknownCount": 0,
+    "requestCount": 5,
+    "methodsInLog": [
+      "GET",
+      "POST"
+    ],
+    "logStatus": "available",
+    "isolationSink": null,
+    "emitMode": "live-necko",
+    "liveFetch": true,
+    "classification": "fo-post-live-necko-400-then-200",
+    "namesHostApi": false,
+    "resourceDrift": false,
+    "namedHostBlocker": false,
+    "pairingFamilies": [
+      "fo-post"
+    ],
+    "certDocumentPostInUnmatchedLog": false,
+    "certDocumentPostObserved": false,
+    "reason": "unmatched rows are GET /other 200, POST /cdn-cgi/challenge-platform/ 400 bodyBytes=3202, POST /cdn-cgi/challenge-platform/ 200 bodyBytes=1346. Both POSTs are fo-post challenge outputs that left through Necko; not resource-drift. Zero POST /cert/, so cert-document-post is a missing output, not an unmatched log row. unmatched GET /other is not fo-post, not cert-document-post, and does not name a host API. isolationSink=null. unmatchedCount+GET+POST does not name a hostBlocker."
+  },
+  "existenceKnife": {
+    "surface": "Element.attachShadow",
+    "reissued": false,
+    "missTokens": [],
+    "localCall": "not-this-slice",
+    "hostBlockerExistenceNamed": false,
+    "gapKindExistenceMissNamed": false,
+    "envProbeIndexOnDisk": false,
+    "namedMemberWithLocalMiss": false,
+    "localEvalThisBeat": false,
+    "formCount": 0,
+    "iframeCount": 0,
+    "cookiePairCount": 1,
+    "logCapabilities": [
+      "console",
+      "net"
+    ],
+    "zerosDoNotAuthorizeExistence": true
+  },
+  "hostEvidenceScope": {
+    "adapter": "ruyijs-live-emit-v1",
+    "property": "certificate-document-post",
+    "onDiskBoundToFrozenRun": true,
+    "onDiskRuyijsRunId": "rj_20261102170743_02229090",
+    "onDiskBrowserRunId": "rt_20260929103550_341b734038",
+    "repaired": false,
+    "reclassified": false,
+    "imported": false,
+    "newScopeIssued": false,
+    "note": "existing ruyijs-live-emit-v1 scope cannot bind this live-emit; create_scope would be another action. Do not import RuyiDOM HTMLFormElement.submit."
+  },
+  "hostClassify": {
+    "ran": false,
+    "toolPathExistsForLiveRun": false,
+    "command": null,
+    "adapter": "ruyijs-live-emit-v1",
+    "property": "certificate-document-post",
+    "comparable": null,
+    "classification": null,
+    "requestBoundaryAligned": null,
+    "targetBefore": null,
+    "targetAfter": null,
+    "factRecordedThisSlice": false,
+    "blockedBy": [
+      "existing scope.ruyijsRun is frozen rj_20261102170743_02229090; host pair copies scope.ruyijsRun and cannot rebind rj_20261102191503_7445d1cb",
+      "new host scope required to bind this live-emit; not issued (another action)",
+      "browser evidence-run state=stopped not completed; evidence-receipt pending; web_case.py host pair would reject this capture as verified completed run",
+      "web_case.py host classify would fact-record requestBoundaryAligned, which this slice must not write"
+    ],
+    "pairingObservationNotClassify": {
+      "browserCertDocumentPost": true,
+      "localCertDocumentPost": false,
+      "expectedAlignedIfClassified": false,
+      "expectedClassificationIfClassified": "boundary-moved",
+      "expectedTargetBefore": 1,
+      "expectedTargetAfter": 0,
+      "label": "[INFERENCE]",
+      "reason": "pairing filenames+netEvents already show browser cert POST_200 vs local count=0; this is not a tool classify write"
+    },
+    "note": "did not overwrite contracts/host-evidence/classification.json (still frozen-run classification cdb3ad2c...)"
+  },
+  "twoLaunch": {
+    "twoLaunchAgree": true,
+    "source": "diagnostics/ruyijs-live-emit-20261103/last-summary.json",
+    "sourceSha256": "be627d4b7b9c539f696c39c615de6e227f27a6a9842c2ca5cae7cdd3039175c6",
+    "note": "two live-emit launches compared on ok/emit.mode/request counts"
+  },
+  "conclusion": {
+    "parameterAnalysis": "inconclusive",
+    "firstDivergence": "challenge-state",
+    "firstDivergenceRole": "planner-candidate",
+    "isolationNoLongerLiveEmitDivergence": true,
+    "hostBlocker": null,
+    "gapKind": null,
+    "namedGap": null,
+    "dualCondition": null,
+    "ruyijsLiveEmit": "completed",
+    "requestBoundaryAligned": false,
+    "requestBoundaryAlignedRole": "pairing-observation-not-tool-classify",
+    "goalComplete": false,
+    "reason": "This live-emit isolationSink=null / emit.mode=live-necko / twoLaunchAgree=true. Fresh orchestrate sha256 a95962c94c8b060919f9c361a2522ff83d078dc34329a25aa0f420136c8449af (not frozen 06e1a7a4). FO POST egressed via Necko (unmatched POST /cdn-cgi/challenge-platform/ statuses 400 then 200); browser FO all POST_200 seqs 4,6,11,13. isolation is no longer the live-emit divergence. cert-document-post absent (browser seq 14 POST_200, live POST /cert/ count=0). fo-post and cert-document-post remain challenge outputs, not resource-drift. unmatched GET /other 200 does not name a host API. attachShadow not re-issued; missTokens empty this beat. HTMLFormElement.submit RuyiDOM host evidence not imported. namedGap stays null. hostClassify not run: existing ruyijs-live-emit-v1 scope is frozen-run bound and a new scope is another action. requestBoundaryAligned stays false as pairing observation and is not fact-recorded. dualCondition is not true."
+  },
+  "recommendedRecordableKeys": [
+    {
+      "key": "firstDivergence",
+      "value": "challenge-state",
+      "label": "[INFERENCE]",
+      "reason": "isolationSink=null and FO POST left through Necko, so facts.revision 70 firstDivergence=isolation is no longer supported by this pairing. Remaining evidenced split is challenge output: FO 400-then-200 vs browser POST_200, cert-document-post absent. missTokens not proven. planner records; this execute does not fact-record."
+    },
+    {
+      "key": "parameterAnalysis",
+      "value": "inconclusive",
+      "label": "[INFERENCE]",
+      "reason": "no named hostBlocker or gapKind; existence knife not reissued; logCapabilities/DOM zeros/cookiePairCount=1 do not name a host API."
+    },
+    {
+      "key": "requestBoundaryAligned",
+      "value": false,
+      "label": "[INFERENCE]",
+      "reason": "local cert-document POST absent vs browser POST_200. Not a tool classify write (new scope required). Do not fact-record true."
+    }
+  ],
+  "factsWrite": {
+    "attempted": false,
+    "reason": "this slice is forbidden from fact-record of requestBoundaryAligned/serverAccepted/localReproduced/dualCondition/requestBoundaryAligned/hostProbe/authorizedSurface; firstDivergence=challenge-state is a planner candidate only (revision 70 still has isolation, which this pairing no longer supports because FO POST egressed); no recordable key is written here",
+    "notWritten": [
+      "parameterAnalysis",
+      "firstDivergence",
+      "hostBlocker",
+      "gapKind",
+      "dualCondition",
+      "serverAccepted",
+      "localReproduced",
+      "requestBoundaryAligned",
+      "hostProbe",
+      "authorizedSurface",
+      "ruyijsLiveEmit"
+    ]
+  },
+  "notStarted": [
+    "new ruyijs Context",
+    "navigate",
+    "proxy",
+    "parameter-analysis rerun",
+    "Element.attachShadow eval",
+    "ruyitrace unbounded query",
+    "web_case.py host scope",
+    "web_case.py host pair",
+    "web_case.py host classify",
+    "web_case.py host verify-readback",
+    "fact record",
+    "RuyiDOM HTMLFormElement.submit re-pair",
+    "frozen live-emit respin"
+  ]
+}

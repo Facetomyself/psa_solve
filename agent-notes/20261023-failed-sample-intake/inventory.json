@@ -1,0 +1,76 @@
+﻿{
+    "schema":  "psa-failed-sample-intake.v1",
+    "createdAt":  "2026-10-23",
+    "project":  "psa_solve",
+    "grokSessionId":  "01a157d3-c8c9-76e3-83ec-35eb8dcbb741",
+    "migration":  {
+                      "caseClass":  "challenge",
+                      "expectedRevision":  10,
+                      "resultRevision":  11,
+                      "check":  "ready",
+                      "missing":  [
+
+                                  ],
+                      "preMigrationWebCaseSha256":  "unknown",
+                      "repositoryHead":  "1bc5ca86f9103cf66376699614b7119e580841af",
+                      "postMigrationMetadataCurrentHead":  "c8de5aecef5656717b14165999a9fba7b8114802"
+                  },
+    "businessAxesUnchanged":  true,
+    "artifacts":  [
+                      {
+                          "path":  "web-case.json",
+                          "sha256":  "4648cb2f49db01c3bd55daae35070bbde0e22cd538bb6c6313322deb3e243397",
+                          "bytes":  2854
+                      },
+                      {
+                          "path":  "contracts\\case-metadata.v1.json",
+                          "sha256":  "9e90ec3945471e02cee7ec209d59139b1412d51dc7c689ba41203dd594d8d816",
+                          "bytes":  509
+                      },
+                      {
+                          "path":  "contracts\\auto-decision-facts.json",
+                          "sha256":  "3440737267cfafd35667c1c836d4425a49ed46b409c8486e7e82fcd2473f44a9",
+                          "bytes":  3540
+                      },
+                      {
+                          "path":  "contracts\\workflow-artifacts.v1.json",
+                          "sha256":  "56c519650281dafc0c11b14d144418fe64bfbdd1c4d3b9f545226f44ea60c8c1",
+                          "bytes":  58509
+                      },
+                      {
+                          "path":  "contracts\\request-parameter-lineage.v1.json",
+                          "sha256":  "0e09fa5d2313ecc0415f5730b4bf593419024f37a476bb57dd99ba36d0569409",
+                          "bytes":  13475
+                      },
+                      {
+                          "path":  "contracts\\host-evidence\\scope.json",
+                          "sha256":  "89bbad3bed44a7f1ea907056140b2613c7c2355afa295e7e7f0f55300c418c31",
+                          "bytes":  4365
+                      },
+                      {
+                          "path":  "contracts\\host-evidence\\state.json",
+                          "sha256":  "7a907bd3aebf55d2a752c17784c86662b2f978405dc2716b2254072ae29eefa0",
+                          "bytes":  193093
+                      },
+                      {
+                          "path":  "contracts\\host-evidence\\pair.json",
+                          "sha256":  "8e054635821de13d1daa3d4d511b0e709a23aa49f1744fd0e75e3c6a2c9d8dc9",
+                          "bytes":  1181
+                      },
+                      {
+                          "path":  "contracts\\host-evidence\\classification.json",
+                          "sha256":  "51dbe7731286389f79520dd47b487d47c0565acc13ee7b0c1f4c3e789cae8989",
+                          "bytes":  841
+                      },
+                      {
+                          "path":  "agent-notes\\20261023-post-ownmethod.md",
+                          "sha256":  "4d3be414d5790dd860996c396d044732fe770f9cf350e853c0d6437017371aa0",
+                          "bytes":  1785
+                      },
+                      {
+                          "path":  "diagnostics\\post-ownmethod-20261023\\node-trace-receipt.json",
+                          "sha256":  "c254612258126e2663bd7c32375cd00351c831b8efc43387062f9f63577453e2",
+                          "bytes":  1502
+                      }
+                  ]
+}

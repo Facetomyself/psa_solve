@@ -1,0 +1,24 @@
+{
+  "slice": "20261003-v8trace-bottleneck",
+  "caseId": "psa-cf-5s-shield-20260815",
+  "status": "kernel-compare-done",
+  "skill": "web-reverse",
+  "tool": "v8trace-mcp CLI dist/cli.js",
+  "blocker": "headed Chrome collected partial (duration, not byte budget): cert Document POST 200 after FO responses that carry cf-chl-out header names; early h2 still interstitial; HTMLFormElement.submit not in hook set; one fo-pagehost body unavailable; not a browser fact",
+  "handles": {
+    "v8traceRunId": "v8-20261003021537-lhw7em",
+    "chromiumRunId": "c266ff812e0facbf7",
+    "chromiumHeadedRunId": "headed-20261003"
+  },
+  "evidence": {
+    "notes": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-v8trace-bottleneck.md",
+    "summary": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-v8trace-bottleneck.json",
+    "patchedNodeRun": "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\v8trace\\v8-20261003021537-lhw7em",
+    "chromiumInteractiveFailed": "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\v8trace-chromium\\c0f25fc8705f7376f",
+    "chromiumHeadlessFailed": "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\v8trace-chromium\\c9aa53202a6309169",
+    "chromiumHeadlessPartial": "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\v8trace-chromium\\c266ff812e0facbf7",
+    "kernelCompare": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-kernel-compare.md",
+    "kernelCompareTable": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-kernel-compare.json"
+  },
+  "updatedAt": "2026-10-03T04:10:00Z"
+}

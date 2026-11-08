@@ -1,0 +1,54 @@
+{
+  "schema": "ruyitrace-capture-start.v1",
+  "decisionId": "7d74e5a12f08406190f96dedaa0b32c1",
+  "action": "ruyitrace_capture_start",
+  "sliceId": "slice-ruyitrace-capture-start-7d74e5a1-20261103",
+  "runId": "rt_20261102184003_209bfef648",
+  "mcpProject": "psa_solve",
+  "caseId": "psa-cf-5s-shield-20260815",
+  "mode": "interactive",
+  "profile": "dom-observe",
+  "fingerprintMode": "baseline",
+  "sensitivity": "private-redacted",
+  "durationSecondsRequested": 1800,
+  "gated": false,
+  "proxy": null,
+  "url": "https://www.psacard.com/cert/67417377/psa",
+  "runtime": {
+    "appVersion": "3.5.0",
+    "verification": "verified",
+    "firefoxVersion": "159.0",
+    "buildId": "20261101193257",
+    "status": "ready"
+  },
+  "status": "running",
+  "blocker": null,
+  "priorAttempt": {
+    "status": "blocked",
+    "blocker": "mcp-schema-lag-ruyijs-case-fields",
+    "mcpErrorCode": "CONTRACT_INVALID",
+    "resolvedBy": "root web-reverse-case.v1 schema synced into ruyitrace-mcp; MCP process restarted"
+  },
+  "capture": {
+    "state": "running",
+    "phase": "capturing",
+    "gateEnabled": true,
+    "startedAt": "2026-11-02T18:40:03.262Z",
+    "evidenceRoot": "evidence/web/ruyitrace/rt_20261102184003_209bfef648/"
+  },
+  "evidencePaths": [
+    "agent-notes/ruyitrace-capture-start-7d74e5a1-20261103.json",
+    "evidence/ruyitrace-capture-start-7d74e5a1-20261103.json",
+    "evidence/web/ruyitrace/rt_20261102184003_209bfef648/"
+  ],
+  "handles": {
+    "runId": "rt_20261102184003_209bfef648",
+    "workerPid": 35932,
+    "session": null,
+    "frozenRuyijsRunId": "rj_20261102170743_02229090",
+    "frozenBrowserRunId": "rt_20260929103550_341b734038"
+  },
+  "receiptsPlane": "ruyitrace-running",
+  "createdAt": "2026-11-02T18:32:37Z",
+  "updatedAt": "2026-11-02T18:40:50Z"
+}

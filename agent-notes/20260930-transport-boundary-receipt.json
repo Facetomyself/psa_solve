@@ -1,0 +1,486 @@
+{
+  "schema": "psa-transport-boundary-delta.v1",
+  "status": "verified-read-only",
+  "at": "2026-09-30T11:01:33.455226+00:00",
+  "targetNetworkExecuted": false,
+  "rootCauseProven": false,
+  "sameChallengeMaterial": false,
+  "firstDivergenceCandidate": "transport",
+  "localProtocolObservationSource": "native nsIHttpChannel.protocolVersion at response observer; summary.respLog, not preferences",
+  "local": {
+    "runId": "05c67ac6c8c24b38aa03d866258971ad",
+    "rows": [
+      {
+        "method": "GET",
+        "status": 200,
+        "path": "/favicon.ico",
+        "hostClass": "page",
+        "proto": "h2",
+        "altUsed": false,
+        "reqLen": -1,
+        "respLen": -1,
+        "chanLen": -1
+      },
+      {
+        "method": "POST",
+        "status": 200,
+        "path": "/cdn-cgi/challenge-platform/h/b/fo/{id}:{id}:{id}/{id}/{id}",
+        "hostClass": "page",
+        "proto": "h2",
+        "altUsed": false,
+        "reqLen": 2252,
+        "respLen": -1,
+        "chanLen": -1
+      },
+      {
+        "method": "POST",
+        "status": 200,
+        "path": "/cdn-cgi/challenge-platform/h/b/fo/{id}:{id}:{id}/{id}/{id}",
+        "hostClass": "cf",
+        "proto": "h2",
+        "altUsed": false,
+        "reqLen": 4674,
+        "respLen": -1,
+        "chanLen": -1
+      },
+      {
+        "method": "GET",
+        "status": 200,
+        "path": "/g/chains/{id}/{id}",
+        "hostClass": "other",
+        "proto": "h2",
+        "altUsed": false,
+        "reqLen": -1,
+        "respLen": 5307,
+        "chanLen": 5307
+      },
+      {
+        "method": "POST",
+        "status": 200,
+        "path": "/cdn-cgi/challenge-platform/h/b/fo/{id}:{id}:{id}/{id}/{id}",
+        "hostClass": "cf",
+        "proto": "h2",
+        "altUsed": false,
+        "reqLen": 84439,
+        "respLen": -1,
+        "chanLen": -1
+      },
+      {
+        "method": "POST",
+        "status": 200,
+        "path": "/cdn-cgi/challenge-platform/h/b/fo/{id}:{id}:{id}/{id}/{id}",
+        "hostClass": "cf",
+        "proto": "h2",
+        "altUsed": false,
+        "reqLen": 88450,
+        "respLen": -1,
+        "chanLen": -1
+      },
+      {
+        "method": "POST",
+        "status": 200,
+        "path": "/cdn-cgi/challenge-platform/h/b/fo/{id}:{id}:{id}/{id}/{id}",
+        "hostClass": "page",
+        "proto": "h2",
+        "altUsed": false,
+        "reqLen": 8791,
+        "respLen": -1,
+        "chanLen": -1
+      }
+    ],
+    "allObservedRowsH2": true,
+    "foRows": 5,
+    "pageFoRows": 2
+  },
+  "headed": [
+    {
+      "runId": "rt_20260929103550_341b734038",
+      "rows": [
+        {
+          "seq": 3,
+          "pathClass": "challenge-document-get",
+          "method": "GET",
+          "status": 403,
+          "requestKind": "document",
+          "transport": "tcp",
+          "transportSource": "alpn",
+          "alpn": "h2",
+          "packetHttpVersion": "HTTP/2",
+          "packetAlpn": "h2",
+          "proxyUsed": false,
+          "xFirefoxSpdyPresent": true,
+          "rawPacket": {
+            "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929103550_341b734038/raw/http_packet/000003_GET_403_www.psacard.com_cert_67417377_psa_fcb61999_pid30840_300000015.http_packet.json",
+            "sha256": "d0933793ac77e143028c23179be15378f40f0adf2043c714e04ec80077889c83",
+            "bytes": 13289
+          }
+        },
+        {
+          "seq": 8,
+          "pathClass": "page-fo",
+          "method": "POST",
+          "status": 200,
+          "requestKind": "xhr",
+          "transport": "udp",
+          "transportSource": "alpn",
+          "alpn": "h3",
+          "packetHttpVersion": "HTTP/3",
+          "packetAlpn": "h3",
+          "proxyUsed": false,
+          "xFirefoxSpdyPresent": false,
+          "rawPacket": {
+            "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929103550_341b734038/raw/http_packet/000008_POST_200_www.psacard.com_cdn-cgi_challenge-platform_h_b_fo_2093632578_1790676030_3MCY57IsghDgkTu_ae0f38c6_pid30840_400000015.http_packet.json",
+            "sha256": "80b2351b7e20828d2a65989e8cf59e0becbbf6ee91ca6209770b76797e4422d8",
+            "bytes": 116547
+          }
+        },
+        {
+          "seq": 20,
+          "pathClass": "widget-fo",
+          "method": "POST",
+          "status": 200,
+          "requestKind": "xhr",
+          "transport": "udp",
+          "transportSource": "alpn",
+          "alpn": "h3",
+          "packetHttpVersion": "HTTP/3",
+          "packetAlpn": "h3",
+          "proxyUsed": false,
+          "xFirefoxSpdyPresent": false,
+          "rawPacket": {
+            "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929103550_341b734038/raw/http_packet/000020_POST_200_challenges.cloudflare.com_cdn-cgi_challenge-platform_h_b_fo_1312459222_1790676032_u4V1r_51e3f381_pid30840_480000011.http_packet.json",
+            "sha256": "cda4e35d812c604bc2f1fef8531cfb95d5a412225da0a7014c6cc74087f20b84",
+            "bytes": 810961
+          }
+        },
+        {
+          "seq": 32,
+          "pathClass": "widget-fo",
+          "method": "POST",
+          "status": 200,
+          "requestKind": "xhr",
+          "transport": "udp",
+          "transportSource": "alpn",
+          "alpn": "h3",
+          "packetHttpVersion": "HTTP/3",
+          "packetAlpn": "h3",
+          "proxyUsed": false,
+          "xFirefoxSpdyPresent": false,
+          "rawPacket": {
+            "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929103550_341b734038/raw/http_packet/000032_POST_200_challenges.cloudflare.com_cdn-cgi_challenge-platform_h_b_fo_1312459222_1790676032_u4V1r_51e3f381_pid30840_480000017.http_packet.json",
+            "sha256": "8f986d673d73989d69d005a1846010c3ea46f0980ec33f514072a89879a30536",
+            "bytes": 216413
+          }
+        },
+        {
+          "seq": 54,
+          "pathClass": "widget-fo",
+          "method": "POST",
+          "status": 200,
+          "requestKind": "xhr",
+          "transport": "udp",
+          "transportSource": "alpn",
+          "alpn": "h3",
+          "packetHttpVersion": "HTTP/3",
+          "packetAlpn": "h3",
+          "proxyUsed": false,
+          "xFirefoxSpdyPresent": false,
+          "rawPacket": {
+            "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929103550_341b734038/raw/http_packet/000054_POST_200_challenges.cloudflare.com_cdn-cgi_challenge-platform_h_b_fo_1312459222_1790676032_u4V1r_51e3f381_pid30840_480000018.http_packet.json",
+            "sha256": "8455303a7a3aa53d6e5dbae81c205f19462a2626eea444cafaa1e6385f32fa50",
+            "bytes": 117928
+          }
+        },
+        {
+          "seq": 59,
+          "pathClass": "page-fo",
+          "method": "POST",
+          "status": 200,
+          "requestKind": "xhr",
+          "transport": "udp",
+          "transportSource": "alpn",
+          "alpn": "h3",
+          "packetHttpVersion": "HTTP/3",
+          "packetAlpn": "h3",
+          "proxyUsed": false,
+          "xFirefoxSpdyPresent": false,
+          "rawPacket": {
+            "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929103550_341b734038/raw/http_packet/000059_POST_200_www.psacard.com_cdn-cgi_challenge-platform_h_b_fo_2093632578_1790676030_3MCY57IsghDgkTu_ae0f38c6_pid30840_400000017.http_packet.json",
+            "sha256": "59ed68dcb2948ad46140461713ba46564e6c5da139215e48bbfccb5b83af6650",
+            "bytes": 30850
+          }
+        },
+        {
+          "seq": 60,
+          "pathClass": "cert-document-post",
+          "method": "POST",
+          "status": 200,
+          "requestKind": "document",
+          "transport": "udp",
+          "transportSource": "alpn",
+          "alpn": "h3",
+          "packetHttpVersion": "HTTP/3",
+          "packetAlpn": "h3",
+          "proxyUsed": false,
+          "xFirefoxSpdyPresent": false,
+          "rawPacket": {
+            "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929103550_341b734038/raw/http_packet/000060_POST_200_www.psacard.com_cert_67417377_psa_fcb61999_pid30840_400000018.http_packet.json",
+            "sha256": "86d6e0b85cb9d7a9bc08835cb925b8b7b308378d41f68330142398bd6ef8401f",
+            "bytes": 182864
+          }
+        }
+      ]
+    },
+    {
+      "runId": "rt_20260929073424_207f577542",
+      "rows": [
+        {
+          "seq": 2,
+          "pathClass": "challenge-document-get",
+          "method": "GET",
+          "status": 403,
+          "requestKind": "document",
+          "transport": "tcp",
+          "transportSource": "alpn",
+          "alpn": "h2",
+          "packetHttpVersion": "HTTP/2",
+          "packetAlpn": "h2",
+          "proxyUsed": false,
+          "xFirefoxSpdyPresent": true,
+          "rawPacket": {
+            "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929073424_207f577542/raw/http_packet/000002_GET_403_www.psacard.com_cert_67417377_psa_fcb61999_pid45320_300000015.http_packet.json",
+            "sha256": "06648d5bcac23673e878f40d13f6695930514d1050bf0f6752af844baeaede32",
+            "bytes": 13289
+          }
+        },
+        {
+          "seq": 5,
+          "pathClass": "page-fo",
+          "method": "POST",
+          "status": 200,
+          "requestKind": "xhr",
+          "transport": "udp",
+          "transportSource": "alpn",
+          "alpn": "h3",
+          "packetHttpVersion": "HTTP/3",
+          "packetAlpn": "h3",
+          "proxyUsed": false,
+          "xFirefoxSpdyPresent": false,
+          "rawPacket": {
+            "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929073424_207f577542/raw/http_packet/000005_POST_200_www.psacard.com_cdn-cgi_challenge-platform_h_b_fo_1429032028_1790665208_BeQPHMpj2lFsjm8_fd9bc0f6_pid45320_400000015.http_packet.json",
+            "sha256": "ead50c90ba6c11913b886938ed64e99e42f2c588394573071e572c48dde8f3f9",
+            "bytes": 116541
+          }
+        },
+        {
+          "seq": 11,
+          "pathClass": "widget-fo",
+          "method": "POST",
+          "status": 200,
+          "requestKind": "xhr",
+          "transport": "udp",
+          "transportSource": "alpn",
+          "alpn": "h3",
+          "packetHttpVersion": "HTTP/3",
+          "packetAlpn": "h3",
+          "proxyUsed": false,
+          "xFirefoxSpdyPresent": false,
+          "rawPacket": {
+            "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929073424_207f577542/raw/http_packet/000011_POST_200_challenges.cloudflare.com_cdn-cgi_challenge-platform_h_b_fo_3656645351_1790665209_iJn_k_d24069d1_pid45320_480000011.http_packet.json",
+            "sha256": "9e6eb9d195119f95be134851498988b37d0d903e1a500f3f43133e2781fd6352",
+            "bytes": 791640
+          }
+        },
+        {
+          "seq": 32,
+          "pathClass": "widget-fo",
+          "method": "POST",
+          "status": 200,
+          "requestKind": "xhr",
+          "transport": "udp",
+          "transportSource": "alpn",
+          "alpn": "h3",
+          "packetHttpVersion": "HTTP/3",
+          "packetAlpn": "h3",
+          "proxyUsed": false,
+          "xFirefoxSpdyPresent": false,
+          "rawPacket": {
+            "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929073424_207f577542/raw/http_packet/000032_POST_200_challenges.cloudflare.com_cdn-cgi_challenge-platform_h_b_fo_3656645351_1790665209_iJn_k_d24069d1_pid45320_480000017.http_packet.json",
+            "sha256": "d87ea79778991446afb208a2ccec9638e5b472bd213caef39af52cd8640aaef7",
+            "bytes": 214213
+          }
+        },
+        {
+          "seq": 37,
+          "pathClass": "widget-fo",
+          "method": "POST",
+          "status": 200,
+          "requestKind": "xhr",
+          "transport": "udp",
+          "transportSource": "alpn",
+          "alpn": "h3",
+          "packetHttpVersion": "HTTP/3",
+          "packetAlpn": "h3",
+          "proxyUsed": false,
+          "xFirefoxSpdyPresent": false,
+          "rawPacket": {
+            "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929073424_207f577542/raw/http_packet/000037_POST_200_challenges.cloudflare.com_cdn-cgi_challenge-platform_h_b_fo_3656645351_1790665209_iJn_k_d24069d1_pid45320_480000018.http_packet.json",
+            "sha256": "59860bf0bc21a32ca62fe439a66eaff2052116144d590d8e187795f0f9209ecb",
+            "bytes": 115690
+          }
+        },
+        {
+          "seq": 38,
+          "pathClass": "page-fo",
+          "method": "POST",
+          "status": 200,
+          "requestKind": "xhr",
+          "transport": "udp",
+          "transportSource": "alpn",
+          "alpn": "h3",
+          "packetHttpVersion": "HTTP/3",
+          "packetAlpn": "h3",
+          "proxyUsed": false,
+          "xFirefoxSpdyPresent": false,
+          "rawPacket": {
+            "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929073424_207f577542/raw/http_packet/000038_POST_200_www.psacard.com_cdn-cgi_challenge-platform_h_b_fo_1429032028_1790665208_BeQPHMpj2lFsjm8_fd9bc0f6_pid45320_400000017.http_packet.json",
+            "sha256": "1273909e2f0a140e2f0fadbb0d32c1aa7cd4c0f5d1098c4a7c5d1a08b50c193b",
+            "bytes": 29794
+          }
+        },
+        {
+          "seq": 39,
+          "pathClass": "cert-document-post",
+          "method": "POST",
+          "status": 200,
+          "requestKind": "document",
+          "transport": "udp",
+          "transportSource": "alpn",
+          "alpn": "h3",
+          "packetHttpVersion": "HTTP/3",
+          "packetAlpn": "h3",
+          "proxyUsed": false,
+          "xFirefoxSpdyPresent": false,
+          "rawPacket": {
+            "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929073424_207f577542/raw/http_packet/000039_POST_200_www.psacard.com_cert_67417377_psa_fcb61999_pid45320_400000018.http_packet.json",
+            "sha256": "ea7af877d7750a1914ca0f4bc9ed84d27df3a72e4e8516b0450ed2cc48edc53b",
+            "bytes": 182004
+          }
+        }
+      ]
+    }
+  ],
+  "localVersusHeadedFoProtocolMismatch": true,
+  "factsSnapshot": {
+    "path": "workspace/psa_solve/contracts/auto-decision-facts.json",
+    "sha256": "586e8577d184e35de9c4795dd28af25b69043ca7bee400ce67a8b63fe489a2cf",
+    "bytes": 274,
+    "expectedRevision": 0,
+    "metadataContractRevisionIsNotFactsRevision": true
+  },
+  "gateReview": {
+    "pauseBoundary": "skill/web-env-patcher/references/pause-boundaries.md:89",
+    "notOpaqueByte": true,
+    "allowedProposedKeys": {
+      "firstDivergence": "transport",
+      "experimentHygiene": "ok"
+    },
+    "authoritativeFactsWritten": false,
+    "inMemoryPreviewAction": "fix_transport",
+    "inMemoryPreviewTurnGate": "blocked"
+  },
+  "rawEvidence": [
+    {
+      "path": "workspace/psa_solve/evidence/web/diagnostic-instrumentation-v2/restricted/05c67ac6c8c24b38aa03d866258971ad/bridge-live.jsonl",
+      "sha256": "876cb6477b28ad3ebef372aab4c898d97c14d048d4452416399302be2510079a",
+      "bytes": 28773
+    },
+    {
+      "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929103550_341b734038/raw/http_packet/index.jsonl",
+      "sha256": "0ad5a17d3e77dbf15652d33f70dd3e061e2bea7d9b79ddc0495cb674bd69fc58",
+      "bytes": 225663
+    },
+    {
+      "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929103550_341b734038/raw/http_packet/000003_GET_403_www.psacard.com_cert_67417377_psa_fcb61999_pid30840_300000015.http_packet.json",
+      "sha256": "d0933793ac77e143028c23179be15378f40f0adf2043c714e04ec80077889c83",
+      "bytes": 13289
+    },
+    {
+      "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929103550_341b734038/raw/http_packet/000008_POST_200_www.psacard.com_cdn-cgi_challenge-platform_h_b_fo_2093632578_1790676030_3MCY57IsghDgkTu_ae0f38c6_pid30840_400000015.http_packet.json",
+      "sha256": "80b2351b7e20828d2a65989e8cf59e0becbbf6ee91ca6209770b76797e4422d8",
+      "bytes": 116547
+    },
+    {
+      "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929103550_341b734038/raw/http_packet/000020_POST_200_challenges.cloudflare.com_cdn-cgi_challenge-platform_h_b_fo_1312459222_1790676032_u4V1r_51e3f381_pid30840_480000011.http_packet.json",
+      "sha256": "cda4e35d812c604bc2f1fef8531cfb95d5a412225da0a7014c6cc74087f20b84",
+      "bytes": 810961
+    },
+    {
+      "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929103550_341b734038/raw/http_packet/000032_POST_200_challenges.cloudflare.com_cdn-cgi_challenge-platform_h_b_fo_1312459222_1790676032_u4V1r_51e3f381_pid30840_480000017.http_packet.json",
+      "sha256": "8f986d673d73989d69d005a1846010c3ea46f0980ec33f514072a89879a30536",
+      "bytes": 216413
+    },
+    {
+      "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929103550_341b734038/raw/http_packet/000054_POST_200_challenges.cloudflare.com_cdn-cgi_challenge-platform_h_b_fo_1312459222_1790676032_u4V1r_51e3f381_pid30840_480000018.http_packet.json",
+      "sha256": "8455303a7a3aa53d6e5dbae81c205f19462a2626eea444cafaa1e6385f32fa50",
+      "bytes": 117928
+    },
+    {
+      "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929103550_341b734038/raw/http_packet/000059_POST_200_www.psacard.com_cdn-cgi_challenge-platform_h_b_fo_2093632578_1790676030_3MCY57IsghDgkTu_ae0f38c6_pid30840_400000017.http_packet.json",
+      "sha256": "59ed68dcb2948ad46140461713ba46564e6c5da139215e48bbfccb5b83af6650",
+      "bytes": 30850
+    },
+    {
+      "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929103550_341b734038/raw/http_packet/000060_POST_200_www.psacard.com_cert_67417377_psa_fcb61999_pid30840_400000018.http_packet.json",
+      "sha256": "86d6e0b85cb9d7a9bc08835cb925b8b7b308378d41f68330142398bd6ef8401f",
+      "bytes": 182864
+    },
+    {
+      "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929073424_207f577542/raw/http_packet/index.jsonl",
+      "sha256": "321d187562b7ac0538f8176b41a59071d9e6280ad4c5154f3a3f927c1a93e684",
+      "bytes": 233269
+    },
+    {
+      "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929073424_207f577542/raw/http_packet/000002_GET_403_www.psacard.com_cert_67417377_psa_fcb61999_pid45320_300000015.http_packet.json",
+      "sha256": "06648d5bcac23673e878f40d13f6695930514d1050bf0f6752af844baeaede32",
+      "bytes": 13289
+    },
+    {
+      "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929073424_207f577542/raw/http_packet/000005_POST_200_www.psacard.com_cdn-cgi_challenge-platform_h_b_fo_1429032028_1790665208_BeQPHMpj2lFsjm8_fd9bc0f6_pid45320_400000015.http_packet.json",
+      "sha256": "ead50c90ba6c11913b886938ed64e99e42f2c588394573071e572c48dde8f3f9",
+      "bytes": 116541
+    },
+    {
+      "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929073424_207f577542/raw/http_packet/000011_POST_200_challenges.cloudflare.com_cdn-cgi_challenge-platform_h_b_fo_3656645351_1790665209_iJn_k_d24069d1_pid45320_480000011.http_packet.json",
+      "sha256": "9e6eb9d195119f95be134851498988b37d0d903e1a500f3f43133e2781fd6352",
+      "bytes": 791640
+    },
+    {
+      "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929073424_207f577542/raw/http_packet/000032_POST_200_challenges.cloudflare.com_cdn-cgi_challenge-platform_h_b_fo_3656645351_1790665209_iJn_k_d24069d1_pid45320_480000017.http_packet.json",
+      "sha256": "d87ea79778991446afb208a2ccec9638e5b472bd213caef39af52cd8640aaef7",
+      "bytes": 214213
+    },
+    {
+      "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929073424_207f577542/raw/http_packet/000037_POST_200_challenges.cloudflare.com_cdn-cgi_challenge-platform_h_b_fo_3656645351_1790665209_iJn_k_d24069d1_pid45320_480000018.http_packet.json",
+      "sha256": "59860bf0bc21a32ca62fe439a66eaff2052116144d590d8e187795f0f9209ecb",
+      "bytes": 115690
+    },
+    {
+      "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929073424_207f577542/raw/http_packet/000038_POST_200_www.psacard.com_cdn-cgi_challenge-platform_h_b_fo_1429032028_1790665208_BeQPHMpj2lFsjm8_fd9bc0f6_pid45320_400000017.http_packet.json",
+      "sha256": "1273909e2f0a140e2f0fadbb0d32c1aa7cd4c0f5d1098c4a7c5d1a08b50c193b",
+      "bytes": 29794
+    },
+    {
+      "path": "workspace/psa_solve/evidence/web/ruyitrace/rt_20260929073424_207f577542/raw/http_packet/000039_POST_200_www.psacard.com_cert_67417377_psa_fcb61999_pid45320_400000018.http_packet.json",
+      "sha256": "ea7af877d7750a1914ca0f4bc9ed84d27df3a72e4e8516b0450ed2cc48edc53b",
+      "bytes": 182004
+    }
+  ],
+  "limitations": [
+    "Different fresh sessions and entry material provenance; protocol mismatch does not prove form missing root cause.",
+    "local altUsed=false alone does not prove HTTP/2; protocolVersion=h2 is the protocol evidence.",
+    "headed alt-svc advertisement alone does not prove HTTP/3; raw meta/alpn and transport do.",
+    "The current h3 pref/mapping block exists; precise reason for H2 fallback has not been observed.",
+    "Native-navigation alternative is independent and not to be combined with same-runner transport correction."
+  ]
+}

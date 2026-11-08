@@ -1,0 +1,20 @@
+{
+  "scopeId": "8c0b2b72653544af763d685680d16600c796ead3a591e9b4ef3a6b39a3dd157c",
+  "adapter": "ruyijs-live-emit-v1",
+  "browserRun": {
+    "path": "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\ruyitrace\\rt_20261102184003_209bfef648\\evidence-run.json",
+    "sha256": "20392be4814d31a2c3a25a56382786ea5eed84e83f79ccacf9d0438c50e92931"
+  },
+  "browserTrace": {
+    "path": "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\ruyitrace\\rt_20261102184003_209bfef648\\raw\\domtrace\\trace_process_61096.ndjson",
+    "sha256": "1654b8e4547db90717b1f8c8c9555dd8a9fa10a916813d5c910c47b4659063a1"
+  },
+  "browserPacket": {
+    "path": "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\ruyitrace\\rt_20261102184003_209bfef648\\raw\\http_packet\\000014_POST_200_www.psacard.com_cert_67417377_psa_fcb61999_pid61096_480000019.http_packet.json",
+    "sha256": "de7f589153ec0771128dada6d3f2298cfaa57ebe1bea5e7e948fb5431fced058"
+  },
+  "ruyijsRun": {
+    "path": "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\ruyijs\\rj_20261102191503_7445d1cb\\evidence-run.json",
+    "sha256": "9d337de92bbb11f126c9bd68ae58efd669eacf6e2999c0f325075dc698a59142"
+  }
+}

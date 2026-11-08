@@ -1,0 +1,146 @@
+{
+  "schema": "ruyitrace-capture-stop.v1",
+  "decisionId": "e5f6009ec238e0ea59fcdc04b984ef1b",
+  "action": "ruyitrace_capture_stop",
+  "sliceId": "slice-ruyitrace-capture-stop-e5f6009e-20261103",
+  "runId": "rt_20261102184003_209bfef648",
+  "mcpProject": "psa_solve",
+  "caseId": "psa-cf-5s-shield-20260815",
+  "runtime": {
+    "appVersion": "3.5.0",
+    "verification": "verified",
+    "firefoxVersion": "159.0",
+    "buildId": "20261101193257",
+    "status": "ready"
+  },
+  "mcpStop": {
+    "schema": "ruyitrace-capture-stop.v1",
+    "status": "requested"
+  },
+  "stop": {
+    "state": "stopped",
+    "phase": "stopped",
+    "stoppedAt": "2026-11-02T18:57:09.479Z",
+    "startedAt": "2026-11-02T18:40:03.262Z",
+    "gateEnabled": true,
+    "failure": null,
+    "artifactCount": 372,
+    "indexedRecords": 738792,
+    "indexedArtifacts": 372,
+    "gates": [
+      {
+        "name": "runtime-hash",
+        "status": "pass"
+      },
+      {
+        "name": "evidence-index",
+        "status": "pass"
+      },
+      {
+        "name": "evidence-receipt",
+        "status": "pending"
+      }
+    ],
+    "partitions": {
+      "cookie": {
+        "records": 721,
+        "artifacts": 4
+      },
+      "descriptor": {
+        "records": 899,
+        "artifacts": 3
+      },
+      "domtrace": {
+        "records": 727278,
+        "artifacts": 1
+      },
+      "eval": {
+        "records": 362,
+        "artifacts": 157
+      },
+      "event": {
+        "records": 515,
+        "artifacts": 7
+      },
+      "http_packet": {
+        "records": 384,
+        "artifacts": 180
+      },
+      "storage": {
+        "records": 8633,
+        "artifacts": 6
+      }
+    }
+  },
+  "flush": {
+    "complete": true,
+    "droppedAnyGtZero": false,
+    "io_errors": 0,
+    "dropped": {
+      "dropped_full": 0,
+      "dropped_contention": 0,
+      "dropped_oom": 0,
+      "dropped_oversize": 0,
+      "dropped_gate": 0,
+      "dropped_shutdown": 0,
+      "dropped_writer_failed": 0,
+      "dropped_control": 0,
+      "dropped_dispatch": 0,
+      "dropped_session": 0
+    },
+    "http_packet_writer_stats": {
+      "path": "evidence/web/ruyitrace/rt_20261102184003_209bfef648/raw/http_packet/http_packet_writer_stats.jsonl",
+      "attempted": 206,
+      "admitted": 206,
+      "queued": 206,
+      "written": 177,
+      "skipped": 29,
+      "skipped_reasons_background": 29,
+      "dropped_session": 0,
+      "dropped_gate": 0,
+      "dropped_full": 0,
+      "io_errors": 0
+    },
+    "jscall_stats": null,
+    "jscallNote": "dom-observe; raw/jscall empty; no jscall_stats line",
+    "writer_stats_paths": [
+      "evidence/web/ruyitrace/rt_20261102184003_209bfef648/raw/http_packet/http_packet_writer_stats.jsonl"
+    ],
+    "writer_stats_last_line_sources": [
+      "raw/cookie/*.ndjson sidecar_writer_stats",
+      "raw/descriptor/*.ndjson sidecar_writer_stats",
+      "raw/storage/*.ndjson sidecar_writer_stats",
+      "raw/event/*.ndjson sidecar_writer_stats",
+      "raw/eval/*.ndjson eval_writer_stats",
+      "raw/domtrace/*.ndjson last-line domtrace_writer_stats"
+    ],
+    "note": "All scanned last-line dropped_* and io_errors are 0. skipped=29 is background, not dropped."
+  },
+  "httpUrlCount": 384,
+  "httpUrlsFromStatusCapped": 10,
+  "certPostFilenamePresent": true,
+  "certPostFilename": "000014_POST_200_www.psacard.com_cert_67417377_psa_fcb61999_pid61096_480000019.http_packet.json",
+  "workerEvidenceRun": "evidence/web/ruyitrace/rt_20261102184003_209bfef648/evidence-run.json",
+  "evidencePaths": [
+    "agent-notes/ruyitrace-capture-stop-e5f6009e-20261103.json",
+    "evidence/ruyitrace-capture-stop-e5f6009e-20261103.json",
+    "evidence/web/ruyitrace/rt_20261102184003_209bfef648/"
+  ],
+  "handles": {
+    "runId": "rt_20261102184003_209bfef648",
+    "workerPid": 35932,
+    "workerPidAliveAfterStop": false,
+    "browserPid": 61096,
+    "browserPidAliveAfterStop": false,
+    "session": null,
+    "frozenRuyijsRunId": "rj_20261102170743_02229090",
+    "frozenBrowserRunId": "rt_20260929103550_341b734038"
+  },
+  "receiptsPlane": "this slice STOPS capture only; did not write receipts.ruyitrace=completed; worker evidence-run.json already state=stopped; evidence-receipt gate pending; leave receipts for parent",
+  "status": "completed",
+  "blocker": null,
+  "createdAt": "2026-11-02T19:00:21Z",
+  "updatedAt": "2026-11-02T19:00:21Z",
+  "evidenceSha256": "b0f6a88bed392788df0db7b454ff6e276f4c70ba0d1a407709da4cf1a6294f5c",
+  "evidenceSha256Of": "evidence/ruyitrace-capture-stop-e5f6009e-20261103.json"
+}

@@ -1,69 +1,353 @@
 {
   "schema": "request-parameter-lineage.v1",
   "caseId": "psa-cf-5s-shield-20260815",
-  "status": "draft",
-  "objective": "替换为本 case 的请求参数谱系目标",
+  "status": "blocked",
+  "objective": "Record the PSA managed-challenge request classes and the missing certificate POST. No raw cookies, tokens, or bodies.",
   "targetOrigins": [
-    "https://example.invalid"
+    "https://www.psacard.com"
   ],
   "endpoints": [
     {
-      "id": "replace-endpoint-id",
-      "method": "POST",
-      "path": "/replace-path",
-      "payloadShape": "form",
+      "id": "cert-document-get",
+      "method": "GET",
+      "path": "/cert/",
+      "payloadShape": "none",
       "evidence": {
         "schema": "evidence-pointer.v1",
         "caseId": "psa-cf-5s-shield-20260815",
         "plane": "ruyitrace",
-        "runId": "rt_template_001",
-        "artifactId": "request-shape",
-        "path": "evidence/web/ruyitrace/rt_template_001/request-shape.json",
-        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "bytes": 0,
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "ep-cert-get",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
         "mediaType": "application/json",
-        "sensitivity": "public-synthetic",
-        "redaction": "synthetic"
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
       },
       "parameters": [
         {
-          "name": "replace-parameter-name",
-          "location": "form",
-          "classification": "unknown",
-          "requiredByServer": true,
+          "name": "__cf_bm",
+          "location": "cookie",
+          "classification": "session-bound",
+          "requiredByServer": false,
           "lineage": {
-            "sourceKind": "unknown",
+            "sourceKind": "previous-response",
             "transform": {
-              "kind": "unknown",
-              "reference": "待定位的 writer/builder/callsite",
+              "kind": "server-issued",
+              "reference": "Set-Cookie name __cf_bm",
               "inputParameters": []
             },
             "evidence": {
               "schema": "evidence-pointer.v1",
               "caseId": "psa-cf-5s-shield-20260815",
               "plane": "ruyitrace",
-              "runId": "rt_template_001",
-              "artifactId": "parameter-lineage",
-              "path": "evidence/web/ruyitrace/rt_template_001/parameter-lineage.json",
-              "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-              "bytes": 0,
+              "runId": "rt_20260929103550_341b734038",
+              "artifactId": "lin---cf-bm",
+              "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+              "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+              "bytes": 234116,
               "mediaType": "application/json",
-              "sensitivity": "public-synthetic",
-              "redaction": "synthetic"
+              "sensitivity": "private-redacted",
+              "redaction": "allowlist-summary"
             }
           },
           "verification": {
-            "browserObserved": "not-run",
-            "localReproduced": "not-run",
-            "serverAccepted": "not-run"
+            "browserObserved": "pass",
+            "localReproduced": "pass",
+            "serverAccepted": "fail"
+          },
+          "sensitivity": "private-redacted"
+        }
+      ]
+    },
+    {
+      "id": "orchestrate-get",
+      "method": "GET",
+      "path": "/cdn-cgi/challenge-platform/orchestrate",
+      "payloadShape": "none",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "ep-orch",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      },
+      "parameters": [
+        {
+          "name": "__cf_bm",
+          "location": "cookie",
+          "classification": "session-bound",
+          "requiredByServer": false,
+          "lineage": {
+            "sourceKind": "storage-category",
+            "transform": {
+              "kind": "direct",
+              "reference": "session cookie name __cf_bm",
+              "inputParameters": []
+            },
+            "evidence": {
+              "schema": "evidence-pointer.v1",
+              "caseId": "psa-cf-5s-shield-20260815",
+              "plane": "ruyitrace",
+              "runId": "rt_20260929103550_341b734038",
+              "artifactId": "lin---cf-bm",
+              "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+              "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+              "bytes": 234116,
+              "mediaType": "application/json",
+              "sensitivity": "private-redacted",
+              "redaction": "allowlist-summary"
+            }
+          },
+          "verification": {
+            "browserObserved": "pass",
+            "localReproduced": "pass",
+            "serverAccepted": "fail"
+          },
+          "sensitivity": "private-redacted"
+        }
+      ]
+    },
+    {
+      "id": "page-fo",
+      "method": "POST",
+      "path": "/cdn-cgi/challenge-platform/fo/",
+      "payloadShape": "unknown",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "ep-page-fo",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      },
+      "parameters": [
+        {
+          "name": "fo-body",
+          "location": "form",
+          "classification": "challenge-bound",
+          "requiredByServer": false,
+          "lineage": {
+            "sourceKind": "challenge-runtime",
+            "transform": {
+              "kind": "encoding",
+              "reference": "page script opaque /fo/ body",
+              "inputParameters": []
+            },
+            "evidence": {
+              "schema": "evidence-pointer.v1",
+              "caseId": "psa-cf-5s-shield-20260815",
+              "plane": "ruyitrace",
+              "runId": "rt_20260929103550_341b734038",
+              "artifactId": "lin-fo-body",
+              "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+              "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+              "bytes": 234116,
+              "mediaType": "application/json",
+              "sensitivity": "private-redacted",
+              "redaction": "allowlist-summary"
+            }
+          },
+          "verification": {
+            "browserObserved": "pass",
+            "localReproduced": "pass",
+            "serverAccepted": "fail"
+          },
+          "sensitivity": "private-redacted"
+        }
+      ]
+    },
+    {
+      "id": "clearance-fo",
+      "method": "POST",
+      "path": "/cdn-cgi/challenge-platform/fo/",
+      "payloadShape": "unknown",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "ep-clearance",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      },
+      "parameters": [
+        {
+          "name": "cf_clearance",
+          "location": "cookie",
+          "classification": "challenge-bound",
+          "requiredByServer": false,
+          "lineage": {
+            "sourceKind": "previous-response",
+            "transform": {
+              "kind": "server-issued",
+              "reference": "Set-Cookie name cf_clearance",
+              "inputParameters": []
+            },
+            "evidence": {
+              "schema": "evidence-pointer.v1",
+              "caseId": "psa-cf-5s-shield-20260815",
+              "plane": "ruyitrace",
+              "runId": "rt_20260929103550_341b734038",
+              "artifactId": "lin-cf-clearance",
+              "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+              "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+              "bytes": 234116,
+              "mediaType": "application/json",
+              "sensitivity": "private-redacted",
+              "redaction": "allowlist-summary"
+            }
+          },
+          "verification": {
+            "browserObserved": "pass",
+            "localReproduced": "fail",
+            "serverAccepted": "fail"
+          },
+          "sensitivity": "private-redacted"
+        },
+        {
+          "name": "fo-body",
+          "location": "form",
+          "classification": "challenge-bound",
+          "requiredByServer": false,
+          "lineage": {
+            "sourceKind": "challenge-runtime",
+            "transform": {
+              "kind": "encoding",
+              "reference": "clearance /fo/ body class",
+              "inputParameters": []
+            },
+            "evidence": {
+              "schema": "evidence-pointer.v1",
+              "caseId": "psa-cf-5s-shield-20260815",
+              "plane": "ruyitrace",
+              "runId": "rt_20260929103550_341b734038",
+              "artifactId": "lin-fo-body",
+              "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+              "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+              "bytes": 234116,
+              "mediaType": "application/json",
+              "sensitivity": "private-redacted",
+              "redaction": "allowlist-summary"
+            }
+          },
+          "verification": {
+            "browserObserved": "pass",
+            "localReproduced": "fail",
+            "serverAccepted": "fail"
+          },
+          "sensitivity": "private-redacted"
+        }
+      ]
+    },
+    {
+      "id": "cert-document-post",
+      "method": "POST",
+      "path": "/cert/",
+      "payloadShape": "form",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "ep-cert-post",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      },
+      "parameters": [
+        {
+          "name": "cf_clearance",
+          "location": "cookie",
+          "classification": "challenge-bound",
+          "requiredByServer": false,
+          "lineage": {
+            "sourceKind": "storage-category",
+            "transform": {
+              "kind": "direct",
+              "reference": "site-partition cookie name cf_clearance",
+              "inputParameters": []
+            },
+            "evidence": {
+              "schema": "evidence-pointer.v1",
+              "caseId": "psa-cf-5s-shield-20260815",
+              "plane": "ruyitrace",
+              "runId": "rt_20260929103550_341b734038",
+              "artifactId": "lin-cf-clearance",
+              "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+              "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+              "bytes": 234116,
+              "mediaType": "application/json",
+              "sensitivity": "private-redacted",
+              "redaction": "allowlist-summary"
+            }
+          },
+          "verification": {
+            "browserObserved": "pass",
+            "localReproduced": "fail",
+            "serverAccepted": "fail"
+          },
+          "sensitivity": "private-redacted"
+        },
+        {
+          "name": "form-body",
+          "location": "form",
+          "classification": "challenge-bound",
+          "requiredByServer": false,
+          "lineage": {
+            "sourceKind": "challenge-runtime",
+            "transform": {
+              "kind": "encoding",
+              "reference": "form.submit urlencoded body",
+              "inputParameters": []
+            },
+            "evidence": {
+              "schema": "evidence-pointer.v1",
+              "caseId": "psa-cf-5s-shield-20260815",
+              "plane": "ruyitrace",
+              "runId": "rt_20260929103550_341b734038",
+              "artifactId": "lin-form-body",
+              "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+              "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+              "bytes": 234116,
+              "mediaType": "application/json",
+              "sensitivity": "private-redacted",
+              "redaction": "allowlist-summary"
+            }
+          },
+          "verification": {
+            "browserObserved": "pass",
+            "localReproduced": "fail",
+            "serverAccepted": "fail"
           },
           "sensitivity": "private-redacted"
         }
       ]
     }
   ],
-  "executionReadiness": "not-ready",
+  "executionReadiness": "diagnostic-only",
   "limitations": [
-    "模板中的 synthetic pointer 必须替换为当前 case 的脱敏 evidence pointer。"
+    "requiredByServer is false because serverAccepted is not pass. The headed certificate POST still depends on cf_clearance.",
+    "Local cf_clearance verification is fail: the name is present, the certificate POST is not.",
+    "fo-body and form-body are class names. Values are not in this contract."
   ]
 }

@@ -1,0 +1,197 @@
+{
+  "schema": "psa-live-transport-cause.v1",
+  "status": "verified",
+  "runId": "e0b71e462e87439696301f2b211a7ea1",
+  "at": "2026-09-30T11:15:02.878131+00:00",
+  "authorizedAction": "fix_transport",
+  "rootCauseScope": "HTTP3 admission excluded by effective HTTP application proxy; not proof of missing-form/business root cause",
+  "h3MappingAppliedAndPrefsRetained": true,
+  "nativeLogCounts": {
+    "altSvcIgnoredDueToProxy": 12,
+    "aNoHttp3True": 24,
+    "httpProxyTargetConnectionEntries": 30,
+    "http3SessionLog": 0,
+    "mappingRead": 3
+  },
+  "anchors": [
+    {
+      "role": "existing-page-host-h3-mapping-read",
+      "line": 1260,
+      "excerpt": "2026-09-30 11:10:09.861000 UTC - [Parent 1288: Main Thread]: D/nsHttp nsHttpHandler::MaybeAddAltSvcForTesting for www.psacard.com map: h3=\":443\""
+    },
+    {
+      "role": "target-dispatched-via-http-loopback-proxy",
+      "line": 1987,
+      "excerpt": "2026-09-30 11:10:09.866000 UTC - [Parent 1288: Socket Thread]: V/nsHttp nsHttpConnectionMgr::TryDispatchTransaction without conn [trans={ptr} ci={ptr} ci=PSA........[tlsflags0x00000000]challenges.cloudflare.com:443 (http:{loopback-proxy})[:]{TPRH} caps=1200111 onlyreused=0 active=0 idle=0]"
+    },
+    {
+      "role": "target-dispatched-via-http-loopback-proxy",
+      "line": 2010,
+      "excerpt": "2026-09-30 11:10:09.866000 UTC - [Parent 1288: Socket Thread]: V/nsHttp nsHttpConnectionMgr::TryDispatchTransaction without conn [trans={ptr} ci={ptr} ci=PS.........[tlsflags0x00000000]www.psacard.com:443 (http:{loopback-proxy})[:]{TPRH} caps=1200001 onlyreused=0 active=0 idle=0]"
+    },
+    {
+      "role": "target-dispatched-via-http-loopback-proxy",
+      "line": 2432,
+      "excerpt": "2026-09-30 11:10:09.870000 UTC - [Parent 1288: Socket Thread]: V/nsHttp nsHttpConnectionMgr::TryDispatchTransaction without conn [trans={ptr} ci={ptr} ci=PSA........[tlsflags0x00000000]challenges.cloudflare.com:443 (http:{loopback-proxy})[:]{TPRH} caps=1200111 onlyreused=1 active=0 idle=1]"
+    },
+    {
+      "role": "existing-page-host-h3-mapping-read",
+      "line": 3793,
+      "excerpt": "2026-09-30 11:10:09.924000 UTC - [Parent 1288: Main Thread]: D/nsHttp nsHttpHandler::MaybeAddAltSvcForTesting for www.psacard.com map: h3=\":443\""
+    },
+    {
+      "role": "alt-svc-rejected-due-to-proxy",
+      "line": 19209,
+      "excerpt": "2026-09-30 11:10:10.216000 UTC - [Parent 1288: Main Thread]: D/nsHttp AltSvcMapping::ProcessHeader ignoring due to proxy"
+    },
+    {
+      "role": "alt-svc-rejected-due-to-proxy",
+      "line": 65166,
+      "excerpt": "2026-09-30 11:10:10.346000 UTC - [Parent 1288: Main Thread]: D/nsHttp AltSvcMapping::ProcessHeader ignoring due to proxy"
+    },
+    {
+      "role": "alt-svc-rejected-due-to-proxy",
+      "line": 66742,
+      "excerpt": "2026-09-30 11:10:10.441000 UTC - [Parent 1288: Main Thread]: D/nsHttp AltSvcMapping::ProcessHeader ignoring due to proxy"
+    },
+    {
+      "role": "existing-page-host-h3-mapping-read",
+      "line": 248101,
+      "excerpt": "2026-09-30 11:10:16.015000 UTC - [Parent 1288: Main Thread]: D/nsHttp nsHttpHandler::MaybeAddAltSvcForTesting for www.psacard.com map: h3=\":443\""
+    }
+  ],
+  "proxyProvenance": {
+    "environmentProxyVariablesPresent": [],
+    "systemProxyEnabled": true,
+    "systemProxyServerIsKnownLoopbackEndpoint": true,
+    "defaultGeckoProxyTypeBeforeAfterInit": 5,
+    "typeMeaning": "system proxy settings",
+    "registryModified": false
+  },
+  "foProtocols": [
+    {
+      "hostClass": "page",
+      "path": "/cdn-cgi/challenge-platform/h/b/fo/{id}:{id}:{id}/{id}/{id}",
+      "method": "POST",
+      "status": 200,
+      "proto": "h2",
+      "altUsed": false,
+      "reqLen": 2252,
+      "respLen": -1
+    },
+    {
+      "hostClass": "cf",
+      "path": "/cdn-cgi/challenge-platform/h/b/fo/{id}:{id}:{id}/{id}/{id}",
+      "method": "POST",
+      "status": 200,
+      "proto": "h2",
+      "altUsed": false,
+      "reqLen": 4706,
+      "respLen": -1
+    },
+    {
+      "hostClass": "cf",
+      "path": "/cdn-cgi/challenge-platform/h/b/fo/{id}:{id}:{id}/{id}/{id}",
+      "method": "POST",
+      "status": 200,
+      "proto": "h2",
+      "altUsed": false,
+      "reqLen": 83436,
+      "respLen": -1
+    },
+    {
+      "hostClass": "cf",
+      "path": "/cdn-cgi/challenge-platform/h/b/fo/{id}:{id}:{id}/{id}/{id}",
+      "method": "POST",
+      "status": 200,
+      "proto": "h2",
+      "altUsed": false,
+      "reqLen": 86604,
+      "respLen": -1
+    },
+    {
+      "hostClass": "page",
+      "path": "/cdn-cgi/challenge-platform/h/b/fo/{id}:{id}:{id}/{id}/{id}",
+      "method": "POST",
+      "status": 200,
+      "proto": "h2",
+      "altUsed": false,
+      "reqLen": 8812,
+      "respLen": -1
+    }
+  ],
+  "allFiveFoH2": true,
+  "outcome": {
+    "harnessHealthy": true,
+    "widgetComplete": true,
+    "siteClearanceCookieNamed": true,
+    "forms": 0,
+    "submits": 0,
+    "certDocumentPost": false,
+    "serverAccepted": false
+  },
+  "nextAuthorizedRepair": {
+    "singleVariable": "engine-local network.proxy.type=0",
+    "preserve": [
+      "urllib-UA135 fresh-material generator and its own system-proxy handling",
+      "Gecko135 binary/library lock",
+      "UA155 runner override",
+      "HTML/material bridge entry",
+      "existing real host patches",
+      "e10s/fission MOZ_FORCE keys",
+      "trusted pointer/click path"
+    ],
+    "doNotChange": [
+      "Windows registry or TUN",
+      "target JS or VM",
+      "other proxy types/preferences",
+      "v2 diagnostic budget/profile"
+    ],
+    "additionalBudget": {
+      "freshMaterialRounds": 1,
+      "engineSpawns": 1
+    }
+  },
+  "rawEvidence": [
+    {
+      "path": "evidence/web/transport-diagnostic/e0b71e462e87439696301f2b211a7ea1/gecko-transport.log.moz_log",
+      "sha256": "54395c9682925b87c35c460b2652d5bfc7a2a5175f19dd5ce6a1cdc3e2126ef0",
+      "bytes": 31027347
+    },
+    {
+      "path": "evidence/web/transport-diagnostic/e0b71e462e87439696301f2b211a7ea1/bridge-live.jsonl",
+      "sha256": "8d075919f827aa94b1e9b5d8e3d26c07af5c490f0e5405b4d553e2c27436725e",
+      "bytes": 31914
+    },
+    {
+      "path": "evidence/web/transport-diagnostic/e0b71e462e87439696301f2b211a7ea1/engine-stdout.json",
+      "sha256": "10715c7c2b8831624f50ff08a573d222f93af739ab7df2709ff0a09376d4531d",
+      "bytes": 26595
+    },
+    {
+      "path": "evidence/web/transport-diagnostic/e0b71e462e87439696301f2b211a7ea1/execution-receipt.json",
+      "sha256": "710f57dd8d9efc3a2ba06083138db3acd9acf6a81e76402ecbabf49507a4f969",
+      "bytes": 2209
+    },
+    {
+      "path": "evidence/web/transport-diagnostic/e0b71e462e87439696301f2b211a7ea1/proxy-provenance.json",
+      "sha256": "bc54e776315e439bfb7eff0f4796e6ab468149d76ba2719336f3da2f0b5de2b0",
+      "bytes": 739
+    },
+    {
+      "path": "evidence/web/transport-diagnostic/e0b71e462e87439696301f2b211a7ea1/proxy-effective.stdout.json",
+      "sha256": "5d7cc19b08859352266fdf8f4217726415f03e9f26b4a57dfb71ee10b87c109f",
+      "bytes": 1342
+    },
+    {
+      "path": "evidence/web/transport-diagnostic/e0b71e462e87439696301f2b211a7ea1/operation-binding.json",
+      "sha256": "2dc4cd953fefd9223dac45cc70e85437cde61164e8916e03ce71dee375d54127",
+      "bytes": 2483
+    }
+  ],
+  "limitations": [
+    "Native logging introduces timing/IO overhead; no cross-session opaque payload attribution.",
+    "Fresh material handoff remains urllib-UA135 to Gecko; logical challenge session, not same TLS/engine.",
+    "Correction targets proven HTTP3/proxy drift, not proven reason for missing cert POST."
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "slice": "20261003-v8trace-headed",
+  "runDir": "headed-20261003",
+  "capture": "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\v8trace-chromium\\headed-20261003\\capture",
+  "browserFact": false,
+  "receipt": false,
+  "runnerExit": 1,
+  "headed": {
+    "launchHasHeadlessArg": false,
+    "headlessOption": false,
+    "browserProduct": "Chrome",
+    "uaProduct": "Chrome",
+    "browserVersion": "Chrome/151.0.7922.72",
+    "windowVisible": true,
+    "windowTitleClass": "cert-verification",
+    "cpuProfile": false,
+    "nativeTimeline": false,
+    "opcode": false,
+    "rawCdp": false,
+    "maxBytes": 1073741824,
+    "maxEvents": 200000,
+    "hooks": true
+  },
+  "summary": {
+    "stopReason": "duration",
+    "captureConclusion": "collected",
+    "integrityConclusion": "partial",
+    "eventCount": 29622,
+    "criticalGapCount": 6,
+    "recordedBytes": 167372273,
+    "durationSeconds": 121.476,
+    "startedAt": "2026-10-03T03:07:09.777Z",
+    "browserExitCode": 0,
+    "counts": {
+      "lifecycle": 387,
+      "http": 1636,
+      "env": 27056,
+      "script": 512,
+      "console": 30,
+      "exception": 1
+    }
+  },
+  "gaps": {
+    "response-body-unavailable|fo-pagehost|critical": 1,
+    "response-body-unavailable|other|critical": 5,
+    "request-open-at-stop|other": 2
+  },
+  "certDocuments": [
+    {"t": 0.696, "method": "GET", "type": "Document", "status": 403, "encoded": 4139, "cfMitigated": true},
+    {"t": 31.335, "method": "POST", "type": "Document", "status": 200, "encoded": 24653, "cfMitigated": false, "hasPostData": true, "initiatorType": "other", "redirect": false}
+  ],
+  "fo": [
+    {"t": 2.149, "class": "fo-pagehost", "method": "POST", "type": "XHR", "status": 200, "encoded": 81560, "cfChlOut": false, "cfChlOutS": false},
+    {"t": 3.484, "class": "fo-cf", "method": "POST", "type": "XHR", "status": 200, "encoded": 575840, "cfChlOut": false, "cfChlOutS": false},
+    {"t": 12.079, "class": "fo-cf", "method": "POST", "type": "XHR", "status": 200, "encoded": 86784, "cfChlOut": false, "cfChlOutS": false},
+    {"t": 30.453, "class": "fo-cf", "method": "POST", "type": "XHR", "status": 200, "encoded": 8472, "cfChlOut": true, "cfChlOutS": true},
+    {"t": 31.137, "class": "fo-pagehost", "method": "POST", "type": "XHR", "status": 200, "encoded": 4953, "cfChlOut": true, "cfChlOutS": true}
+  ],
+  "getResponseHeaderLookups": {"cf-chl-out": 3, "cf-chl-out-s": 3},
+  "createElement": {
+    "form": 3,
+    "h2": 2,
+    "h2T": [1.718, 1.731],
+    "h2DeltaFromFirstFo": [-0.431, -0.418],
+    "formT": [31.317, 34.45, 35.458],
+    "tags": {
+      "a": 171, "b": 1, "br": 1, "button": 43, "canvas": 2, "dd": 18, "div": 355, "dl": 2, "dt": 18,
+      "footer": 2, "form": 3, "h1": 3, "h2": 2, "h3": 18, "header": 2, "hr": 10, "iframe": 16, "img": 29,
+      "input": 12, "label": 3, "li": 144, "link": 42, "main": 1, "meta": 128, "nav": 6, "next-route-announcer": 1,
+      "noscript": 2, "null": 1, "ol": 2, "option": 3, "p": 141, "script": 57, "span": 161, "style": 6,
+      "table": 2, "tbody": 2, "td": 50, "template": 15, "textarea": 3, "th": 10, "thead": 2, "title": 2,
+      "tr": 12, "ul": 32
+    }
+  },
+  "submitBindingEvents": 0,
+  "htmlFormElementBinding": false,
+  "branch": "headed-completion",
+  "comparedTo": "c266ff812e0facbf7"
+}

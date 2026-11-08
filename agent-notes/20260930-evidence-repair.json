@@ -1,0 +1,79 @@
+{
+  "schema": "diagnostic-evidence-repair.v1",
+  "status": "completed-offline-repair",
+  "reportedAt": "2026-09-30T11:01:25.096221+00:00",
+  "project": "D:\\reverse_ENV\\workspace\\psa_solve",
+  "targetNetworkAccessedThisSlice": false,
+  "targetCodeExecutedThisSlice": false,
+  "newActionOrBudgetCreated": false,
+  "rawClaimReceiptModified": false,
+  "caseFactsWrittenThisSlice": false,
+  "historicalExecution": {
+    "profile": "psa-20260930-capability-instrumentation-v2",
+    "receiptStatus": "executed-hold",
+    "claimId": "28edad61-517e-44c1-a186-f0291131bc5d",
+    "sessionId": "05c67ac6c8c24b38aa03d866258971ad",
+    "pid": 52968,
+    "startedAt": "2026-09-30T10:18:32.958538+00:00",
+    "endedAt": "2026-09-30T10:19:04.969078+00:00",
+    "executeBefore": "2026-09-30T10:19:22.320179+00:00",
+    "recordedAt": "2026-09-30T10:20:51.352947+00:00",
+    "exitCode": 0,
+    "executionReceiptHashMatches": true,
+    "stdoutHashMatches": true
+  },
+  "currentProtected": {
+    "web-case.json": {
+      "claimedSha256": "2888bc8791cead12acc3847d6fba7e74053e8cd1c97f6327889e4da0054cac14",
+      "currentSha256": "04207d8f09e7016da5df391bcf69849a7894741281922a1ec22903fd95e69727",
+      "matchesClaim": false
+    },
+    "contracts/auto-decision-facts.json": {
+      "claimedSha256": "586e8577d184e35de9c4795dd28af25b69043ca7bee400ce67a8b63fe489a2cf",
+      "currentSha256": "586e8577d184e35de9c4795dd28af25b69043ca7bee400ce67a8b63fe489a2cf",
+      "matchesClaim": true
+    }
+  },
+  "currentBindingAudit": "protected-hash-mismatch-case-changed-after-record",
+  "subsequentMigration": {
+    "receipt": "contracts/case-metadata.v1.json",
+    "sha256": "8cd0394fbd6d1be3552f0c6478f196084fd8f0038b6b7dda250eafda5bbe91f4",
+    "contractRevision": 1,
+    "caseClass": "challenge",
+    "updatedAt": "2026-09-30T10:37:57Z",
+    "knownCaseField": "updatedAt",
+    "completeFieldDiffAvailable": false,
+    "limitation": "claim stores hash, not original whole-byte case snapshot"
+  },
+  "summary": {
+    "path": "evidence/web/diagnostic-instrumentation-v2/restricted/05c67ac6c8c24b38aa03d866258971ad/boundary-summary.offline-repair.json",
+    "sha256": "ef2424488e3c470f71e940778abf57e788c70fad01ba60241ec124cde9129dc8",
+    "sourceSha256": "fa545abacd0238f2e66834c76899303f71058aff3b4fdd7c69905facd6c39974",
+    "harnessHealthy": true,
+    "forms": 0,
+    "submits": 0,
+    "historicalIframeCreateCount": 2,
+    "historicalTurnstileFrameCount": 1,
+    "finalLightDomIframeCount": 0,
+    "nestedDocumentResponseCount": 1,
+    "nestedDocumentStopCount": 1,
+    "successfulNestedGetAndStopObserved": true,
+    "clearanceCookieObserved": true,
+    "clearancePartition": "site",
+    "certPostObserved": false,
+    "certDocumentPostObserved": false,
+    "businessAcceptanceStatus": "not-proven",
+    "independentBusinessReadbackPerformed": false
+  },
+  "tests": {
+    "instrumentationAndSummary": 26,
+    "webReverseTotal": 122,
+    "baselineWrapper": 9,
+    "status": "OK",
+    "skillValidator": "pass"
+  },
+  "report": "temp/agent-runs/20260930-evidence-repair.md",
+  "next": "response-to-DOM causal receipt; not getter enumeration",
+  "liveHandles": [],
+  "commitOrPush": false
+}

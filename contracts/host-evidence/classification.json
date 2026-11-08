@@ -1,0 +1,12 @@
+{
+  "schema": "web-host-classification.v1",
+  "adapter": "ruyijs-live-emit-v1",
+  "scopeId": "8c0b2b72653544af763d685680d16600c796ead3a591e9b4ef3a6b39a3dd157c",
+  "collector": "web-host-process-collector.v1",
+  "comparable": true,
+  "classification": "boundary-moved",
+  "requestBoundaryAligned": false,
+  "targetBefore": 1,
+  "targetAfter": 0,
+  "reason": "cert-document-post class only"
+}

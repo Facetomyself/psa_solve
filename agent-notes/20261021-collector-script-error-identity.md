@@ -1,0 +1,9 @@
+# 正式 scriptError 补上异常身份
+
+2026-10-21。晚间审计核对到 20:18：不等价 eval 剥空白已经离开默认路径，正式复跑后的 raw 没变，所以不能把那次剥离当成第 3028 列的原因。Location getter、Location 原型、页面 window identity 以及随后的 `contentWindow` 占位，都没有新增正式 receiver。业务三轴仍是 false。
+
+本拍的 `next` 仍给出 `repair_submit_host_behavior`，`turnGate=blocked`。审计要求先停下这三类未定位接收者的广补。因此 helper 没有再改，门没有改。只改了正式采集器 `describeScriptError`：side 记下 kind、class、行列、`sourceForm`、`sourceClass`、`errorName`、`insecure`、`parentLine`、`sourceLineLength`、`keywordAtColumn`、`stackShape`、`flags`、`categoryClass`、`receiverId`。消息正文、源行文本和 sourceName 不入账。回归 `test_shipped_collector_script_error_records_identity_without_message_text` 通过。runner sha256 `c563864c6a34cd56551892e39faa7e7c1dae04056c1ba43346edde01938a5f6b`。helper 仍是 `40a98a9f2e93ce20c5c97bd697d5929fbac9cc5d10c3a8cf0b885cd6705faf57`。scope 重签为 `727d4f60c83383b719183246ed8164a09273814562e60a92f8921a161efed04a`，`688e9a44f3f136a35790f39a71fa3820a5da37816d85fa3143c38c9a245da555` 与 baseline `64d3a40503ef4c47a7cf22a67e9c4956` 留在 priorScope。`load_scope` 通过。
+
+官方 baseline `02b1aecb92dd48d3b6edf237d0908795`：exitCode=1，timedOut=false，pid 38376，约 9.1s。诊断仍是第 2 行第 3028 列，matched false，base `object`。side 的 scriptError：kind `other`，class `other`，sourceForm `injected`，sourceClass `about-blank-injected`，errorName `SecurityError`，insecure true，parentLine 1447，sourceLineLength 0，keywordAtColumn false，stackShape `other`，flags 0，categoryClass `content-javascript`，receiverId `null`。side sha256 `450f5442a04a346eedc3f8d4a59839dbde85df251cfd737b0e4ce1074f553304`。raw 222 字节，sha256 `534609ca23a0472c035bc74092454398420761e448eb632583db28adac35ac2c`，与 `64d3a405` 字节相同。事件只有 `host-diagnostic` 和 `summary`。没有 `host-observation`，没有请求行，没有到第 75507 列。
+
+正式异常名和来源类别已经进 side。receiver 仍空，抛错行没有源文本，栈帧没有可分类的位置。这还不能点名哪个宿主 API。没有证书 document POST，也没有同租约回读。`serverAccepted`、`localReproduced`、`requestBoundaryAligned` 保持 false。`experimentHygiene` 仍是 `ok`。

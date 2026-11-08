@@ -1,0 +1,206 @@
+{
+  "schema": "psa-live-transport-repair.v1",
+  "status": "transport-fixed-business-unverified",
+  "runId": "3355e716c80b4c60b07c8caa5c2d2a57",
+  "at": "2026-09-30T11:21:52.499672+00:00",
+  "singleBehaviorVariable": "engine-local network.proxy.type=0",
+  "effectiveProxyTypeStages": [
+    {
+      "stage": "before-existing-pref-block",
+      "proxyType": 5,
+      "h3Enabled": true,
+      "mappingMatchesPageHost": null
+    },
+    {
+      "stage": "after-existing-pref-block",
+      "proxyType": 0,
+      "h3Enabled": true,
+      "mappingMatchesPageHost": true
+    },
+    {
+      "stage": "after-profile-init-before-page-scripts",
+      "proxyType": 0,
+      "h3Enabled": true,
+      "mappingMatchesPageHost": true
+    },
+    {
+      "stage": "pump-ended",
+      "proxyType": 0,
+      "h3Enabled": true,
+      "mappingMatchesPageHost": true
+    }
+  ],
+  "nativeLogCounts": {
+    "altSvcProxyRejects": 0,
+    "actualTargetHttpProxyDispatch": 0,
+    "actualTargetDirectDispatch": 12,
+    "actualHttp3Dispatch": 9,
+    "Http3SessionLogRows": 2839
+  },
+  "nativeLogAnchors": [
+    {
+      "line": 64382,
+      "role": "actual-http3-direct-dispatch",
+      "excerpt": "2026-09-30 11:16:54.250000 UTC - [Parent 26888: Socket Thread]: V/nsHttp nsHttpConnectionMgr::DispatchTransaction [ent-ci=.S...X.....[tlsflags0x00000000]www.psacard.com:443 <ROUTE-via www.psacard.com:443> {NPN-TOKEN h3}^partitionKey=%28https%2Cpsacard.com%29 {ptr} trans={ptr} caps=181 conn={ptr} priority=0 isHttp2=0 isHttp3=1]"
+    },
+    {
+      "line": 64396,
+      "role": "actual-http3-direct-dispatch",
+      "excerpt": "2026-09-30 11:16:54.250000 UTC - [Parent 26888: Socket Thread]: V/nsHttp nsHttpConnectionMgr::DispatchTransaction [ent-ci=.S...X.....[tlsflags0x00000000]www.psacard.com:443 <ROUTE-via www.psacard.com:443> {NPN-TOKEN h3}^partitionKey=%28https%2Cpsacard.com%29 {ptr} trans={ptr} caps=81 conn={ptr} priority=10 isHttp2=0 isHttp3=1]"
+    },
+    {
+      "line": 149209,
+      "role": "actual-http3-direct-dispatch",
+      "excerpt": "2026-09-30 11:16:55.071000 UTC - [Parent 26888: Socket Thread]: V/nsHttp nsHttpConnectionMgr::DispatchTransaction [ent-ci=.S...X.....[tlsflags0x00000000]challenges.cloudflare.com:443 <ROUTE-via challenges.cloudflare.com:443> {NPN-TOKEN h3}^partitionKey=%28https%2Cpsacard.com%29 {ptr} trans={ptr} caps=81 conn={ptr} priority=0 isHttp2=0 isHttp3=1]"
+    },
+    {
+      "line": 161421,
+      "role": "actual-http3-direct-dispatch",
+      "excerpt": "2026-09-30 11:16:55.677000 UTC - [Parent 26888: Socket Thread]: V/nsHttp nsHttpConnectionMgr::DispatchTransaction [ent-ci=.S...X.....[tlsflags0x00000000]challenges.cloudflare.com:443 <ROUTE-via challenges.cloudflare.com:443> {NPN-TOKEN h3}^partitionKey=%28https%2Cpsacard.com%29 {ptr} trans={ptr} caps=181 conn={ptr} priority=0 isHttp2=0 isHttp3=1]"
+    },
+    {
+      "line": 290275,
+      "role": "actual-http3-direct-dispatch",
+      "excerpt": "2026-09-30 11:16:57.183000 UTC - [Parent 26888: Socket Thread]: V/nsHttp nsHttpConnectionMgr::DispatchTransaction [ent-ci=.S...X.....[tlsflags0x00000000]challenges.cloudflare.com:443 <ROUTE-via challenges.cloudflare.com:443> {NPN-TOKEN h3}^partitionKey=%28https%2Cpsacard.com%29 {ptr} trans={ptr} caps=81 conn={ptr} priority=11 isHttp2=0 isHttp3=1]"
+    }
+  ],
+  "foProtocols": [
+    {
+      "hostClass": "page",
+      "path": "/cdn-cgi/challenge-platform/h/b/fo/{id}:{id}:{id}/{id}/{id}",
+      "method": "POST",
+      "status": 200,
+      "proto": "h3",
+      "altUsed": true,
+      "reqLen": 2252,
+      "respLen": -1
+    },
+    {
+      "hostClass": "cf",
+      "path": "/cdn-cgi/challenge-platform/h/b/fo/{id}:{id}:{id}/{id}/{id}",
+      "method": "POST",
+      "status": 200,
+      "proto": "h3",
+      "altUsed": true,
+      "reqLen": 4695,
+      "respLen": -1
+    },
+    {
+      "hostClass": "cf",
+      "path": "/cdn-cgi/challenge-platform/h/b/fo/{id}:{id}:{id}/{id}/{id}",
+      "method": "POST",
+      "status": 200,
+      "proto": "h3",
+      "altUsed": true,
+      "reqLen": 83031,
+      "respLen": -1
+    },
+    {
+      "hostClass": "cf",
+      "path": "/cdn-cgi/challenge-platform/h/b/fo/{id}:{id}:{id}/{id}/{id}",
+      "method": "POST",
+      "status": 200,
+      "proto": "h3",
+      "altUsed": true,
+      "reqLen": 86284,
+      "respLen": -1
+    },
+    {
+      "hostClass": "page",
+      "path": "/cdn-cgi/challenge-platform/h/b/fo/{id}:{id}:{id}/{id}/{id}",
+      "method": "POST",
+      "status": 200,
+      "proto": "h3",
+      "altUsed": true,
+      "reqLen": 8759,
+      "respLen": -1
+    }
+  ],
+  "allFiveFoActualH3": true,
+  "engineHTTP3CapabilityNowProven": true,
+  "systemProxyConfigurationUnchanged": true,
+  "outcome": {
+    "harnessHealthy": true,
+    "widgetComplete": true,
+    "siteClearanceCookieNamed": true,
+    "forms": 0,
+    "submits": 0,
+    "certDocumentPost": false,
+    "sameSessionBusinessContentReadback": "not-performed/no-cert-POST",
+    "serverAccepted": false
+  },
+  "rootCauseScope": "The system HTTP proxy explains H2-vs-H3 transport drift; removing it does not explain or resolve missing form/POST.",
+  "stableBaseline": {
+    "path": "diagnostics/clean-baseline-20260930/ruyidom_bridge.stable-transport.js",
+    "sha256": "a6f0e51a8b8c99019678a508385cc21f66fd3205e08c512d3ccc8888a32433d6",
+    "bytes": 86278
+  },
+  "stableManifest": {
+    "path": "diagnostics/clean-baseline-20260930/stable-transport-manifest.json",
+    "sha256": "0989745d66429de4d195f8e4185d1bbd26ba58b783b1226c766f6d8c347cf8d3",
+    "bytes": 4112
+  },
+  "budgetsConsumed": {
+    "diagnostic": {
+      "freshMaterialRounds": 1,
+      "engineSpawns": 1
+    },
+    "sameTransportRepair": {
+      "freshMaterialRounds": 1,
+      "engineSpawns": 1
+    },
+    "additionalTargetRounds": 0
+  },
+  "rawEvidence": [
+    {
+      "path": "evidence/web/transport-diagnostic/3355e716c80b4c60b07c8caa5c2d2a57/execution-receipt.json",
+      "sha256": "d52ff65b9d715f6ddab765d4cf31b284e09e4a2de3218be35b10becf84718e46",
+      "bytes": 2209
+    },
+    {
+      "path": "evidence/web/transport-diagnostic/3355e716c80b4c60b07c8caa5c2d2a57/operation-binding.json",
+      "sha256": "c6bb5e130f78aeb3c2c5d5d215ac7aaf2d733621b9902ac5705ad137022df5cd",
+      "bytes": 2483
+    },
+    {
+      "path": "evidence/web/transport-diagnostic/3355e716c80b4c60b07c8caa5c2d2a57/source-receipt.json",
+      "sha256": "f6c4758dd4c124646c622d7a5c55d529940f9cdc9c02a9deb8f1976160cdc2dd",
+      "bytes": 2203
+    },
+    {
+      "path": "evidence/web/transport-diagnostic/3355e716c80b4c60b07c8caa5c2d2a57/engine-stdout.json",
+      "sha256": "d6c0b8ef9cf4c4041647a12ebb801b18d3dd4dbd869fee74cc8682bc9696362e",
+      "bytes": 25964
+    },
+    {
+      "path": "evidence/web/transport-diagnostic/3355e716c80b4c60b07c8caa5c2d2a57/bridge-live.jsonl",
+      "sha256": "f412da050be61f8654f18314941d465d05030be9d4ca3358c64f369c48e196e0",
+      "bytes": 31534
+    },
+    {
+      "path": "evidence/web/transport-diagnostic/3355e716c80b4c60b07c8caa5c2d2a57/gecko-transport.log.moz_log",
+      "sha256": "3d7f0389447740335c53fe69a7a4d61cd4d66a77f1aec27b24c498842905009a",
+      "bytes": 42637765
+    },
+    {
+      "path": "evidence/web/transport-diagnostic/control/3355e716c80b4c60b07c8caa5c2d2a57/source-delta.json",
+      "sha256": "173a92148b0c6803a4786ad22c489dde12f07fc24fbbc178c66d8f37671e08b9",
+      "bytes": 1737
+    }
+  ],
+  "recommendFactsAfterParentReview": {
+    "firstDivergence": "environment-gap",
+    "experimentHygiene": "stop-search",
+    "localReproduced": false,
+    "serverAccepted": false,
+    "requestBoundaryAligned": false,
+    "factsWrittenBySlice": false
+  },
+  "nextObservationGap": "response-to-DOM causal receipt missing; cannot infer root cause from clearance payload length or eval this identity",
+  "limitations": [
+    "urllib-UA135 fresh fetch behavior unchanged and may retain Windows application proxy; repaired Gecko is engine-local direct. Logical handoff is not same TLS/session runtime.",
+    "No zero-wrapper claim: pre-existing clean-base observers remain.",
+    "Stable clean transport candidate has only static verification; live evidence applies to exact same transport setting in the diagnostic variant.",
+    "Fresh sessions/materials differ; no opaque byte or target algorithm attribution."
+  ]
+}

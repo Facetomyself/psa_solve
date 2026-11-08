@@ -1,0 +1,666 @@
+{
+  "schema": "psa-jscall-detail-subset.v1",
+  "run_id": "rt_20261005125421_1d84c46dcd",
+  "scope": "session/process/thread; never cross-run or cross-pid identity",
+  "receipt_integrity": "pass",
+  "artifacts": [
+    {
+      "path": "evidence\\web\\ruyitrace\\rt_20261005125421_1d84c46dcd\\raw\\jscall\\trace_jscall_process_50068.bin",
+      "bytes": 1360912,
+      "sha256": "9307a2bbdbcd94e42ba48fa43081e134157906b6c0ffc18a11395dcacc7ae066",
+      "indexed": true,
+      "index_match": true
+    },
+    {
+      "path": "evidence\\web\\ruyitrace\\rt_20261005125421_1d84c46dcd\\raw\\jscall\\trace_jscall_process_50068.dict.jsonl",
+      "bytes": 525453,
+      "sha256": "c1fe557ea0e54db058b330b8f47336bab4edd73bad3604934f8bf81cdd29df0f",
+      "indexed": true,
+      "index_match": true
+    },
+    {
+      "path": "evidence\\web\\ruyitrace\\rt_20261005125421_1d84c46dcd\\raw\\jscall\\trace_jscall_process_50068.detail.bin",
+      "bytes": 1314744,
+      "sha256": "69afb5d9f9ebf15796d7c5fdd6bf50760fd753aedddac7b152dc9d4f6e2dcad5",
+      "indexed": true,
+      "index_match": true
+    },
+    {
+      "path": "evidence\\web\\ruyitrace\\rt_20261005125421_1d84c46dcd\\raw\\jscall\\trace_jscall_process_51372.bin",
+      "bytes": 177968,
+      "sha256": "ca99e7bde4d77c5f787444f4da402c8526ef826c4d2230bcc89930557e62c71a",
+      "indexed": true,
+      "index_match": true
+    },
+    {
+      "path": "evidence\\web\\ruyitrace\\rt_20261005125421_1d84c46dcd\\raw\\jscall\\trace_jscall_process_51372.dict.jsonl",
+      "bytes": 118937,
+      "sha256": "58ea443fc99b0098d4a499a964225aaa0316952c2a0db98dcf788372cedc51e8",
+      "indexed": true,
+      "index_match": true
+    },
+    {
+      "path": "evidence\\web\\ruyitrace\\rt_20261005125421_1d84c46dcd\\raw\\jscall\\trace_jscall_process_51372.detail.bin",
+      "bytes": 11548,
+      "sha256": "5774b51ea8507ad77800e9bc7b3a89e14e282ffd26d644b29173b1fea5f590a6",
+      "indexed": true,
+      "index_match": true
+    }
+  ],
+  "processes": [
+    {
+      "pid": 50068,
+      "decoder_command": [
+        "D:\\reverse_ENV\\.venv\\Scripts\\python.exe",
+        "D:\\reverse_ENV\\mcp\\ruyitrace-mcp\\scripts\\jscall_decode.py",
+        "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\ruyitrace\\rt_20261005125421_1d84c46dcd\\raw\\jscall\\trace_jscall_process_50068.bin",
+        "--dict",
+        "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\ruyitrace\\rt_20261005125421_1d84c46dcd\\raw\\jscall\\trace_jscall_process_50068.dict.jsonl",
+        "--detail",
+        "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\ruyitrace\\rt_20261005125421_1d84c46dcd\\raw\\jscall\\trace_jscall_process_50068.detail.bin",
+        "--values",
+        "--output",
+        "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\jscall-detail-decode-20261005\\restricted\\pid50068-values.txt"
+      ],
+      "decoder_exit": 0,
+      "source_sha256": "eee05641ead359eed27d49331f02cab589feca0c6373b41305e03eb72e9870a7",
+      "source_chars": 238893,
+      "source_packet": "000010_GET_200_challenges.cloudflare.com_cdn-cgi_challenge-platform_h_b_turnstile_f_av0_rch_7czq1_0x4AA_05c807ac_pid48180_400000016.http_packet.json",
+      "trailing_bytes": 0,
+      "records": 42528,
+      "stats": {
+        "type": "jscall_stats",
+        "pid": 50068,
+        "recorded": 42528,
+        "functions": 2093,
+        "dropped_limit": 0,
+        "dropped_gate": 611,
+        "dropped_no_func_id": 0,
+        "opcode_records": 0,
+        "opcode_dropped_limit": 0,
+        "dropped_chunks": 0,
+        "filtered_sources": 55,
+        "sources_dumped": 1,
+        "sources_unavailable": 3,
+        "dict_entries": 2093,
+        "io_errors": 0,
+        "limit": 100000,
+        "per_func_limit": 1024
+      },
+      "rows": [
+        {
+          "dom_line": 101,
+          "dom_seq": 103,
+          "pid": 50068,
+          "origin_call_id": 1030,
+          "interface": "Document",
+          "member": "get body",
+          "jscall_found": true,
+          "dom_this": {
+            "id": "",
+            "nativeId": "ecd29e368194f82c",
+            "class": "HTMLDocument"
+          },
+          "dom_return": {
+            "id": "00000000000000ec",
+            "nativeId": "8ca81f311803363c",
+            "class": "HTMLBodyElement"
+          },
+          "dom_args_identity": null,
+          "source": [
+            {
+              "function": "df",
+              "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/turnstile/iframe [run-local variant]",
+              "line": 1,
+              "column": 207105,
+              "url_exact_packet_match": true,
+              "url_without_query_match": true
+            }
+          ],
+          "jscall": {
+            "type": "jscall",
+            "call_id": 1030,
+            "parent_call_id": 900,
+            "thread": 0,
+            "seq": 1030,
+            "depth": 2,
+            "func_id": 146,
+            "name": "get body",
+            "line": 0,
+            "column": 0,
+            "kind": "native",
+            "argc": 0,
+            "op": "call",
+            "ok": true,
+            "native": true,
+            "self_hosted": false,
+            "suspended": false,
+            "resumed": false,
+            "parent_exact": true,
+            "subtree_truncated": false,
+            "entry_path": "stack",
+            "duration_us": 8,
+            "url": ""
+          },
+          "parent": {
+            "type": "jscall",
+            "call_id": 900,
+            "parent_call_id": 0,
+            "thread": 0,
+            "seq": 900,
+            "depth": 1,
+            "func_id": 123,
+            "name": "df",
+            "line": 1,
+            "column": 203142,
+            "kind": "js",
+            "argc": 0,
+            "op": "call",
+            "ok": true,
+            "native": false,
+            "self_hosted": false,
+            "suspended": false,
+            "resumed": false,
+            "parent_exact": true,
+            "subtree_truncated": false,
+            "entry_path": "stack",
+            "duration_us": 734,
+            "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/turnstile/iframe [run-local variant]"
+          },
+          "values": {},
+          "joins": [
+            {
+              "slot": "this",
+              "stable": false,
+              "dom_js_id_present": false,
+              "identity_matches": false,
+              "kind": "JS id (not nativeId)"
+            },
+            {
+              "slot": "return",
+              "stable": false,
+              "dom_js_id_present": true,
+              "identity_matches": false,
+              "kind": "JS id (not nativeId)"
+            }
+          ]
+        },
+        {
+          "dom_line": 102,
+          "dom_seq": 104,
+          "pid": 50068,
+          "origin_call_id": 1032,
+          "interface": "Element",
+          "member": "attachShadow",
+          "jscall_found": true,
+          "dom_this": {
+            "id": "00000000000000ec",
+            "nativeId": "8ca81f311803363c",
+            "class": "HTMLBodyElement"
+          },
+          "dom_return": {
+            "id": "00000000000000fe",
+            "nativeId": "dbb6013748845e9a",
+            "class": "ShadowRoot"
+          },
+          "dom_args_identity": [
+            {
+              "id": "00000000000000fa",
+              "nativeId": "0000000000000000",
+              "class": "Object"
+            }
+          ],
+          "source": [
+            {
+              "function": "df",
+              "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/turnstile/iframe [run-local variant]",
+              "line": 1,
+              "column": 207126,
+              "url_exact_packet_match": true,
+              "url_without_query_match": true
+            }
+          ],
+          "jscall": {
+            "type": "jscall",
+            "call_id": 1032,
+            "parent_call_id": 900,
+            "thread": 0,
+            "seq": 1032,
+            "depth": 2,
+            "func_id": 147,
+            "name": "attachShadow",
+            "line": 0,
+            "column": 0,
+            "kind": "native",
+            "argc": 1,
+            "op": "call",
+            "ok": true,
+            "native": true,
+            "self_hosted": false,
+            "suspended": false,
+            "resumed": false,
+            "parent_exact": true,
+            "subtree_truncated": false,
+            "entry_path": "stack",
+            "duration_us": 42,
+            "url": ""
+          },
+          "parent": {
+            "type": "jscall",
+            "call_id": 900,
+            "parent_call_id": 0,
+            "thread": 0,
+            "seq": 900,
+            "depth": 1,
+            "func_id": 123,
+            "name": "df",
+            "line": 1,
+            "column": 203142,
+            "kind": "js",
+            "argc": 0,
+            "op": "call",
+            "ok": true,
+            "native": false,
+            "self_hosted": false,
+            "suspended": false,
+            "resumed": false,
+            "parent_exact": true,
+            "subtree_truncated": false,
+            "entry_path": "stack",
+            "duration_us": 734,
+            "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/turnstile/iframe [run-local variant]"
+          },
+          "values": {
+            "this": {
+              "type": "object",
+              "value": "#00000000000000ec",
+              "bytes": 8,
+              "truncated": false,
+              "unreadable": false,
+              "identity_only": true,
+              "unstable_identity": false
+            },
+            "arg0": {
+              "type": "object",
+              "value": "#00000000000000fa",
+              "bytes": 8,
+              "truncated": false,
+              "unreadable": false,
+              "identity_only": true,
+              "unstable_identity": false
+            },
+            "return": {
+              "type": "object",
+              "value": "#00000000000000fe",
+              "bytes": 8,
+              "truncated": false,
+              "unreadable": false,
+              "identity_only": true,
+              "unstable_identity": false
+            }
+          },
+          "joins": [
+            {
+              "slot": "this",
+              "stable": true,
+              "dom_js_id_present": true,
+              "identity_matches": true,
+              "kind": "JS id (not nativeId)"
+            },
+            {
+              "slot": "return",
+              "stable": true,
+              "dom_js_id_present": true,
+              "identity_matches": true,
+              "kind": "JS id (not nativeId)"
+            },
+            {
+              "slot": "arg0",
+              "stable": true,
+              "dom_js_id_present": true,
+              "identity_matches": true,
+              "kind": "JS id (not nativeId)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "pid": 51372,
+      "decoder_command": [
+        "D:\\reverse_ENV\\.venv\\Scripts\\python.exe",
+        "D:\\reverse_ENV\\mcp\\ruyitrace-mcp\\scripts\\jscall_decode.py",
+        "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\ruyitrace\\rt_20261005125421_1d84c46dcd\\raw\\jscall\\trace_jscall_process_51372.bin",
+        "--dict",
+        "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\ruyitrace\\rt_20261005125421_1d84c46dcd\\raw\\jscall\\trace_jscall_process_51372.dict.jsonl",
+        "--detail",
+        "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\ruyitrace\\rt_20261005125421_1d84c46dcd\\raw\\jscall\\trace_jscall_process_51372.detail.bin",
+        "--values",
+        "--output",
+        "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\jscall-detail-decode-20261005\\restricted\\pid51372-values.txt"
+      ],
+      "decoder_exit": 0,
+      "source_sha256": "76763bb46224400a11af989831d62d06629aba6f67d50cac96afae4a590adf59",
+      "source_chars": 86732,
+      "source_packet": "000006_GET_200_challenges.cloudflare.com_turnstile_v0_b_d76008a69eab_api.js_c7858510_pid48180_400000013.http_packet.json",
+      "trailing_bytes": 0,
+      "records": 5561,
+      "stats": {
+        "type": "jscall_stats",
+        "pid": 51372,
+        "recorded": 5561,
+        "functions": 601,
+        "dropped_limit": 0,
+        "dropped_gate": 611,
+        "dropped_no_func_id": 0,
+        "opcode_records": 0,
+        "opcode_dropped_limit": 0,
+        "dropped_chunks": 0,
+        "filtered_sources": 40,
+        "sources_dumped": 0,
+        "sources_unavailable": 0,
+        "dict_entries": 601,
+        "io_errors": 0,
+        "limit": 100000,
+        "per_func_limit": 1024
+      },
+      "rows": [
+        {
+          "dom_line": 83043,
+          "dom_seq": 83069,
+          "pid": 51372,
+          "origin_call_id": 2687,
+          "interface": "Document",
+          "member": "createElement",
+          "jscall_found": true,
+          "dom_this": {
+            "id": "",
+            "nativeId": "c02d4e149d22334e",
+            "class": "HTMLDocument"
+          },
+          "dom_return": {
+            "id": "000000000000040e",
+            "nativeId": "08e157a35c264ce0",
+            "class": "HTMLDivElement"
+          },
+          "dom_args_identity": null,
+          "source": [
+            {
+              "function": "xe",
+              "url": "https://challenges.cloudflare.com/turnstile/api.js [run-local variant]",
+              "line": 2,
+              "column": 74781,
+              "url_exact_packet_match": true,
+              "url_without_query_match": true
+            },
+            {
+              "function": "Se",
+              "url": "https://challenges.cloudflare.com/turnstile/api.js [run-local variant]",
+              "line": 2,
+              "column": 76801,
+              "url_exact_packet_match": true,
+              "url_without_query_match": true
+            },
+            {
+              "function": "jj",
+              "url": "[source redacted]",
+              "line": 1,
+              "column": 75745,
+              "url_exact_packet_match": false,
+              "url_without_query_match": false
+            }
+          ],
+          "jscall": {
+            "type": "jscall",
+            "call_id": 2687,
+            "parent_call_id": 2620,
+            "thread": 0,
+            "seq": 2687,
+            "depth": 4,
+            "func_id": 116,
+            "name": "createElement",
+            "line": 0,
+            "column": 0,
+            "kind": "native",
+            "argc": 1,
+            "op": "call",
+            "ok": true,
+            "native": true,
+            "self_hosted": false,
+            "suspended": false,
+            "resumed": false,
+            "parent_exact": true,
+            "subtree_truncated": false,
+            "entry_path": "stack",
+            "duration_us": 10,
+            "url": ""
+          },
+          "parent": {
+            "type": "jscall",
+            "call_id": 2620,
+            "parent_call_id": 2569,
+            "thread": 0,
+            "seq": 2620,
+            "depth": 3,
+            "func_id": 171,
+            "name": "call",
+            "line": 0,
+            "column": 0,
+            "kind": "native",
+            "argc": 3,
+            "op": "call",
+            "ok": true,
+            "native": true,
+            "self_hosted": false,
+            "suspended": false,
+            "resumed": false,
+            "parent_exact": false,
+            "subtree_truncated": false,
+            "entry_path": "stack",
+            "duration_us": 3649,
+            "url": ""
+          },
+          "values": {
+            "this": {
+              "type": "object",
+              "value": "?0000000000000000",
+              "bytes": 8,
+              "truncated": false,
+              "unreadable": false,
+              "identity_only": true,
+              "unstable_identity": true
+            },
+            "arg0": {
+              "type": "string",
+              "value": "div",
+              "bytes": 3,
+              "truncated": false,
+              "unreadable": false,
+              "identity_only": false,
+              "unstable_identity": false
+            },
+            "return": {
+              "type": "object",
+              "value": "#000000000000040e",
+              "bytes": 8,
+              "truncated": false,
+              "unreadable": false,
+              "identity_only": true,
+              "unstable_identity": false
+            }
+          },
+          "joins": [
+            {
+              "slot": "this",
+              "stable": false,
+              "dom_js_id_present": false,
+              "identity_matches": false,
+              "kind": "JS id (not nativeId)"
+            },
+            {
+              "slot": "return",
+              "stable": true,
+              "dom_js_id_present": true,
+              "identity_matches": true,
+              "kind": "JS id (not nativeId)"
+            }
+          ]
+        },
+        {
+          "dom_line": 83044,
+          "dom_seq": 83070,
+          "pid": 51372,
+          "origin_call_id": 2688,
+          "interface": "Element",
+          "member": "attachShadow",
+          "jscall_found": true,
+          "dom_this": {
+            "id": "000000000000040e",
+            "nativeId": "08e157a35c264ce0",
+            "class": "HTMLDivElement"
+          },
+          "dom_return": {
+            "id": "0000000000000413",
+            "nativeId": "ca74970f909e1f80",
+            "class": "ShadowRoot"
+          },
+          "dom_args_identity": [
+            {
+              "id": "000000000000040f",
+              "nativeId": "0000000000000000",
+              "class": "Object"
+            }
+          ],
+          "source": [
+            {
+              "function": "xe",
+              "url": "https://challenges.cloudflare.com/turnstile/api.js [run-local variant]",
+              "line": 2,
+              "column": 74808,
+              "url_exact_packet_match": true,
+              "url_without_query_match": true
+            },
+            {
+              "function": "Se",
+              "url": "https://challenges.cloudflare.com/turnstile/api.js [run-local variant]",
+              "line": 2,
+              "column": 76801,
+              "url_exact_packet_match": true,
+              "url_without_query_match": true
+            },
+            {
+              "function": "jj",
+              "url": "[source redacted]",
+              "line": 1,
+              "column": 75745,
+              "url_exact_packet_match": false,
+              "url_without_query_match": false
+            }
+          ],
+          "jscall": {
+            "type": "jscall",
+            "call_id": 2688,
+            "parent_call_id": 2620,
+            "thread": 0,
+            "seq": 2688,
+            "depth": 4,
+            "func_id": 463,
+            "name": "attachShadow",
+            "line": 0,
+            "column": 0,
+            "kind": "native",
+            "argc": 1,
+            "op": "call",
+            "ok": true,
+            "native": true,
+            "self_hosted": false,
+            "suspended": false,
+            "resumed": false,
+            "parent_exact": true,
+            "subtree_truncated": false,
+            "entry_path": "stack",
+            "duration_us": 55,
+            "url": ""
+          },
+          "parent": {
+            "type": "jscall",
+            "call_id": 2620,
+            "parent_call_id": 2569,
+            "thread": 0,
+            "seq": 2620,
+            "depth": 3,
+            "func_id": 171,
+            "name": "call",
+            "line": 0,
+            "column": 0,
+            "kind": "native",
+            "argc": 3,
+            "op": "call",
+            "ok": true,
+            "native": true,
+            "self_hosted": false,
+            "suspended": false,
+            "resumed": false,
+            "parent_exact": false,
+            "subtree_truncated": false,
+            "entry_path": "stack",
+            "duration_us": 3649,
+            "url": ""
+          },
+          "values": {
+            "this": {
+              "type": "object",
+              "value": "#000000000000040e",
+              "bytes": 8,
+              "truncated": false,
+              "unreadable": false,
+              "identity_only": true,
+              "unstable_identity": false
+            },
+            "arg0": {
+              "type": "object",
+              "value": "#000000000000040f",
+              "bytes": 8,
+              "truncated": false,
+              "unreadable": false,
+              "identity_only": true,
+              "unstable_identity": false
+            },
+            "return": {
+              "type": "object",
+              "value": "#0000000000000413",
+              "bytes": 8,
+              "truncated": false,
+              "unreadable": false,
+              "identity_only": true,
+              "unstable_identity": false
+            }
+          },
+          "joins": [
+            {
+              "slot": "this",
+              "stable": true,
+              "dom_js_id_present": true,
+              "identity_matches": true,
+              "kind": "JS id (not nativeId)"
+            },
+            {
+              "slot": "return",
+              "stable": true,
+              "dom_js_id_present": true,
+              "identity_matches": true,
+              "kind": "JS id (not nativeId)"
+            },
+            {
+              "slot": "arg0",
+              "stable": true,
+              "dom_js_id_present": true,
+              "identity_matches": true,
+              "kind": "JS id (not nativeId)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

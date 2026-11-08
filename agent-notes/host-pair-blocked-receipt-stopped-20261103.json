@@ -1,0 +1,51 @@
+{
+  "schema": "psa-host-cycle-blocker.v1",
+  "slice": "host-cycle-receipt-scope-pair-classify",
+  "caseId": "psa-cf-5s-shield-20260815",
+  "sessionId": "01a19ac1-28c9-7f60-bb3a-4af694731647",
+  "blocker": "capture-not-completed",
+  "why": "ruyitrace_receipt wrote receipt.json with integrity=pass, but evidence-run.json stayed state=stopped, evidence-receipt gate pending, no integrityReceipt. web_case.py run --plane ruyitrace skipped (not completed). host pair failed with ERROR: browser pair requires a verified completed RuyiTrace artifact run. Did not hand-edit evidence-run.json to completed. Did not invoke host classify. Did not invent hostBlocker.",
+  "receipt": {
+    "path": "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\ruyitrace\\rt_20261102184003_209bfef648\\receipt.json",
+    "schema": "ruyitrace-evidence-receipt.v1",
+    "integrity": "pass",
+    "caseId": "psa-cf-5s-shield-20260815",
+    "runId": "rt_20261102184003_209bfef648",
+    "rootSha256": "d9bb9a185ac45661924e9b4ff0bd121fe8169d4d15a2374259bd29f14e245ec0",
+    "artifactCount": 372
+  },
+  "capture": {
+    "runId": "rt_20261102184003_209bfef648",
+    "stateAfterReceipt": "stopped",
+    "gates": {
+      "runtime-hash": "pass",
+      "evidence-index": "pass",
+      "evidence-receipt": "pending"
+    },
+    "integrityReceipt": null,
+    "packetSha256": "de7f589153ec0771128dada6d3f2298cfaa57ebe1bea5e7e948fb5431fced058",
+    "traceSha256": "1654b8e4547db90717b1f8c8c9555dd8a9fa10a916813d5c910c47b4659063a1"
+  },
+  "webCaseRunPlaneRuyitrace": "skipped",
+  "scope": {
+    "scopeId": "8c0b2b72653544af763d685680d16600c796ead3a591e9b4ef3a6b39a3dd157c",
+    "status": "issued",
+    "ruyijsRun": "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\ruyijs\\rj_20261102191503_7445d1cb\\evidence-run.json",
+    "replacedFrozenScopeId": "dde6b25373a2daa38d02e73bbe340587ca026a49a9b907ab45b578475b7b1743",
+    "frozenRunNotRebound": "rj_20261102170743_02229090"
+  },
+  "pair": {
+    "ok": false,
+    "error": "ERROR: browser pair requires a verified completed RuyiTrace artifact run",
+    "pairJsonUnchangedFrozen": true
+  },
+  "classify": {
+    "invoked": false
+  },
+  "namedHostBlocker": false,
+  "facts": {
+    "requestBoundaryAlignedWrittenThisSlice": false,
+    "revision": 71,
+    "note": "host scope cleared dualCondition/hostProbe/authorizedSurface; classify did not write requestBoundaryAligned"
+  }
+}

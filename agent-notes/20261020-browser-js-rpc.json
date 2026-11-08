@@ -1,0 +1,61 @@
+{
+  "schema": "browser-js-rpc-probe.v1",
+  "at": "2026-10-20T07:58:59Z",
+  "browser": "ruyipage-151-proxy",
+  "egress": "loopback-7897",
+  "egressClass": "local-clash-listener",
+  "client": "page-fetch",
+  "serverAccepted": false,
+  "hostPatch": false,
+  "navigationSamples": [
+    {
+      "t": 1792483141.7,
+      "readyState": "interactive",
+      "titleLen": 16,
+      "pageKind": "challenge",
+      "textLen": 0,
+      "hrefLen": 164
+    },
+    {
+      "t": 1792483143.7,
+      "readyState": "complete",
+      "titleLen": 16,
+      "pageKind": "challenge",
+      "textLen": 263,
+      "hrefLen": 42
+    },
+    {
+      "t": 1792483145.7,
+      "readyState": "complete",
+      "titleLen": 16,
+      "pageKind": "challenge",
+      "textLen": 263,
+      "hrefLen": 42
+    },
+    {
+      "t": 1792483147.8,
+      "readyState": "interactive",
+      "titleLen": 27,
+      "pageKind": "cert",
+      "textLen": 1894,
+      "hrefLen": 42
+    }
+  ],
+  "navigation": {
+    "readyState": "interactive",
+    "titleLen": 27,
+    "pageKind": "cert",
+    "textLen": 1894,
+    "hrefLen": 42
+  },
+  "rpcFetch": {
+    "status": 200,
+    "redirected": false,
+    "bodyLen": 134554,
+    "titleLen": 27,
+    "pageKind": "cert",
+    "ms": 1110
+  },
+  "feasible": true,
+  "status": "ok"
+}

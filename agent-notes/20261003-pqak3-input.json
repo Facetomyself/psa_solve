@@ -1,0 +1,14 @@
+{
+  "challengeHtmlPath": "D:\\reverse_ENV\\workspace\\psa_solve\\challenge-material\\rt_20260928061614_ee71af43b2\\challenge-page.html",
+  "orchestrateJsPath": "D:\\reverse_ENV\\workspace\\psa_solve\\challenge-material\\rt_20260928061614_ee71af43b2\\chl-page-orchestrate.js",
+  "turnstileJsPath": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\live\\turnstile-api.js",
+  "turnstileScriptUrl": "https://challenges.cloudflare.com/turnstile/v0/b/d76008a69eab/api.js?onload=zaERg6&render=explicit",
+  "challengeUrl": "https://www.psacard.com/cert/67417377/psa",
+  "codeJsPath": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\NO_NODE_CODE_JS",
+  "pumpMs": 15000,
+  "patchHistory": true,
+  "liveNetwork": false,
+  "debugThrow": true,
+  "traceEval": true,
+  "tracePath": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-pqak3-bridge.jsonl"
+}

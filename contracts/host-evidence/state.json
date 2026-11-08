@@ -1,0 +1,10 @@
+{
+  "schema": "web-host-state.v1",
+  "scopeId": "8c0b2b72653544af763d685680d16600c796ead3a591e9b4ef3a6b39a3dd157c",
+  "status": "classified",
+  "executions": {},
+  "classification": {
+    "path": "D:\\reverse_ENV\\workspace\\psa_solve\\contracts\\host-evidence\\classification.json",
+    "sha256": "2d1136a79e4be047732db4e7bcd08d55b76b4984c77fd1b11c913f1818da2ca8"
+  }
+}

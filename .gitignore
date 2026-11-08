@@ -1,31 +1,123 @@
-# 挑战材料（每轮 epoch：挑战页 HTML + orchestrate JS + manifest）——不进 Git
+# ============================================================
+# psa_solve .gitignore
+# 原则：脚本/文档/流程状态进 Git；会话材料、捕获值、证据库只留本地。
+# 判据：含 ray/cH token/cookie 值/挑战字节流/抓包原始数据 = gitignore 域。
+# ============================================================
+
+# ---------- 证据与材料（大体积 + 会话敏感） ----------
+
+# 挑战材料（每轮 epoch：挑战页 HTML + orchestrate JS + manifest）
 challenge-material/
 
-# 原始 evidence（仅 manifest/contract 进 Git）
+# 原始 evidence（23G 证据库：RuyiTrace/ruyijs/v8trace run 产物，仅本地）
 evidence/
 
-# Python 缓存
+# 调度临时区（验收日志、临时抓取、smoke 产物）
+temp/
+temp-*
+smoke-*
+diag-script-*.js
+
+# ---------- Python ----------
 __pycache__/
 *.pyc
+.venv/
 
-# FO 载荷原始捕获（加密指纹串，仅本地 diff 用）
-diagnostics/*/fo-bodies/
-diagnostics/*/fo-bodies/
-diagnostics/ruyijs-api-log-*/api-log/
-diagnostics/ruyijs-api-log-*/summary.json
-diagnostics/ruyijs-api-log-*/atob-values/
-diagnostics/atob-diff-*/challenge-page.html
-diagnostics/atob-diff-*/chl-page-orchestrate.js
-diagnostics/atob-diff-*/ruyijs-atob.jsonl
-diagnostics/atob-diff-*/bridge-atob.jsonl
-# 消变体回放材料（含会话 ray/cH token 与挑战字节流——只留脚本，不留材料）
-diagnostics/atob-diff-*/replay-materials/
-diagnostics/atob-diff-*/ruyijs-replay-atob.jsonl
-diagnostics/atob-diff-*/bridge-replay-atob.jsonl
-diagnostics/atob-diff-*/ruyijs-pair-atob.jsonl
-diagnostics/atob-diff-*/bridge-pair-atob.jsonl
-diagnostics/atob-diff-*/ruyijs-pair-apilog.jsonl
-diagnostics/atob-diff-*/ruyijs-pair-netlog.json
-diagnostics/atob-diff-*/bridge-fo-resp-*.bin
-diagnostics/atob-diff-*/diag-script-*.js
-diagnostics/atob-diff-*/report.json
+# ---------- diagnostics：脚本白名单 + 材料域整体忽略 ----------
+# 原则：.py/.mjs 诊断脚本可进（研究链可复现）；捕获值/材料/大产物不进。
+# 已 tracked 的 10 个脚本不受 ignore 影响。
+
+# 先整域忽略（含全部材料/捕获/run 产物）
+diagnostics/*
+# 白名单脚本：目录与文件逐层反豁免
+!diagnostics/*.py
+!diagnostics/*.js
+!diagnostics/atob-diff-20261107/
+!diagnostics/ruyijs-fresh-navigate-20261103/
+!diagnostics/ruyijs-api-log-20261107/
+!diagnostics/ruyijs-live-emit-20261102/
+!diagnostics/ruyijs-live-emit-20261103/
+!diagnostics/ruyijs-parameter-analysis-20261102/
+!diagnostics/ruyijs-host-api-diff-20261102/
+!diagnostics/ruyijs-env-patch-20261102/
+!diagnostics/atob-diff-20261107/*.py
+!diagnostics/atob-diff-20261107/make_instrumented.js
+!diagnostics/ruyijs-fresh-navigate-20261103/*.py
+!diagnostics/ruyijs-api-log-20261107/*.py
+!diagnostics/ruyijs-live-emit-20261102/*.py
+!diagnostics/ruyijs-live-emit-20261102/*.mjs
+!diagnostics/ruyijs-live-emit-20261103/*.py
+!diagnostics/ruyijs-live-emit-20261103/*.mjs
+!diagnostics/ruyijs-parameter-analysis-20261102/*.py
+!diagnostics/ruyijs-parameter-analysis-20261102/*.mjs
+!diagnostics/ruyijs-host-api-diff-20261102/*.py
+!diagnostics/ruyijs-host-api-diff-20261102/*.mjs
+!diagnostics/ruyijs-env-patch-20261102/*.py
+!diagnostics/ruyijs-env-patch-20261102/*.mjs
+# 顶层材料副本与插桩产物（非代码）
+diagnostics/diag-script-*.js
+diagnostics/atob-diff-20261107/chl-page-orchestrate.js
+diagnostics/atob-diff-20261107/diag-script-*.js
+diagnostics/atob-diff-20261107/bridge-*.jsonl
+diagnostics/atob-diff-20261107/bridge-fo-resp-*.bin
+diagnostics/atob-diff-20261107/challenge-page.html
+diagnostics/atob-diff-20261107/*.json
+diagnostics/atob-diff-20261107/*.out
+diagnostics/atob-diff-20261107/jsvmp-id15/
+diagnostics/atob-diff-20261107/online-probe*/
+diagnostics/atob-diff-20261107/replay-materials/
+diagnostics/atob-diff-20261107/static-payload-verify/
+diagnostics/ruyijs-fresh-navigate-20261103/*.json
+diagnostics/ruyijs-fresh-navigate-20261103/*.txt
+diagnostics/ruyijs-fresh-navigate-20261103/fo-bodies/
+# ruyijs-api-log 值域子目录
+diagnostics/ruyijs-api-log-20261107/api-log/
+diagnostics/ruyijs-api-log-20261107/atob-values/
+diagnostics/ruyijs-api-log-20261107/fo-bodies/
+diagnostics/ruyijs-api-log-20261107/summary.json
+# atob-diff 捕获值 jsonl（白名单 *.py 之外仍漏的）
+diagnostics/atob-diff-20261107/ruyijs-*.jsonl
+diagnostics/atob-diff-20261107/bridge-*.jsonl
+# ruyijs-* 域内整目录（.py 已逐个反豁免，其余全 ignore）
+diagnostics/ruyijs-env-patch-20261102/
+diagnostics/ruyijs-host-api-diff-20261102/
+diagnostics/ruyijs-live-emit-20261102/
+diagnostics/ruyijs-live-emit-20261103/
+diagnostics/ruyijs-parameter-analysis-20261102/
+!diagnostics/ruyijs-env-patch-20261102/*.py
+!diagnostics/ruyijs-env-patch-20261102/*.mjs
+!diagnostics/ruyijs-host-api-diff-20261102/*.py
+!diagnostics/ruyijs-host-api-diff-20261102/*.mjs
+!diagnostics/ruyijs-live-emit-20261102/*.py
+!diagnostics/ruyijs-live-emit-20261102/*.mjs
+!diagnostics/ruyijs-live-emit-20261103/*.py
+!diagnostics/ruyijs-live-emit-20261103/*.mjs
+!diagnostics/ruyijs-parameter-analysis-20261102/*.py
+!diagnostics/ruyijs-parameter-analysis-20261102/*.mjs
+# 顶层 bridge 桥（被 ruyidom_bridge.js 引用关系单一，留本地）
+diagnostics/ruyidom_bridge.js
+# ruyijs-* 目录反豁免顺序修正（上面整目录 ignore 覆盖了前面的 *.py 反豁免，
+# 这里统一重新反豁免一次保证脚本可见）
+
+# ---------- agent-notes：调度笔记进 git，捕获值域不进 ----------
+
+agent-notes/jscall-detail-decode-20261005/restricted/
+agent-notes/deobf-ast/
+agent-notes/canonical-receiver-pair-20261005/receiver-fact.redacted.json
+agent-notes/20260928-deobf-gate.json
+
+# ---------- runtime：调试残留 ----------
+
+runtime/diag-script-*.js
+runtime/node-*.log
+runtime/realm-probe-child-debug.json
+runtime/realm-probe-result.json
+runtime/solve-ruijs-stderr.txt
+runtime/test-innerHeight-939-request.json
+
+# ---------- 系统杂项 ----------
+
+Thumbs.db
+.DS_Store
+$null
+*.log

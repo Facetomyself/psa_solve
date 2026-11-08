@@ -1,0 +1,19 @@
+{
+  "schema": "causal-observer-synthetic-fixtures.v1",
+  "networkUsed": false,
+  "targetExecuted": false,
+  "expectedEventKinds": [
+    "request",
+    "response",
+    "document.write",
+    "createElement"
+  ],
+  "knownAnswerSha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+  "redactedFinal": {
+    "title": "Troubleshooting {number} {email}",
+    "text": "Visit {url} token {token} for support.",
+    "textLen": 79,
+    "textSha256": "a9ca93a22fc2987d272f444e533c70072792e4629990c17a7b47809d0eb6331a"
+  },
+  "sensitiveLeakCheck": "pass"
+}

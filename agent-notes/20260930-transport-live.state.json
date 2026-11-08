@@ -1,0 +1,197 @@
+{
+  "schema": "transport-live-operation.v1",
+  "runId": "e0b71e462e87439696301f2b211a7ea1",
+  "status": "done-transport-fixed-business-still-stuck",
+  "terminal": "completed",
+  "action": "fix_transport",
+  "turnGate": "blocked",
+  "budgets": {
+    "freshMaterialRounds": 1,
+    "engineSpawns": 1,
+    "repairPhases": 0
+  },
+  "engineSpawnCount": 1,
+  "commands": [
+    {
+      "name": "syntax",
+      "argv": [
+        "D:\\reverse_ENV\\tools\\node\\node.exe",
+        "--check",
+        "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\transport-diagnostic\\control\\e0b71e462e87439696301f2b211a7ea1\\transport-runner.js"
+      ],
+      "argvSha256": "6723beb2dfc1e1bf7ff39095883db3f2036379c0f15135b8f6f2e801ab9f9a53",
+      "startedAt": "2026-09-30T11:09:30.885504Z",
+      "endedAt": "2026-09-30T11:09:30.928900Z",
+      "exitCode": 0,
+      "stdout": {
+        "path": "evidence/web/transport-diagnostic/control/e0b71e462e87439696301f2b211a7ea1/syntax.stdout.json",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "evidence/web/transport-diagnostic/control/e0b71e462e87439696301f2b211a7ea1/syntax.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "name": "runtime-status",
+      "argv": [
+        "D:\\reverse_ENV\\tools\\node\\node.exe",
+        "D:\\reverse_ENV\\mcp\\ruyidom-mcp\\dist\\cli.js",
+        "status"
+      ],
+      "argvSha256": "9fe24500af9553fca9131f1b70ad5ba82262b5e014c0e47810dcd3d070e67ab6",
+      "startedAt": "2026-09-30T11:09:30.929891Z",
+      "endedAt": "2026-09-30T11:09:31.224658Z",
+      "exitCode": 0,
+      "stdout": {
+        "path": "evidence/web/transport-diagnostic/control/e0b71e462e87439696301f2b211a7ea1/runtime-status.stdout.json",
+        "sha256": "732aad8cb811059867d3bbd85c8fd9eced2e85948e811cd6208ba323f962d590",
+        "bytes": 2347
+      },
+      "stderr": {
+        "path": "evidence/web/transport-diagnostic/control/e0b71e462e87439696301f2b211a7ea1/runtime-status.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    }
+  ],
+  "factsRevisionBefore": 2,
+  "factsSha256Before": "b9c061d21069b3a19153943c1ca4bfb37c6453cbb8dd8b8d08cc3ef93263738a",
+  "source": {
+    "path": "diagnostics/instrumentation-20260930-v2/ruyidom_bridge.instrumented.js",
+    "sha256": "7e1c6f05018806d87289a3d5c15255fd6882be044920e8d596c6d3218790aea3",
+    "bytes": 88075
+  },
+  "runner": {
+    "path": "evidence/web/transport-diagnostic/control/e0b71e462e87439696301f2b211a7ea1/transport-runner.js",
+    "sha256": "3ffab8d8d891030f1e1b139bcd5a7e707fe85d07298ae221473ed31b562beaf4",
+    "bytes": 89720
+  },
+  "freshGenerator": {
+    "path": "agent-notes/20260930-clean-baseline-wrapper.py",
+    "sha256": "445b23b13a4b32740285becd2757be7bf88d2f1d3502de28ed7a20fbda24cec4",
+    "bytes": 15687
+  },
+  "sourceReverseCheck": true,
+  "changes": [
+    "four chrome-only effective transport-pref snapshots",
+    "native MOZ_LOG diagnostics"
+  ],
+  "argv": [
+    "D:\\reverse_ENV\\tools\\node\\node.exe",
+    "D:\\reverse_ENV\\mcp\\ruyidom-mcp\\dist\\cli.js",
+    "run",
+    "--script",
+    "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\transport-diagnostic\\control\\e0b71e462e87439696301f2b211a7ea1\\transport-runner.js",
+    "--input-file",
+    "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\transport-diagnostic\\e0b71e462e87439696301f2b211a7ea1\\fresh-input.json",
+    "--timeout-seconds",
+    "120",
+    "--allow-network"
+  ],
+  "argvSha256": "8ecf4b99293fdf8770e0769b0bbea2b1ef880950f66f65a2041e07c31ca2c84e",
+  "environmentOverrides": {
+    "MOZ_FORCE_DISABLE_E10S": "1",
+    "MOZ_FORCE_DISABLE_FISSION": "1",
+    "MOZ_LOG": "timestamp,sync,nsHttp:5,nsSocketTransport:5,neqo_transport:5,neqo_http3:5",
+    "MOZ_LOG_FILE": "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\transport-diagnostic\\e0b71e462e87439696301f2b211a7ea1\\gecko-transport.log"
+  },
+  "targetNetworkExecuted": true,
+  "v2BudgetModified": false,
+  "historicalResponseReplay": false,
+  "pageSourceOrHooksChanged": false,
+  "serverAccepted": false,
+  "updatedAt": "2026-09-30T11:10:40.049890Z",
+  "runtimeHealthy": true,
+  "wrapperPid": null,
+  "targetNetworkStartedAt": "2026-09-30T11:10:07.917726Z",
+  "sessionId": "e0b71e462e87439696301f2b211a7ea1",
+  "rawDirectory": "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\transport-diagnostic\\e0b71e462e87439696301f2b211a7ea1",
+  "enginePid": null,
+  "onlineExecuted": true,
+  "materialNetworkStartedAt": "2026-09-30T11:10:07.931618Z",
+  "freshInputPrepared": true,
+  "provenancePath": "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\transport-diagnostic\\e0b71e462e87439696301f2b211a7ea1\\provenance.json",
+  "materialNetworkEndedAt": "2026-09-30T11:10:09.199540Z",
+  "cliPid": 51044,
+  "engineStartedAt": "2026-09-30T11:10:09.204162Z",
+  "operationBinding": {
+    "path": "evidence/web/transport-diagnostic/e0b71e462e87439696301f2b211a7ea1/operation-binding.json",
+    "sha256": "2dc4cd953fefd9223dac45cc70e85437cde61164e8916e03ce71dee375d54127",
+    "bytes": 2483
+  },
+  "engineEndedAt": "2026-09-30T11:10:40.021323Z",
+  "exitCode": 0,
+  "engineExitCode": 0,
+  "timedOut": false,
+  "executionReceipt": {
+    "path": "evidence/web/transport-diagnostic/e0b71e462e87439696301f2b211a7ea1/execution-receipt.json",
+    "sha256": "710f57dd8d9efc3a2ba06083138db3acd9acf6a81e76402ecbabf49507a4f969",
+    "bytes": 2209
+  },
+  "boundarySummary": {
+    "path": "evidence/web/transport-diagnostic/e0b71e462e87439696301f2b211a7ea1/boundary-summary.json",
+    "sha256": "b98b76185c89de68f1d16eb598ef111ca2e5412e986b01e3b781389a721c1167",
+    "bytes": 2634
+  },
+  "harnessHealthy": true,
+  "forms": 0,
+  "submits": 0,
+  "diagnosticCause": {
+    "path": "agent-notes/20260930-transport-live.cause.json",
+    "sha256": "46c2f08246e4a6796be1f04c753538a67851f2225747ef442139982ec89aba79",
+    "bytes": 7539
+  },
+  "conclusion": "HTTP proxy excludes HTTP3; retained h3 config is not failure; business root cause unproven",
+  "repairPhaseAuthorization": {
+    "reviewedBy": "parent",
+    "singleVariable": "engine-local network.proxy.type=0",
+    "freshMaterialRounds": 1,
+    "engineSpawns": 1,
+    "status": "prepared",
+    "runId": "3355e716c80b4c60b07c8caa5c2d2a57",
+    "statePath": "agent-notes/20260930-transport-live.repair.state.json",
+    "singleVariableDiff": {
+      "path": "evidence/web/transport-diagnostic/control/3355e716c80b4c60b07c8caa5c2d2a57/source-delta.json",
+      "sha256": "173a92148b0c6803a4786ad22c489dde12f07fc24fbbc178c66d8f37671e08b9"
+    }
+  },
+  "repairPhase": {
+    "runId": "3355e716c80b4c60b07c8caa5c2d2a57",
+    "statePath": "agent-notes/20260930-transport-live.repair.state.json",
+    "resultReceipt": {
+      "path": "agent-notes/20260930-transport-live.repair.json",
+      "sha256": "7d9f3c348490722cfadc444cd2d01f9fb90b229ac48759b56cc511d99c5c3a42",
+      "bytes": 8237
+    }
+  },
+  "stableCleanCandidate": {
+    "path": "diagnostics/clean-baseline-20260930/ruyidom_bridge.stable-transport.js",
+    "sha256": "a6f0e51a8b8c99019678a508385cc21f66fd3205e08c512d3ccc8888a32433d6",
+    "bytes": 86278
+  },
+  "stableManifest": {
+    "path": "diagnostics/clean-baseline-20260930/stable-transport-manifest.json",
+    "sha256": "0989745d66429de4d195f8e4185d1bbd26ba58b783b1226c766f6d8c347cf8d3",
+    "bytes": 4112
+  },
+  "transportFixed": true,
+  "requestBoundaryAligned": false,
+  "factsModifiedBySlice": false,
+  "next": "parent CAS environment-gap/stop-search, keep validated transport patch, governed response-to-DOM observation; no adjacent transport prefs",
+  "report": "agent-notes/20260930-transport-live.md",
+  "closure": {
+    "path": "agent-notes/20260930-transport-live.closure.json",
+    "sha256": "e329d5b5eae3a99aab259c6ac6429d4a8b75f49f9b6e0842240131f175bbd7dc"
+  },
+  "rawHashChecksPassed": 12,
+  "cliPidAlive": false,
+  "onlineExecutedHistoricalDefault": false,
+  "onlineFlagCorrectionReason": "reused fresh-generator sets onlineExecuted=false while fetching; actual engine spawn/exit receipt proves live execution",
+  "onlineFlagEvidence": {
+    "path": "evidence/web/transport-diagnostic/e0b71e462e87439696301f2b211a7ea1/execution-receipt.json",
+    "sha256": "710f57dd8d9efc3a2ba06083138db3acd9acf6a81e76402ecbabf49507a4f969"
+  }
+}

@@ -1,0 +1,1411 @@
+{
+  "schema": "reverse-workspace-state.v1",
+  "project": "psa_solve",
+  "taskClass": "web",
+  "evidencePointers": {
+    "case": "web-case.json",
+    "facts": "contracts/auto-decision-facts.json",
+    "receipts": "contracts/receipts.json",
+    "planner": "evidence/planner/c13aa134cb5a2168d544982472d0a311.json"
+  },
+  "goal": "先用 ruyijs 完成 PSA managed challenge 求解：同一 fresh 输入与 session 下由 ruyijs 自然完成请求响应、目标提交、parity 及约 5 秒后同 lease 独立业务 readback 200。浏览器仅作行为 oracle。纯 Node 补环境作为后续扩展，不作为本分支完成门。按 web-reverse dispatcher 推进，不以浏览器成功替代 ruyijs 完成。",
+  "next": "hold_challenge",
+  "updatedAt": "2026-11-02T21:59:15Z",
+  "known": {
+    "caseId": "psa-cf-5s-shield-20260815",
+    "caseFile": "D:\\reverse_ENV\\workspace\\psa_solve\\web-case.json",
+    "progress": "D:\\reverse_ENV\\workspace\\psa_solve\\analysis-progress.md",
+    "lastBrowserRun": "rt_20260928061614_ee71af43b2",
+    "registeredBrowserRun": "rt_20260815060651_eb196ed770",
+    "caseStatusDrift": "status corrected to patching on 2026-09-28; stages still not forged complete",
+    "lastConclusion": "2026-10-03 trace-gap review: Firefox RuyiTrace is complete browser fact through 5x FO -> cf_clearance name -> cert POST 200; Chromium is partial comparison only; local RuyiDOM remains noform and serverAccepted=false; contract/pointer validation repaired",
+    "traceGapReview": {
+      "chromiumEvidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-chromium-trace-gap.md",
+      "firefoxEvidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-firefox-trace-gap.md",
+      "classification": "semantic-execution-boundary",
+      "browserFactPlane": "ruyitrace-only",
+      "businessReadback": "unverified",
+      "serverAccepted": false,
+      "contractStatus": "migrated to revision 2 at root HEAD b48aca9db76226a89dcd0a274c56a9c7a08b9952",
+      "contractBlocker": "none; next is blocked by stop-search/refuse_host_enumeration"
+    },
+    "v8traceSettingsAudit": {
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-v8trace-settings-audit.md",
+      "paramCompleteRun": "v8-20261003100221-c54ooe",
+      "allTraceRun": "v8-20261003102000-alltrace",
+      "firstCandidateHostGap": "performance.getEntries",
+      "traceToolStatus": "working; prior profiles omitted get/source/raw; runner still has no response boundary"
+    },
+    "nodePerformanceRerun": {
+      "factEvidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-performance-entries-fact.md",
+      "rerunEvidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-node-performance-rerun.md",
+      "latestCanary": "v8-20261003121849-1ykah1",
+      "getEntriesBoundary": "passed-method-existence-only",
+      "requestBoundary": false,
+      "sourceMismatch": {
+        "nodeBytes": 229681,
+        "browserMaterialBytes": 238694,
+        "nodeIdentifier": "WHtx4",
+        "matchedMaterialIdentifier": "PQak3"
+      },
+      "nextBoundary": "resource-loader-and-cross-realm-context",
+      "matchedSourceRun": "v8-20261003121849-1ykah1",
+      "forcedExitCanaries": true,
+      "turnstileResourceCanaries": [
+        "v8-20261003130747-4pwon9",
+        "v8-20261003131931-dbzjwx"
+      ],
+      "resourceEvalStatus": "turnstile-api eval ok after currentScript/HTMLScriptElement; PQak3 dynamic context still missing",
+      "resourceCanaryRuns": {
+        "htmlScriptElement": "v8-20261003131028-kt767g",
+        "getEntriesByType": "v8-20261003131931-dbzjwx",
+        "latestResource": "v8-20261003131931-dbzjwx",
+        "foBoundary": false
+      }
+    }
+  },
+  "slices": [
+    {
+      "id": "slice-hold-challenge-d8297755-20261103",
+      "skill": "reverse-planner",
+      "objective": "Document hold_challenge stop: challengePhase=stuck, firstDivergence=challenge-state; ruyijs still has no certificate-document POST; GET_403 load_page is the same problem; no new verification-chain fact; do not respin.",
+      "status": "done",
+      "conclusion": "blocked",
+      "evidence": "evidence/hold-challenge-d8297755-20261103.json",
+      "handles": {
+        "ruyijsRunId": "rj_20261102191503_7445d1cb",
+        "browserRunId": "rt_20261102184003_209bfef648",
+        "plannerDecisionId": "d82977550ce1d2d410c9428247ee79d8",
+        "plannerHandle": "01a19ac1-28c9-7f60-bb3a-4af694731647-planner-d8297755",
+        "sessionId": "01a19ac1-28c9-7f60-bb3a-4af694731647"
+      },
+      "blocker": "ruyijs 路径仍无 certificate-document POST；GET_403 load_page 同一道题；验证链无新外部事实。",
+      "summary": "hold_challenge stop recorded. facts rev 73 unchanged. leavePathsNotTaken: firstDivergence change, humanActionPending, resource-drift. Not needs-human. Not execute-class."
+    },
+    {
+      "id": "slice-web-challenge-f5913234-20261103",
+      "skill": "reverse-planner",
+      "objective": "Record challengePhase from web_challenge observation f5913234.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "evidence/web-challenge-state-f5913234-20261103.json",
+      "handles": {
+        "ruyijsRunId": "rj_20261102191503_7445d1cb",
+        "browserRunId": "rt_20261102184003_209bfef648",
+        "executeDecisionId": "f5913234c679b0658f728b5cd2a679a7",
+        "plannerDecisionId": "780dabb6c1d6d5876614e87f7f451f2e",
+        "executionHandle": "01a19ac1-28c9-7f60-bb3a-4af694731647-challenge-f5913234",
+        "plannerHandle": "01a19ac1-28c9-7f60-bb3a-4af694731647-planner-780dabb6",
+        "sessionId": "01a19ac1-28c9-7f60-bb3a-4af694731647"
+      },
+      "blocker": null,
+      "summary": "challengePhase=stuck (rev 73). No new 清场 cookie / 挑战令牌 / 业务请求; local cert-document POST count=0; GET_403 load_page replay not resource-drift. firstDivergence stays challenge-state. No hostBlocker invented."
+    },
+    {
+      "id": "slice-postcf-document-pairing-20261103",
+      "skill": "web-reverse",
+      "objective": "Extract post-CF certificate document that issued seq-14 POST /cert/ from completed capture and compare to live-emit GET_403 load_page.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "evidence/postcf-document-pairing-20261103.json",
+      "handles": {
+        "ruyijsRunId": "rj_20261102191503_7445d1cb",
+        "browserRunId": "rt_20261102184003_209bfef648",
+        "liveEmitHtmlSha256": "2d5a1b33a5e894a83c5fb2bb0a9474f708c86ce865cb91ccce32181d8f78a8d0",
+        "seq14ResponseSha256": "b328a7303d21382cca2ab00ca3bd40a8f9376a95bfe8551397ea27030aa9c636"
+      },
+      "blocker": "no distinct frozen GET HTML for cert URL before seq-14; convert cannot rebind load_page",
+      "summary": "seq1 GET_403 5787B sha 2d5a1b33 IS live-emit load_page (formTags=0). No later GET_200 HTML of the cert URL before POST. seq5 is turnstile-rch already put_resource. FO HTML is challenge output. seq14 136434B HTML is POST response (formTags=1), not a load_page input. DOM trace has zero HTMLFormElement.submit. Not resource-drift. firstDivergence stays unknown."
+    },
+    {
+      "id": "slice-compare-facts-ae0adba7-20261103",
+      "skill": "web-reverse",
+      "objective": "Reconcile executed compare_facts ae0adba7: host classify bound to THIS pair; isolation disproven; firstDivergence stays unknown; no named hostBlocker.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "evidence/compare-facts-execution-ae0adba7-20261103.json",
+      "handles": {
+        "ruyijsRunId": "rj_20261102191503_7445d1cb",
+        "browserRunId": "rt_20261102184003_209bfef648",
+        "executeDecisionId": "ae0adba733b15e2ce2433830b8a455bc",
+        "plannerDecisionId": "42b8b2ebed12762736cf402d3079f7b7",
+        "executionHandle": "01a19ac1-28c9-7f60-bb3a-4af694731647-compare-ae0adba7",
+        "plannerHandle": "01a19ac1-28c9-7f60-bb3a-4af694731647-planner-42b8b2eb",
+        "hostScopeId": "8c0b2b72653544af763d685680d16600c796ead3a591e9b4ef3a6b39a3dd157c"
+      },
+      "blocker": null,
+      "summary": "host classify bound to THIS pair; boundary-moved 1→0 aligned=false; GET_403 load_page so no POST /cert/; isolation disproven; firstDivergence stays unknown; no named hostBlocker."
+    },
+    {
+      "id": "slice-compare-facts-d9cf3983-20261103",
+      "skill": "reverse-planner",
+      "objective": "Reconcile executed compare_facts 11d0524d: isolation disproven; firstDivergence=unknown; parameterAnalysis stays inconclusive; no named hostBlocker.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "evidence/compare-facts-execution-11d0524d-20261103.json",
+      "handles": {
+        "ruyijsRunId": "rj_20261102191503_7445d1cb",
+        "browserRunId": "rt_20261102184003_209bfef648",
+        "executeDecisionId": "11d0524df33ae0306e462563cd0d03a6",
+        "plannerDecisionId": "d9cf3983f2f6f127caf65712aac128d6"
+      },
+      "blocker": null,
+      "summary": "FO POST live-necko 400 then 200; cert-document POST absent; not resource-drift; host classify not bound to this pair."
+    },
+    {
+      "id": "slice-ruyijs-live-emit-25ddea8d-20261103",
+      "skill": "ruyijs",
+      "objective": "Reconcile executed ruyijs_live_emit: write ruyijsLiveEmit=completed from live-necko FO POST; remaining cert-document pairing belongs to compare_facts.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "evidence/ruyijs-live-emit-25ddea8d-20261103.json",
+      "handles": {
+        "runId": "rj_20261102191503_7445d1cb",
+        "sourceCapture": "rt_20261102184003_209bfef648",
+        "decisionId": "25ddea8df2bcfab849be5f2a8975dff6",
+        "plannerDecisionId": "ee1136bf43ac859d70d474395d3a4372",
+        "frozenRuyijsRunId": "rj_20261102170743_02229090"
+      },
+      "blocker": null,
+      "summary": "ruyijsLiveEmit=completed (rev 70). emitMode=live-necko; isolationSink=null; twoLaunchAgree=true; FO POST /cdn-cgi/challenge-platform/ 400 then 200; cert-document POST /cert/ ABSENT vs browser oracle POST /cert/ 200. firstDivergence stays isolation (sink-swallowed no longer true; remaining output-family pairing is compare_facts, not resource-drift). Frozen run untouched. hostBlocker/gapKind unset. requestBoundaryAligned not written."
+    },
+    {
+      "id": "slice-ruyitrace-capture-stop-e5f6009e-20261103",
+      "skill": "ruyitrace",
+      "objective": "Reconcile executed ruyitrace_capture_stop: clear stale running receipt, keep canonical activeRuns until integrity=pass.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "evidence/ruyitrace-capture-stop-e5f6009e-20261103.json",
+      "handles": {
+        "runId": "rt_20261102184003_209bfef648",
+        "decisionId": "e5f6009ec238e0ea59fcdc04b984ef1b",
+        "plannerDecisionId": "cc9aee901927af8cc6b04585138649ff",
+        "frozenRuyijsRunId": "rj_20261102170743_02229090",
+        "frozenBrowserRunId": "rt_20260929103550_341b734038"
+      },
+      "blocker": null,
+      "summary": "stop verified; receipts.ruyitrace=window-closed; firstDivergence=isolation; ruyijsLiveEmit=want; activeRuns.ruyitrace stays canonical"
+    },
+    {
+      "id": "slice-ruyitrace-capture-start-7d74e5a1-20261103",
+      "skill": "ruyitrace",
+      "objective": "Start interactive ruyitrace capture so wait_human can complete CF click; do not dump secrets.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "evidence/ruyitrace-capture-start-7d74e5a1-20261103.json",
+      "handles": {
+        "decisionId": "7d74e5a12f08406190f96dedaa0b32c1",
+        "runId": "rt_20261102184003_209bfef648",
+        "workerPid": 35932,
+        "ruyijsRunId": "rj_20261102170743_02229090",
+        "frozenBrowserRunId": "rt_20260929103550_341b734038"
+      },
+      "blocker": null,
+      "summary": "interactive capture running; receipts.ruyitrace=running; wait_human next"
+    },
+    {
+      "id": "slice-hold-challenge-d89556c5-20261102",
+      "skill": "reverse-planner",
+      "objective": "Document hold_challenge stop after stuck phase; do not respin.",
+      "status": "done",
+      "conclusion": "blocked",
+      "evidence": "evidence/planner-hold-challenge-d89556c5-20261102.json",
+      "handles": {
+        "ruyijsRunId": "rj_20261102170743_02229090",
+        "browserRunId": "rt_20260929103550_341b734038"
+      },
+      "blocker": "challenge-stuck-frozen-orchestrate-vs-live-cf",
+      "summary": "停止重复求解。离开条件未满足。"
+    },
+    {
+      "id": "slice-web-challenge-65c5e594-20261102",
+      "skill": "reverse-planner",
+      "objective": "Record challengePhase from web_challenge observation 36e1d41d.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "evidence/planner-web-challenge-65c5e594-20261102.json",
+      "handles": {
+        "ruyijsRunId": "rj_20261102170743_02229090",
+        "browserRunId": "rt_20260929103550_341b734038"
+      },
+      "blocker": null,
+      "summary": "challengePhase=stuck; no new clearance cookie/token/business request; FO 404 vs browser 200; cert POST 0; readback 403. No hostBlocker invented."
+    },
+    {
+      "id": "slice-compare-facts-f45f07ad-20261102",
+      "skill": "reverse-planner",
+      "objective": "Confirm live-emit pairing after class execute 5cde43c1; rewrite firstDivergence isolation→challenge-state only.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "evidence/planner-compare-facts-f45f07ad-20261102.json",
+      "handles": {
+        "ruyijsRunId": "rj_20261102170743_02229090",
+        "browserRunId": "rt_20260929103550_341b734038"
+      },
+      "blocker": null,
+      "summary": "firstDivergence=challenge-state from live FO 404 + missing cert POST + readback 403. hostBlocker/gapKind unset. attachShadow not re-issued. No tool-owned positives via fact record."
+    },
+    {
+      "id": "slice-compare-facts-c0b7de3a-20261102",
+      "skill": "reverse-planner",
+      "objective": "Confirm compare_facts after class execute 580bbffb: live-emit pairing vs facts revision 61; rewrite only if a recordable key is still wrong.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "evidence/planner-compare-facts-c0b7de3a-20261102.json",
+      "handles": {
+        "runId": "rj_20261102163249_c6d25972",
+        "browserRunId": "rt_20260929103550_341b734038"
+      },
+      "blocker": null,
+      "summary": "Live pairing matches. parameterAnalysis=inconclusive, firstDivergence=isolation, ruyijsLiveEmit=completed, hostBlocker/gapKind unset, namedGap=null. fo-post/cert-document-post are outputs not resource-drift. No fact rewrite. No hostBlocker=existence. No attachShadow re-eval. No RuyiDOM submit re-pair. requestBoundaryAligned stays false. No execute-class on the same digest."
+    },
+    {
+      "id": "slice-compare-facts-b05f48a7-20261102",
+      "skill": "reverse-planner",
+      "objective": "Confirm compare_facts after class execute 51a36613: isolated pairing vs facts revision 59; rewrite only if a recordable key is still wrong.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "evidence/planner-compare-facts-b05f48a7-20261102.json",
+      "handles": {
+        "runId": "rj_20261102153528_cc268870",
+        "browserRunId": "rt_20260929103550_341b734038"
+      },
+      "blocker": null,
+      "summary": "Isolated pairing matches. parameterAnalysis=inconclusive, firstDivergence=unknown, hostBlocker/gapKind unset. No fact rewrite. No hostBlocker=existence. No execute-class on the same digest."
+    },
+    {
+      "id": "slice-record-parameter-analysis-c1b4e3e5-20261102",
+      "skill": "reverse-planner",
+      "objective": "Record parameterAnalysis from isolated ruyijs parameter-analysis run rj_20261102153528_cc268870 using pairing evidence.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "evidence/planner-record-parameter-analysis-c1b4e3e5-20261102.json",
+      "handles": {
+        "runId": "rj_20261102153528_cc268870"
+      },
+      "blocker": null,
+      "summary": "parameterAnalysis want -> inconclusive. unmatchedCount=2/formCount=0 do not prove env-bound. missTokens=[]. fo-post/cert-document-post are challenge outputs. Existence knife already failed (attachShadow call=ok). firstDivergence stays unknown. No dualCondition/hostProbe/hostBlocker."
+    },
+    {
+      "id": "slice-compare-facts-be0090c8-20261102",
+      "skill": "reverse-planner",
+      "objective": "Confirm compare_facts after class execute dcc4a6ca: pairing vs facts revision 57; rewrite only if a recordable key is still wrong.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "evidence/planner-compare-facts-be0090c8-20261102.json",
+      "handles": {
+        "runId": "rj_20261102062310_d7463f5c",
+        "browserRunId": "rt_20260929103550_341b734038"
+      },
+      "blocker": null,
+      "summary": "Facts already match pairing. parameterAnalysis=inconclusive, firstDivergence=unknown, hostBlocker/gapKind unset. No fact rewrite. No hostBlocker=existence. No execute-class on the same digest."
+    },
+    {
+      "id": "slice-compare-facts-ruyijs-20261102",
+      "skill": "reverse-planner",
+      "objective": "Pair ruyijs request families with skippedFamilies/eval; correct the env-bound parameterAnalysis after the failed existence knife.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "evidence/planner-compare-facts-20261102.json",
+      "handles": {
+        "runId": "rj_20261102062310_d7463f5c"
+      },
+      "blocker": null,
+      "summary": "parameterAnalysis env-bound -> inconclusive. 4 input resources replayed; fo-post/cert-document-post are challenge outputs not resource-drift. missTokens=[] so hostBlocker=existence not named. No dualCondition/hostProbe/serverAccepted/localReproduced/requestBoundaryAligned write."
+    },
+    {
+      "id": "slice-record-parameter-analysis-20261102",
+      "skill": "reverse-planner",
+      "objective": "Record parameterAnalysis from completed ruyijs parameter-analysis run rj_20261102062310_d7463f5c as local-hit or env-bound. Receipt is not browser fact.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "evidence/planner-record-parameter-analysis.json",
+      "handles": {
+        "runId": "rj_20261102062310_d7463f5c"
+      },
+      "blocker": "env-bound basis was hostSurfaces/matchedCount/DOM zeros; superseded by slice-compare-facts-ruyijs-20261102 as inconclusive"
+    },
+    {
+      "id": "slice-ruyijs-env-patch-existence-20261102",
+      "skill": "web-env-patcher",
+      "objective": "On ruyijs executor, apply one existence-only external-host patch with dual-condition evidence. Do not rerun as official baseline; do not write serverAccepted/localReproduced/requestBoundaryAligned.",
+      "status": "blocked",
+      "conclusion": "blocked",
+      "evidence": "agent-notes/20261102-ruyijs-existence-patch.md",
+      "handles": {
+        "runId": "rj_20261102062310_d7463f5c"
+      },
+      "blocker": "existence dual-condition incomplete: browser read Element.attachShadow; ruyijs local function call=ok missTokens=[]; do not execute-class the same existence knife",
+      "summary": "No patch. Browser read attachShadow; ruyijs local has the function and closed ShadowRoot; missTokens empty; no second existence miss. Planner receipt evidence/planner-environment-patch-20261102.json. compare_facts corrected parameterAnalysis to inconclusive."
+    },
+    {
+      "id": "slice-post-d1caller",
+      "skill": "web-env-patcher",
+      "objective": "On one fresh runtime/run.js page, after the second blob worker, record the depth-1 caller of the depth-2-plus numeric hot function and the host value it reads or writes before re-entering that loop. Name one host read only if that value is a stamp-allowed surface that can reach the certificate document POST.",
+      "status": "running",
+      "evidence": null,
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-d2",
+      "skill": "web-env-patcher",
+      "objective": "On one fresh runtime/run.js page, after the second blob worker, record the hottest Reflect.apply callee at depth 2 or deeper. Name one host read only if that callee fails in a way that can emit the certificate document POST.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-d2-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-d0child",
+      "skill": "web-env-patcher",
+      "objective": "On one fresh runtime/run.js page, after the second blob worker, record the hottest direct Reflect.apply child of the hottest depth-0 callee. Name one host read only if that child fails in a way that can reach form construction.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-d0child-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-d0",
+      "skill": "web-env-patcher",
+      "objective": "On one fresh runtime/run.js page, after the second blob worker returns, record the hottest returning depth-0 Reflect.apply callee before the frame is cleared. Name one host read only if that callee fails in a way that can reach the certificate document POST.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-d0-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-open",
+      "skill": "web-env-patcher",
+      "objective": "On one fresh runtime/run.js page, after the second blob worker returns, capture the unreturned outer Reflect.apply and the depth-2-plus callee still spinning past challenge-fo 200. Name one host read only if that capture shows a failure that can reach the certificate document POST.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-open-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-outer",
+      "skill": "web-env-patcher",
+      "objective": "On one fresh runtime/run.js page, after the second blob worker returns, trace the outer loop exit or poll past challenge-fo 200. Name one host read only if that read fails and can let the run reach the certificate document POST. Do not name the numeric hot callees.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-outer-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-hotbody",
+      "skill": "web-env-patcher",
+      "objective": "On one fresh runtime/run.js page, after the second blob worker returns, trace the three non-bound hot Reflect.apply callees for an allowlisted host argument, object, or token. Name one stamp-allowed host behavior only if that trace shows a failure that can emit the certificate document POST.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-hotbody-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-hot",
+      "skill": "web-env-patcher",
+      "objective": "On one fresh runtime/run.js page, after the second blob worker returns, record the shape of the non-bound hot Reflect.apply callee. Name one stamp-allowed host behavior only if that trace shows a failure that can emit the certificate document POST.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-hot-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-bound",
+      "skill": "web-env-patcher",
+      "objective": "On one fresh runtime/run.js page, after the second blob worker returns, classify bound-call suffixes. Name one stamp-allowed host behavior only if a host suffix throws or returns a class that cannot emit the certificate document POST.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-bound-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-intrinsic",
+      "skill": "web-env-patcher",
+      "objective": "On one fresh runtime/run.js page, after the second blob worker returns, match Reflect.apply callees to a fixed intrinsic identity table instead of the empty DOM name allowlist. Name one stamp-allowed host behavior only if that intrinsic call throws or returns a class that cannot emit the certificate document POST.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-intrinsic-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-longname",
+      "skill": "web-env-patcher",
+      "objective": "On one fresh runtime/run.js page, after the second blob worker returns, count Reflect.apply callees whose names are on a fixed host allowlist. Name one stamp-allowed host behavior only if that call throws or returns a class that cannot emit the certificate document POST.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-longname-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-ownmethod",
+      "skill": "web-env-patcher",
+      "objective": "On one fresh runtime/run.js page, after the second blob worker returns, sample Reflect.apply callee identity classes and count instance-owned setAttribute/appendChild. Name one stamp-allowed host behavior only if that page shows it.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-ownmethod-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-cyclekey",
+      "skill": "web-env-patcher",
+      "objective": "On one fresh runtime/run.js page, count allowlisted form-construction function identities and string arguments inside the post-second-worker Reflect.apply cycle, and name a host behavior only if those counts show a missing or wrong surface that can emit the certificate document POST.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-cyclekey-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-msgtime",
+      "skill": "web-env-patcher",
+      "objective": "On one fresh shipped runtime/run.js session after challenge-fo done 200, trace Worker postMessage timing and the parent Reflect.apply loop, then name or refuse one stamp-allowed host behavior that can emit the certificate document POST.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-msgtime-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-exit16",
+      "skill": "web-env-patcher",
+      "objective": "On one fresh runtime/run.js page, instrument the post-second-worker period-16 Reflect.apply loop and name the exit only if it is one stamp-allowed host behavior.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-exit16-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-deep-apply",
+      "skill": "web-env-patcher",
+      "objective": "After the second blob worker, trace direct host calls inside the Reflect.apply loop and name one stamp-allowed host behavior only if that trace shows it.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-deep-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-inbound-trace",
+      "skill": "web-env-patcher",
+      "objective": "After the worker-inbound change, trace why one fresh runtime/run.js still misses the certificate document POST. Apply one host behavior only if that trace names it.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-inbound-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-msg-deliver",
+      "skill": "web-env-patcher",
+      "objective": "Queue parent Worker postMessage until the worker handler exists, then deliver it. One fresh runtime/run.js. No env.js rewrite and no completion facts unless the certificate POST and readback are captured.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-msg-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-exit-trace",
+      "skill": "web-env-patcher",
+      "objective": "Trace the post-second-worker apply exit condition and the Date.now reads. Apply one host behavior only if that names a surface that can emit the certificate document POST. No env.js rewrite and no completion facts.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-exit-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-gap-trace",
+      "skill": "web-env-patcher",
+      "objective": "After the second blob worker, trace why the numeric apply loop never reaches parent postMessage, worker delivery, a later tick, or form submit. Name one host behavior only from that page. No host edit and no completion facts.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-gap-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-apply-rearm",
+      "skill": "web-env-patcher",
+      "objective": "Re-arm the Reflect.apply sample only after a second blob-worker boot. Name one host surface. No host edit and no completion facts.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-apply-rearm-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-apply-sample",
+      "skill": "web-env-patcher",
+      "objective": "Sample post-second-worker Reflect.apply callees and polled values. One host behavior only if a host surface is named. No completion facts.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-apply-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-worker2-trace",
+      "skill": "web-env-patcher",
+      "objective": "Name the host read or behavior after the second blob worker. No second host change and no completion facts.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-worker2-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-iframe-trace",
+      "skill": "web-env-patcher",
+      "objective": "Name the missing host read on one fresh page after the listener-receiver change. No second behavior and no completion facts.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-iframe-20261023\\node-trace-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-event-trace",
+      "skill": "web-env-patcher",
+      "objective": "Map a non-object listener receiver onto the page window bucket. No completion facts.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\post-event-20261023\\node-rerun-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-event-target",
+      "skill": "web-env-patcher",
+      "objective": "Keep window and document listeners and dispatch them. No completion facts.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\event-target-20261023\\node-rerun-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-current-script",
+      "skill": "web-env-patcher",
+      "objective": "Set document.currentScript null outside script execution. No completion facts.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\current-script-20261023\\node-rerun-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-blob-worker",
+      "skill": "web-env-patcher",
+      "objective": "Run the post-200 blob Worker in its own realm. No completion facts.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\worker-realm-20261023\\node-rerun-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-navigator-gpu",
+      "skill": "web-env-patcher",
+      "objective": "Add navigator.gpu and rerun two fresh Node sessions. No completion facts.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\navigator-gpu-20261023\\node-rerun-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-post-fonts-element-from-point",
+      "skill": "web-env-patcher",
+      "objective": "Trace the post-fonts fresh hang and add document.elementFromPoint. No completion facts.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\element-from-point-20261023\\node-rerun-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-iframe-tree-spin-trace",
+      "skill": "web-env-patcher",
+      "objective": "Count allowlisted host calls while execution spins after the iframe document tree. No source, no host edit.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\iframe-fonts-20261023\\node-rerun-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-iframe-function-stop-trace",
+      "skill": "web-env-patcher",
+      "objective": "Classify why the loaded script stops after the iframe Function read and before createElement input. Counts only.",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\diagnostics\\iframe-document-tree-20261023\\node-rerun-receipt.json",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-web-next",
+      "skill": "web-reverse",
+      "objective": "读执行面之后的步骤，跑 web_case.py next，按返回 action 推进一刀，并写不超过一页的证据摘要。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260928-web-next.md",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-ruyidom-run",
+      "skill": "web-reverse",
+      "objective": "按 next=ruyidom_run 跑现有 runner 一轮，只记录是否到达 fo/eb 或第一个外部宿主缺口。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260928-ruyidom-run.md",
+      "handles": {},
+      "blocker": "injected Node code.js; no fo/eb; material epoch demo6-20260816-222208-3"
+    },
+    {
+      "id": "slice-ruyidom-rerun",
+      "skill": "web-reverse",
+      "objective": "同一 Gecko CLI 再跑一轮：不注入 Node code.js，不做 opcode 插桩，记录 fo/eb 或第一个外部宿主缺口。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260928-ruyidom-rerun.md",
+      "handles": {},
+      "blocker": "SecurityError on about:blank; nonlocal www.psacard.com before wire; fo/eb not observed"
+    },
+    {
+      "id": "slice-doc-context",
+      "skill": "web-reverse",
+      "objective": "只改外部文档上下文：挑战页不要停在 about:blank。再跑一轮，记录 fo/eb 或下一个外部缺口。",
+      "status": "blocked",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260928-doc-context.md",
+      "handles": {},
+      "blocker": "no site-document entry in diagnostics/ruyidom_runner.js; history SecurityError wrapper exists only in opcode-instrumented ruyidom_cf_shield_v1.js"
+    },
+    {
+      "id": "slice-history-host",
+      "skill": "web-reverse",
+      "objective": "只把 history.replaceState/pushState 宿主包装抽到干净 runner，再跑一轮。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260928-history-host.md",
+      "handles": {},
+      "blocker": "nonlocal www.psacard.com before wire; fo/eb not observed; SecurityError absent"
+    },
+    {
+      "id": "slice-local-origin",
+      "skill": "web-reverse",
+      "objective": "页面源站请求留在本地应答，不放行全网。再跑一轮，记录 fo/eb 或下一个外部缺口。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260928-local-origin.md",
+      "handles": {},
+      "blocker": "next nonlocal is www.psacard.com with no path in fatal; fo=0 eb=0"
+    },
+    {
+      "id": "slice-ruyitrace-formal",
+      "skill": "web-reverse",
+      "objective": "用户授权起正式 RuyiTrace：3.3.0 interactive baseline，刷新 cert 页，只记 challenge 链是否出现。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260928-ruyitrace-formal.md",
+      "handles": {
+        "runId": "rt_20260928061614_ee71af43b2",
+        "evidenceRun": "evidence/web/ruyitrace/rt_20260928061614_ee71af43b2/evidence-run.json",
+        "receiptSha256": "c32374d0b74e94bba7c61e0e365042b83930bb72b67482a280f366067b76ad5c"
+      },
+      "blocker": "eb/managed=0; document GET 403 with cf-mitigated=challenge is presence only, not a solve result"
+    },
+    {
+      "id": "slice-ruyidom-fresh",
+      "skill": "web-reverse",
+      "objective": "用 rt_20260928061614_ee71af43b2 的 fresh 挑战页和 orchestrate 跑一轮 RuyiDOM，记录 fo/eb 或第一个外部缺口。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260928-ruyidom-fresh.md",
+      "handles": {
+        "runId": "rt_20260928061614_ee71af43b2",
+        "material": "challenge-material/rt_20260928061614_ee71af43b2",
+        "orchestrateSha256_16": "aa2b09a484f556d1",
+        "htmlSha256_16": "030a1607fc7225a7"
+      },
+      "blocker": "fo=0 eb=0; stdout empty; FATAL challenges.cloudflare.com then www.psacard.com, neither line has a path; no AllowNetwork"
+    },
+    {
+      "id": "slice-cf-doc-map",
+      "skill": "web-reverse",
+      "objective": "汇总 psa 与 psa_solve 里已有 CF 文档和求解代码，写出请求链与参数角色，不改代码。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260928-cf-request-map.md",
+      "handles": {},
+      "blocker": null
+    },
+    {
+      "id": "slice-deobf-gate",
+      "skill": "web-deobfuscation",
+      "objective": "对 fresh orchestrate 跑只读 gate，再按命中的一个阶段分析请求链和加密参数角色。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260928-deobf-request.md",
+      "handles": {
+        "source": "challenge-material/rt_20260928061614_ee71af43b2/chl-page-orchestrate.js",
+        "browserRun": "rt_20260928061614_ee71af43b2"
+      },
+      "blocker": "no opcode fixture; safe AST did not bind fo/eb fields; RuyiDOM TypeError at KP.call so fo=0 and runtime params unobserved"
+    },
+    {
+      "id": "slice-ruyidom-bridge",
+      "skill": "web-reverse",
+      "objective": "用 ruyidom-mcp 按页面加载方式跑 fresh 材料，只补外部宿主，记录 fo 请求形状或第一个缺口。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260928-ruyidom-bridge.md",
+      "handles": {
+        "channel": "cli-fallback",
+        "runner": "diagnostics/ruyidom_bridge.js",
+        "unpatchedTrace": "diagnostics/bridge-run1.jsonl",
+        "patchedTrace": "diagnostics/bridge-run2.jsonl"
+      },
+      "blocker": "execution-boundary: KP is an internal local, window.KP absent; fo=0 eb=0 after replaceState-only patch"
+    },
+    {
+      "id": "slice-ruyidom-script-src",
+      "skill": "web-env-patcher",
+      "objective": "补 Turnstile 已使用的 script.src，离线复跑两次，有 /fo/ 就记红acted 形状，否则停在 execution-boundary。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260928-ruyidom-bridge.md",
+      "handles": {
+        "channel": "cli-fallback",
+        "runner": "diagnostics/ruyidom_bridge.js",
+        "trace": "diagnostics/bridge-src.jsonl"
+      },
+      "blocker": "execution-boundary: both offline runs fo=0 eb=0; only error is internal KP.call; window.turnstile is object; window.KP absent"
+    },
+    {
+      "id": "slice-fo-local",
+      "skill": "web-env-patcher",
+      "objective": "只读分析离线桥：/fo/ 已发出但无响应时，下一刀该补哪一个外部宿主面。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260928-fo-local.md",
+      "handles": {
+        "runner": "diagnostics/ruyidom_bridge.js",
+        "trace": "diagnostics/bridge-src.jsonl"
+      },
+      "blocker": "unknown whether the page reads /fo/ status; createOffer still pending inside 15s"
+    },
+    {
+      "id": "slice-fo-browser",
+      "skill": "web-env-patcher",
+      "objective": "只读对照有头浏览器事实：/fo/ 之前之后的宿主顺序，以及响应侧缺口。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260928-fo-browser.md",
+      "handles": {
+        "browserRun": "rt_20260928075623_d3a207a25f",
+        "materialRun": "rt_20260928061614_ee71af43b2"
+      },
+      "blocker": ""
+    },
+    {
+      "id": "slice-fo-response",
+      "skill": "web-env-patcher",
+      "objective": "从已有捕获抽出 /fo/ 响应形状，供离线桥按序回 200。不编造 body，不提交网络。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260928-fo-response.md",
+      "handles": {
+        "browserRun": "rt_20260928075623_d3a207a25f",
+        "manifest": "diagnostics/fo-response-manifest.json"
+      },
+      "blocker": "replay of another run's first 200 throws InvalidCharacterError; chain stops at fo=1"
+    },
+    {
+      "id": "slice-progress-review",
+      "skill": "web-env-patcher",
+      "objective": "只读复查 2026-09-28 补环境进度：哪些结论成立，下一刀不该是什么。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260928-progress-review.md",
+      "handles": {},
+      "blocker": "consumable /fo/ response is bound to the live request; host replay cannot supply it"
+    },
+    {
+      "id": "slice-direction-sources",
+      "skill": "web-env-patcher",
+      "objective": "按搜索技能搜集 /fo/ 多轮与响应绑定的公开资料，对照本地进度写方向。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260928-direction-sources.md",
+      "handles": {},
+      "blocker": "no public /fo/ codec; same-session envelope replay not yet tested"
+    },
+    {
+      "id": "slice-causal-observer-live",
+      "skill": "web-reverse",
+      "objective": "按 diagnostic-causal-observer 合同一次性在线采集：fresh urllib 材料 → exclusive claim → RuyiDOM --allow-network → record。保留 stop-search 与 proxy.type=0，不写业务事实。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260930-causal-observer-live.md",
+      "handles": {
+        "claimId": "90aa1f82-e1ee-447e-aeeb-2b9c0c865fb9",
+        "cliPid": 18944,
+        "sessionId": "a7e045b6cf194921bb229b6741e59b8b"
+      },
+      "blocker": null,
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-causal-observer-chain",
+      "skill": "web-reverse",
+      "objective": "在 refuse_host_enumeration 门内，只读已采集的 restricted causalTrace/causalFinal，分类 FO request→cf-chl-out response→首次 DOM 写→form/submit 或脱敏排障文案。不开新实验，不写 serverAccepted。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20260930-causal-observer-chain.md",
+      "handles": {
+        "claimId": "90aa1f82-e1ee-447e-aeeb-2b9c0c865fb9",
+        "sessionId": "a7e045b6cf194921bb229b6741e59b8b"
+      },
+      "blocker": "refuse_host_enumeration; complete-to-diagnostic; no form/submit; no new request-boundary",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-kernel-compare-20261003",
+      "skill": "web-reverse",
+      "objective": "只读对照：本地 causal-observer a7e045b6 与有头 Chromium headed-20261003。外部边界对齐。不迁移合同，不写 serverAccepted，不登记 browser fact，不做宿主枚举。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-kernel-compare.md",
+      "handles": {
+        "localSessionId": "a7e045b6cf194921bb229b6741e59b8b",
+        "chromiumHeadedRunId": "headed-20261003"
+      },
+      "blocker": "stop-search remains; headed integrity partial; hop 2-4 local cf-chl-out names unrecorded; opaque 9KB request gap not field-aligned",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-click-install-20261003",
+      "skill": "web-reverse",
+      "objective": "只改 __clickTs 安装：ChromeUtils.exportFunction 挂到内容窗口，空 catch 改记异常名。同一条 transport-fixed 的副本重跑一轮。不二次 claim，不改审查哈希，不写 serverAccepted。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-click-install.md",
+      "handles": {
+        "runner": "diagnostics/click-install-20261003/ruyidom_bridge.click-install.js",
+        "sessionId": "a5f1560cff34418a8594433549a87123",
+        "reviewedRunnerUntouched": "diagnostics/causal-observer-transport-fixed/ruyidom_bridge.causal-observer.transport-fixed.js"
+      },
+      "blocker": "ChromeUtils.exportFunction threw TypeError; __clickTs still missing; noform 3488; no cert document",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-chromium-trace-gap-20261003",
+      "skill": "web-reverse",
+      "objective": "只读分析 psa_solve 中 Chromium/V8Trace 产物，沿 web-reverse 执行面核对 browser fact、trace 覆盖边界、请求/响应与完整 solve 链缺口；不新开网络、不迁移合同、不写 serverAccepted。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-chromium-trace-gap.md",
+      "handles": {},
+      "blocker": "partial Chromium capture; FO body unavailable; no same-lease business readback",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-firefox-trace-gap-20261003",
+      "skill": "web-reverse",
+      "objective": "只读分析 psa_solve 中 Firefox/RuyiTrace 产物，沿 web-reverse 与 ruyi-reverse 执行面核对 browser fact、trace 覆盖边界、请求/响应与完整 solve 链缺口；不新开网络、不迁移合同、不写 serverAccepted。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-firefox-trace-gap.md",
+      "handles": {},
+      "blocker": "local RuyiDOM noform branch; localReproduced/serverAccepted/requestBoundaryAligned=false",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-node-env-gap-20261003",
+      "skill": "web-env-patcher",
+      "objective": "只读复核 Node/V8Trace 纯补环境缺口：首个真实执行边界、trace 能力缺口、可补 external-host 与不可推断项；不执行网络、不改合同或源码。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-node-env-gap.md",
+      "handles": {},
+      "blocker": "param-complete now selects performance.getEntries as first candidate; response/request boundary still absent and entry shape/timing/descriptor need Gecko evidence",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-ruyidom-node-handoff-20261003",
+      "skill": "web-env-patcher",
+      "objective": "只读整理 Firefox/RuyiDOM 到纯 Node 的可迁移 host facts、响应语义边界与同 session 输入缺口；不执行网络、不改合同或源码。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-ruyidom-node-handoff.md",
+      "handles": {},
+      "blocker": "RuyiDOM supplies behavioral contract only; opaque response/session envelope cannot be migrated as values",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-v8trace-settings-audit-20261003",
+      "skill": "web-env-patcher",
+      "objective": "审计 V8Trace profile 默认开关并用 param-complete 做本地 no-network 对照，确认 trace 缺口与首个可验证 host gap。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-v8trace-settings-audit.md",
+      "handles": {
+        "paramCompleteRun": "v8-20261003100221-c54ooe"
+      },
+      "blocker": "真实 response 不属于 Node trace；performance.getEntries 需先用 Gecko 事实补齐返回对象",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-performance-entries-extract-20261003",
+      "skill": "web-env-patcher",
+      "objective": "从已有 Firefox/RuyiDOM evidence 提取 performance.getEntries/getEntriesByType/PerformanceObserver 的真实调用、返回形状、字段、时序与 descriptor；不新开网络、不改 runner。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-performance-entries-fact.md",
+      "handles": {},
+      "blocker": "RuyiTrace proves Array return and field reads, but array contents, descriptor, and observer options are redacted/unavailable",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-node-performance-rerun-20261003",
+      "skill": "web-env-patcher",
+      "objective": "依赖 performance entries 提取结果，在同一 Node runner 做单变量 native-like patch，使用 param-complete 重跑并记录是否越过 IF；不打开真实网络、不改 serverAccepted。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-node-performance-rerun.md",
+      "handles": {
+        "getEntriesCanaryRun": "v8-20261003111529-qeznxd",
+        "topCanaryRun": "v8-20261003112439-lvq58g",
+        "domCanaryRuns": [
+          "v8-20261003112947-brzwm4",
+          "v8-20261003113333-kf3aaj",
+          "v8-20261003113705-ozl2lh",
+          "v8-20261003114712-z4l6s5",
+          "v8-20261003115013-erm6yx"
+        ],
+        "matchedMaterialRun": "v8-20261003121849-1ykah1"
+      },
+      "blocker": "getEntries/top/classList canaries move the boundary, but no FO boundary; same-source rerun changes free identifier to PQak3, indicating dynamic resource/VM/source-context gap",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-node-dynamic-context-20261003",
+      "skill": "web-env-patcher",
+      "objective": "审计同一 fresh source 中 PQak3/动态 eval/runProgram/跨 realm 生成来源，区分 resource loader、VM 输出和 host gap；不硬编码 PQak3，不开真实网络。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-node-dynamic-context.md",
+      "handles": {},
+      "blocker": "runProgram/eval producer ruled out as PQak3 source; Turnstile iframe realm and FO response/callback lifecycle remain to be migrated",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-node-turnstile-frame-20261003",
+      "skill": "web-env-patcher",
+      "objective": "只读验证 Turnstile iframe inline script、独立 realm 与 PQak3 读取；不回放 FO body、不改基线 runner、不写 serverAccepted。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-turnstile-frame-fact.md",
+      "handles": {
+        "frameCanaryRun": "v8-20261003152520-xgv5ln"
+      },
+      "blocker": "frame DOM/parent/message canary reaches PQak3 read but has no PQak3 define or FO response boundary",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-node-constructor-canary-20261004",
+      "skill": "web-env-patcher",
+      "objective": "在独立 iframe realm 离线 runner 中记录候选 constructor 调用及边界；不回放响应、不伪造 PQak3",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261004-node-progress.md",
+      "handles": {},
+      "blocker": "source-aligned mirror crosses synchronous constructor boundary but async IV/x/obfuscated method calls remain; no FO/PQak3",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-source-aligned-mirror-20261004",
+      "skill": "web-env-patcher",
+      "objective": "运行 source-aligned bridge/eval mirror canary，比较同步/异步边界；离线不回放 response",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261004-mirror-canary.md",
+      "handles": {},
+      "blocker": "global hooks cannot observe closure-local x; dynamic eval realm instrumentation required",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-realm-local-probe-20261004",
+      "skill": "web-env-patcher",
+      "objective": "独立动态 eval realm instrumentation canary，定位 closure-local x property/get/call 形态；不回放 FO body、不写 serverAccepted",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261004-realm-probe.md",
+      "handles": {
+        "runner": "runtime/realm-probe-canary.js",
+        "result": "runtime/realm-probe-result.json",
+        "frameSha256": "05102bb5158cd0ba9a41329021f124cad8778a9a556db9a0e802b11c07115262"
+      },
+      "blocker": "accepted closed refuse_host_enumeration gate; no-browser-fact: Timeout.It/Q attachShadow on HTMLScriptElement lacks a matching browser-fact receipt; rt_20261005054520_0e24cdbc08 DOMTrace Q attachShadow receiver is HTMLBodyElement and returns ShadowRoot; gate ready, cert-document request boundary, and independent readback are absent; 纯node补环境未完成; environmentPatchGate stays not-ready",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-receiver-static-review-20261005",
+      "skill": "web-env-patcher",
+      "objective": "只读核对既有 runner 的 DOM 接收者模型；不执行目标、不补字段、不改验收或调度闸门",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\receiver-static-review-20261005.md",
+      "handles": {},
+      "blocker": "runner model pollution is statically confirmed; causal link to It receiver remains unproven",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-firefox-trace-plan-20261005",
+      "skill": "web-reverse",
+      "objective": "核对 Firefox trace 实际设置和迁移检查；不启动 capture",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\firefox-trace-plan-20261005.md",
+      "handles": {},
+      "blocker": "configuration audit complete; migration applied, no capture started",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-chromium-trace-plan-20261005",
+      "skill": "web-reverse",
+      "objective": "核对 Chromium trace 实际设置与 partial capture 缺口；不启动 capture",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\chromium-trace-plan-20261005.md",
+      "handles": {},
+      "blocker": "configuration audit complete; wrapper combination gap remains",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-firefox-receiver-provenance-20261005",
+      "skill": "web-reverse",
+      "objective": "fresh source-aligned Firefox/RuyiTrace receiver provenance capture: creation/query/attachShadow and response callback window; no adjacent host enumeration",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\firefox-receiver-provenance-20261005.md",
+      "handles": {
+        "runId": "rt_20261005125421_1d84c46dcd",
+        "receipt": "evidence/web/ruyitrace/rt_20261005125421_1d84c46dcd/receipt.json"
+      },
+      "blocker": "same-lease business readback remains absent; do not write serverAccepted",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-fresh-trace-compare-20261005",
+      "skill": "web-env-patcher",
+      "objective": "对照已采集 Firefox trace 与既有本地诊断的 source/realm/receiver/submit；仅取证分析，不执行目标或补丁",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\trace-compare-20261005.md",
+      "handles": {},
+      "blocker": "same-run body/div provenance established; source hash differs from local; trace coverage restricted; dispatcher remains blocked",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-jscall-detail-decode-20261005",
+      "skill": "web-reverse",
+      "objective": "解码现有 fresh JSCall detail 为窄语义 receipt；不执行目标脚本，不采新 trace",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\jscall-detail-decode-20261005.md",
+      "handles": {},
+      "blocker": "4 target calls decoded and joined within each process; native options identity-only; historical local provenance still absent",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-canonical-receiver-pair-20261005",
+      "skill": "web-env-patcher",
+      "objective": "对齐旧 browser baseline 与本地 iframe source hash，核对同版本 body/receiver 来源；纯静态证据处理",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\canonical-receiver-pair-20261005.md",
+      "handles": {},
+      "blocker": "original source and call site aligned after HTML prefix correction; dynamic local receiver origin missing; dispatcher blocked",
+      "conclusion": "fact"
+    },
+    {
+      "id": "slice-local-receiver-origin-audit-20261005",
+      "skill": "web-env-patcher",
+      "objective": "审计现有同源本地输出与静态数据流，确认 receiver 来源能否在不运行目标的条件下闭合；禁止新实验或 gate 修改",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\local-receiver-origin-audit-20261005.md",
+      "handles": {},
+      "blocker": "existing outputs lack dynamic receiver origin; computed x property unresolved; required local probe forbidden by current refuse_host_enumeration action",
+      "conclusion": "blocked"
+    },
+    {
+      "id": "slice-blocker-review-20261020",
+      "skill": "web-reverse",
+      "objective": "复核 last-copy 与现有证据，定位实际卡点和可证伪方向；遵守 blocked 门禁，不执行目标",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261020-blocker-review.md",
+      "handles": {},
+      "blocker": "refuse_host_enumeration; missing local receiver provenance; no new experiment allowed",
+      "conclusion": "fact",
+      "summary": "noform is a local regex label, not a server rejection; separate curl challenge execution, RuyiDOM post-FO diagnostic, and Node receiver typing failures; earliest causal branch unknown"
+    },
+    {
+      "id": "slice-receiver-investigation-20261020",
+      "skill": "web-reverse",
+      "objective": "blocked 拍内静态追踪 receiver 来源并核对正式诊断入口；不执行目标或修改门禁",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261020-receiver-investigation.md",
+      "handles": {},
+      "blocker": "dynamic receiver-origin observation forbidden by current refuse_host_enumeration; no matching existing one-shot diagnostic entry",
+      "conclusion": "fact",
+      "summary": "mirror factory loses tag and forces SCRIPT typing; realms share documentStub; frame state restoration lacks finally; historical receiver origin remains unobserved"
+    },
+    {
+      "id": "slice-receiver-provenance-run-20261020",
+      "skill": "web-env-patcher",
+      "objective": "用户明确授权的单次固定输入断网 receiver provenance 诊断；保持 dispatcher blocked，不扩展宿主枚举",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261020-receiver-provenance-run.md",
+      "handles": {},
+      "blocker": "BODY.attachShadow callable/return contract absent; live dispatcher unchanged",
+      "conclusion": "fact",
+      "summary": "Same-source receiver dynamically joined to document.body; typing-only control retains TypeError and FO=0; 12 factory and 12 offline guard assertions pass; inputs and protected files unchanged"
+    },
+    {
+      "id": "slice-shadowroot-contract-20261020",
+      "skill": "web-env-patcher",
+      "objective": "提取同源 BODY.attachShadow/ShadowRoot 真实行为合同；按正式规则验证缺口，不绕过 hygiene 门禁",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261020-shadowroot-contract.md",
+      "handles": {},
+      "blocker": "mode unavailable; hygiene gate blocks target behavior correction; no boundary-moved evidence",
+      "conclusion": "fact",
+      "summary": "Canonical same-root identity joins prove three appendChild and six id queries with creation/tree provenance; bounded 41 assertions pass but target not run or solved"
+    },
+    {
+      "id": "slice-shadow-options-static-20261020",
+      "skill": "web-env-patcher",
+      "objective": "静态追踪 attachShadow options 来源，核实 mode 是否必要阻塞；禁止运行目标或绕门禁",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261020-shadow-options-static.md",
+      "handles": {},
+      "blocker": "precise dual-condition recorded but dispatcher still refuse_host_enumeration; no permitted target execution action",
+      "conclusion": "fact",
+      "summary": "Static table recovery proves same-call options.mode closed; dualCondition formally recorded facts revision 4 to 5, hygiene/business axes unchanged; next remains blocked"
+    },
+    {
+      "id": "slice-shadowroot-repair-20261020",
+      "skill": "web-env-patcher",
+      "objective": "用户明确正式授权：BODY.attachShadow 单 surface 修复与固定输入断网复跑；其他门禁及业务验收保持",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261020-shadowroot-repair.md",
+      "handles": {},
+      "blocker": "ShadowRoot empty before query; null.appendChild in zF",
+      "conclusion": "fact",
+      "summary": "Formal scoped receipt executed-hold; baseline/patched each once: original attachShadow TypeError removed, closed root created, next null.appendChild; 38 surface and 4 adapter tests pass; no send/FO/business boundary"
+    },
+    {
+      "id": "slice-shadowroot-existence-20261020",
+      "skill": "web-env-patcher",
+      "objective": "same-surface existence：返回的 ShadowRoot 在首次查询前收不到已证 append。只补这一属性，不改 Node env.js，不打开 createElement 新表面，不写业务完成轴。",
+      "status": "blocked",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261020-shadowroot-existence.md",
+      "handles": {},
+      "blocker": "appendChild on the returned root already keeps the child; patched log never called it. Document.createElement is the first missing construction and is a different surface.",
+      "conclusion": "blocked",
+      "summary": "No code change. Returned ShadowRoot append exists; call did not land before the null #id query. createElement left closed. Gate not-ready. serverAccepted not written."
+    },
+    {
+      "id": "slice-shadowroot-rerun-20261020",
+      "skill": "web-env-patcher",
+      "objective": "rerun_host_baseline：同一条 RuyiDOM runner 重跑一次，只记请求边界类。不新增字段，不改 runner，不打开 createElement。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261020-shadowroot-rerun.md",
+      "handles": {
+        "ruyidomRunId": "ra86baf771dd24b9e803f"
+      },
+      "blocker": "same runner, no code change; no page FO and no cert document POST",
+      "conclusion": "fact",
+      "summary": "stable-transport hash unchanged, allowNetwork once. certDocumentPost=no, forms=0, submits=0, foCount=0. Not a business acceptance."
+    },
+    {
+      "id": "slice-grok-latest-audit-20261020",
+      "skill": "web-reverse",
+      "objective": "用户点名 Grok 最新卡点判断审计；goal 保持暂停，只读核查不执行 target",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261020-grok-latest-judgment-audit.md",
+      "handles": {},
+      "blocker": null,
+      "conclusion": "fact",
+      "summary": "Latest 22:20 receipts compare request bodyBytes with responseBytes, creating false orchestrate classDelta; online runs inject Sep30 materials; principal progress valid but separate from Node ShadowRoot; no target executed"
+    },
+    {
+      "id": "slice-orchestration-causal-audit-20261020",
+      "skill": "web-reverse",
+      "objective": "只读归因审计：编排、逆向主线、模型责任分离；目标保持暂停",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261020-orchestration-causal-audit.md",
+      "handles": {},
+      "blocker": null,
+      "conclusion": "fact",
+      "summary": "Read-only causal audit complete: direct execution mistakes amplified by unvalidated semantic facts and underscoped execution receipts; no controlled evidence for model-family inferiority; preserve empirical reverse chain"
+    },
+    {
+      "id": "slice-method-model-causal-audit-20261020",
+      "skill": "web-reverse",
+      "objective": "只读归因审计：编排、逆向主线、模型责任分离；目标保持暂停",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261020-method-model-causal-audit.md",
+      "handles": {},
+      "blocker": null,
+      "conclusion": "fact",
+      "summary": "Read-only causal audit complete: direct execution mistakes amplified by unvalidated semantic facts and underscoped execution receipts; no controlled evidence for model-family inferiority; preserve empirical reverse chain"
+    },
+    {
+      "id": "slice-fix-transport-d70bce28-20261103",
+      "skill": "web-reverse",
+      "objective": "fix_transport: TLS/H2/UA/proxy so ruyijs turnstile-host GET completes; do not change algorithm",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "evidence/fix-transport-d70bce28-20261103.json",
+      "handles": {
+        "decisionId": "d70bce280fc77f55c51e43f52dee0656",
+        "sessionId": "01a19ac1-28c9-7f60-bb3a-4af694731647",
+        "handle": "01a19ac1-28c9-7f60-bb3a-4af694731647-fix-transport-d70bce28",
+        "beforeRunId": "rj_20261102204718_e46346d4",
+        "afterRunId": "rj_20261102211143_61a75afb",
+        "browserRunId": "rt_20261102184003_209bfef648",
+        "frozenLiveEmit": "rj_20261102191503_7445d1cb"
+      },
+      "blocker": "named turnstile GET now 200; remaining GET 0 is brunhild.challenges.cloudflare.com /cdn-cgi/challenge-platform/; cert-document POST still 0",
+      "summary": "Restored pinned ruyijs_brotli.dll so oneshot H2 br decode works. Named turnstile-host GET 200/200/401/200. FO POST 200x3. cert POST 0. host classify not run. firstDivergence stays transport."
+    },
+    {
+      "id": "slice-planner-fix-transport-73c56bf2-20261103",
+      "skill": "reverse-planner",
+      "objective": "Document finished fix_transport: named turnstile GET now 200 after brotli restore; cert POST still 0; do not re-run tools",
+      "status": "done",
+      "conclusion": "fact",
+      "evidence": "evidence/planner-fix-transport-73c56bf2-20261103.json",
+      "handles": {
+        "decisionId": "73c56bf2bafe47aacace52ec5f0ee4b8",
+        "sessionId": "01a19ac1-28c9-7f60-bb3a-4af694731647",
+        "handle": "01a19ac1-28c9-7f60-bb3a-4af694731647-planner-73c56bf2",
+        "afterRunId": "rj_20261102211143_61a75afb",
+        "beforeRunId": "rj_20261102204718_e46346d4",
+        "frozenLiveEmit": "rj_20261102191503_7445d1cb",
+        "browserRunId": "rt_20261102184003_209bfef648",
+        "classExecuteHandle": "01a19ac1-28c9-7f60-bb3a-4af694731647-fix-transport-d70bce28",
+        "plannerReceipt": "evidence/planner/73c56bf2bafe47aacace52ec5f0ee4b8.json"
+      },
+      "blocker": "named turnstile GET restored; ruyijs still has no certificate-document POST after GET_403; remaining GET 0 matches browser brunhild",
+      "summary": "firstDivergence transport→challenge-state (rev 75). Named turnstile GET 200/200/401/200. FO POST 200x3. cert POST=0. challengePhase stays stuck. Not execute-class for brunhild. Not needs-human."
+    },
+    {
+      "id": "slice-hold-challenge-c13aa134-20261103",
+      "skill": "reverse-planner",
+      "objective": "Document hold_challenge: challengePhase=stuck, firstDivergence=challenge-state after brotli transport restore; cert POST still 0; do not respin",
+      "status": "done",
+      "conclusion": "blocked",
+      "evidence": "evidence/hold-challenge-c13aa134-20261103.json",
+      "handles": {
+        "decisionId": "c13aa134cb5a2168d544982472d0a311",
+        "sessionId": "01a19ac1-28c9-7f60-bb3a-4af694731647",
+        "handle": "01a19ac1-28c9-7f60-bb3a-4af694731647-planner-c13aa134",
+        "afterRunId": "rj_20261102211143_61a75afb",
+        "beforeRunId": "rj_20261102204718_e46346d4",
+        "frozenLiveEmit": "rj_20261102191503_7445d1cb",
+        "browserRunId": "rt_20261102184003_209bfef648",
+        "classExecuteHandle": "01a19ac1-28c9-7f60-bb3a-4af694731647-fix-transport-d70bce28",
+        "plannerReceipt": "evidence/planner/c13aa134cb5a2168d544982472d0a311.json"
+      },
+      "blocker": "ruyijs 路径仍无 certificate-document POST（GET /cert/ 403 之后仍为 0）；named turnstile GET 已恢复；剩余 GET 0 是 brunhild 且浏览器 oracle 同有；验证链无新外部事实。",
+      "summary": "hold_challenge stop recorded. facts rev 75 unchanged. leavePathsNotTaken: firstDivergence change, humanActionPending, resource-drift. Not needs-human. Not execute-class."
+    },
+    {
+      "id": "slice-pair-403-hold-blocked-20261103",
+      "skill": "web-reverse",
+      "objective": "Pair rj_20261102211143 vs browser oracle at GET /cert/ 403 -> missing cert POST; write leave-hold fact only if legal; then next.",
+      "status": "done",
+      "conclusion": "blocked",
+      "evidence": "evidence/pair-403-hold-blocked-20261103.json",
+      "handles": {
+        "ruyijsRunId": "rj_20261102211143_61a75afb",
+        "browserRunId": "rt_20261102184003_209bfef648",
+        "frozenLiveEmit": "rj_20261102191503_7445d1cb",
+        "pairingEvidence": "evidence/pair-403-missing-cert-post-20261103.json",
+        "holdDecisionId": "1dedebe04ef8d1c9cab8240da13cfad5",
+        "sessionId": "01a19ac1-28c9-7f60-bb3a-4af694731647"
+      },
+      "blocker": "pairing recommendedFact=null (option D); no named host miss/throw; no humanActionPending click target; FO/cert are outputs not resource-drift; next stays hold_challenge blocked.",
+      "summary": "Pairing sha f63eeda1 option D. facts rev 75 unchanged. two next agree hold_challenge blocked digest 9e1590b0. Not claimed. Not invented leave-hold."
+    }
+  ],
+  "turnGate": "blocked",
+  "humanRequired": false,
+  "dispatcher": "schedule",
+  "goalComplete": false,
+  "schedule": {
+    "schema": "reverse-schedule-action.v1",
+    "task": "D:\\reverse_ENV\\workspace\\psa_solve",
+    "skill": "reverse-planner",
+    "action": "hold_challenge",
+    "turnGate": "blocked",
+    "reason": "hold_challenge 的证据没有变化，不再把同一动作派成 run。",
+    "humanRequired": false,
+    "processAnalysis": {
+      "stoppingGate": "hold_challenge",
+      "missingEvidence": "hold_challenge 的证据没有变化，不再把同一动作派成 run。",
+      "goalComplete": false
+    },
+    "evidencePointers": {
+      "case": "web-case.json",
+      "facts": "contracts/auto-decision-facts.json",
+      "receipts": "contracts/receipts.json",
+      "planner": "evidence/planner/c13aa134cb5a2168d544982472d0a311.json"
+    },
+    "decisionId": "1dedebe04ef8d1c9cab8240da13cfad5",
+    "decisionKey": "9006284fb7a5bdb7241ad3a94e61e2093b770d13785120725cb1c66d4f138c42",
+    "inputDigest": "9e1590b03d9534df7dfd7e80c5eb2c6814fe3bcd682020518e1eaa499cbec52f",
+    "sessionId": "01a19ac1-28c9-7f60-bb3a-4af694731647"
+  },
+  "legacyDispatch": {
+    "action": "ruyijs_parameter_analysis",
+    "skill": "web-reverse",
+    "inputDigest": "486dcaa8bfd14a5bf4aeec692c00286a285aba1c54b34c53b20bf7628ecd4f25"
+  },
+  "legacyPlannerReceipts": [
+    "evidence/planner-environment-patch-20261102.json"
+  ],
+  "scheduleDispatch": {
+    "action": "hold_challenge",
+    "skill": "reverse-planner",
+    "inputDigest": "9e1590b03d9534df7dfd7e80c5eb2c6814fe3bcd682020518e1eaa499cbec52f",
+    "decisionId": "c13aa134cb5a2168d544982472d0a311",
+    "sessionId": "01a19ac1-28c9-7f60-bb3a-4af694731647",
+    "status": "finished",
+    "record": {
+      "schema": "reverse-schedule-action.v1",
+      "task": "D:\\reverse_ENV\\workspace\\psa_solve",
+      "skill": "reverse-planner",
+      "action": "hold_challenge",
+      "turnGate": "run",
+      "reason": "验证链没有新的外部事实。停止重复求解。要离开：改 firstDivergence，写 humanActionPending，或把资源失配改成 resource-drift。不得把 challengePhase 改回空来再猜同一道题。",
+      "humanRequired": false,
+      "processAnalysis": {
+        "stoppingGate": "hold_challenge",
+        "missingEvidence": "验证链没有新的外部事实。停止重复求解。要离开：改 firstDivergence，写 humanActionPending，或把资源失配改成 resource-drift。不得把 challengePhase 改回空来再猜同一道题。",
+        "goalComplete": false
+      },
+      "evidencePointers": {
+        "case": "web-case.json",
+        "facts": "contracts/auto-decision-facts.json",
+        "receipts": "contracts/receipts.json",
+        "planner": "evidence/planner/73c56bf2bafe47aacace52ec5f0ee4b8.json"
+      },
+      "handoff": {
+        "executor": "subagent",
+        "skill": "reverse-planner",
+        "objective": "规划者处理动作 hold_challenge（类规则技能 web-reverse）。缺口：验证链没有新的外部事实。停止重复求解。要离开：改 firstDivergence，写 humanActionPending，或把资源失配改成 resource-drift。不得把 challengePhase 改回空来再猜同一道题。。只改本任务的事实、文档或 slices，并写规划回执。",
+        "evidencePointers": {
+          "case": "web-case.json",
+          "facts": "contracts/auto-decision-facts.json",
+          "receipts": "contracts/receipts.json",
+          "planner": "evidence/planner/73c56bf2bafe47aacace52ec5f0ee4b8.json"
+        },
+        "outputContract": "Update only this task's facts, documents, or slices, and write one reverse-planner-resolution.v1 receipt on an evidence pointer. status is resolved, needs-human, or execute-class. needs-human only when the user must act. Do not choose the next action or call another skill.",
+        "mustNotChooseNextAction": true,
+        "decisionId": "c13aa134cb5a2168d544982472d0a311",
+        "inputDigest": "9e1590b03d9534df7dfd7e80c5eb2c6814fe3bcd682020518e1eaa499cbec52f",
+        "claimRequired": true
+      },
+      "decisionId": "c13aa134cb5a2168d544982472d0a311",
+      "decisionKey": "4117d8b2c511522d04718760d63b89ae9a4d7ab229385c305287419433e336c3",
+      "inputDigest": "9e1590b03d9534df7dfd7e80c5eb2c6814fe3bcd682020518e1eaa499cbec52f",
+      "sessionId": "01a19ac1-28c9-7f60-bb3a-4af694731647"
+    },
+    "claimToken": "4ca0d95b4f5643b1e61030cb16780000b13d8c9b00764df017de4299977d210e",
+    "handle": "01a19ac1-28c9-7f60-bb3a-4af694731647-planner-c13aa134",
+    "evidence": "evidence/planner/c13aa134cb5a2168d544982472d0a311.json"
+  },
+  "dispatcherDecisionId": "1dedebe04ef8d1c9cab8240da13cfad5",
+  "dispatcherSessionId": "01a19ac1-28c9-7f60-bb3a-4af694731647"
+}

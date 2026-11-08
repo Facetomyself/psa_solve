@@ -1,0 +1,18 @@
+{
+  "schema": "local-receiver-origin-audit.v1",
+  "date": "2026-10-05",
+  "status": "incomplete",
+  "dynamicReceiverOrigin": "unproven",
+  "staticForcedFactoryType": "HTMLScriptElement",
+  "existingObservedLabel": "HTMLScriptElement",
+  "browserPairedReceiver": "HTMLBodyElement",
+  "computedKeyResolution": "missing",
+  "localIdentityFields": ["receiverEqualsDocumentBody", "tagName", "ownerDocument", "stableIdentity", "creationProvenance"],
+  "nodeCoreSources": ["runtime/run.js", "runtime/code.js", "runtime/lib/host-dom.js", "runtime/lib/transport.js"],
+  "networkPipeline": "source-present-local-boundary-not-observed",
+  "parity": "missing",
+  "readback": "missing",
+  "contract": "refuse_host_enumeration",
+  "nextAction": "record-only-until-explicitly-permitted-local-dynamic-capture",
+  "executed": false
+}

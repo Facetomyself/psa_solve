@@ -1,0 +1,28 @@
+{
+  "schema": "transport-cause-probe.v1",
+  "at": "2026-10-20T07:58:41Z",
+  "egress": "loopback-7897",
+  "impersonate": "firefox",
+  "resolvedProfile": "firefox147",
+  "serverAccepted": false,
+  "rows": [
+    {
+      "label": "default-h2",
+      "status": 403,
+      "httpVersion": 3,
+      "bodyLen": 5790,
+      "titleLen": 16,
+      "pageKind": "challenge",
+      "mitigatedHeader": true
+    },
+    {
+      "label": "explicit-h3",
+      "status": 403,
+      "httpVersion": 3,
+      "bodyLen": 5790,
+      "titleLen": 16,
+      "pageKind": "challenge",
+      "mitigatedHeader": true
+    }
+  ]
+}

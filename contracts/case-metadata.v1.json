@@ -1,0 +1,15 @@
+{
+  "schema": "case-metadata.v1",
+  "caseId": "psa-cf-5s-shield-20260815",
+  "projectRoot": "D:\\reverse_ENV\\workspace\\psa_solve",
+  "caseClass": "challenge",
+  "currentHead": "22b75cb06dd08f6b287810aae1af35a6cd148a75",
+  "contractRevision": 12,
+  "contractRefs": {
+    "workflowArtifacts": "contracts/workflow-artifacts.v1.json",
+    "parameterLineage": "contracts/request-parameter-lineage.v1.json",
+    "riskControlPlan": null,
+    "riskControlReceipt": null
+  },
+  "updatedAt": "2026-11-02T05:39:47Z"
+}

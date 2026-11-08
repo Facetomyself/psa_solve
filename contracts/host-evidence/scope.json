@@ -1,0 +1,19 @@
+{
+  "adapter": "ruyijs-live-emit-v1",
+  "sessionId": "01a19ac1-28c9-7f60-bb3a-4af694731647",
+  "property": "certificate-document-post",
+  "ruyijsRun": {
+    "path": "D:\\reverse_ENV\\workspace\\psa_solve\\evidence\\web\\ruyijs\\rj_20261102191503_7445d1cb\\evidence-run.json",
+    "sha256": "9d337de92bbb11f126c9bd68ae58efd669eacf6e2999c0f325075dc698a59142"
+  },
+  "targetHosts": [
+    "www.psacard.com"
+  ],
+  "targetPathPrefixes": [
+    "/cert/"
+  ],
+  "caseId": "psa-cf-5s-shield-20260815",
+  "objectiveSha256": "0f722f3dd9e2dba36e93c5c0f4448f14604dedc4ca384ab2762d1aaf5052a572",
+  "schema": "web-host-scope.v1",
+  "scopeId": "8c0b2b72653544af763d685680d16600c796ead3a591e9b4ef3a6b39a3dd157c"
+}

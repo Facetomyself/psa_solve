@@ -1,0 +1,106 @@
+{
+  "schema": "causal-observer-build-receipt.v1",
+  "status": "static-verified-not-authorized",
+  "source": "diagnostics/clean-baseline-20260930/ruyidom_bridge.clean.js",
+  "sourceSha256": "32cef74e67164611750ac2870546a2a4283f8b519ec4756e3a8f949fa3c0cd94",
+  "sourceBytes": 86229,
+  "output": "diagnostics/causal-observer-20260930/ruyidom_bridge.causal-observer.js",
+  "outputSha256": "9403ccc17eb77f5abca813582371c4927f66e51e334a77a93a29f5b4974acfb1",
+  "outputBytes": 91153,
+  "sourceUnchangedAfterBuild": true,
+  "edits": [
+    {
+      "anchorSha256": "27a07c5a8cecd9f97906b805ecda2d458ea1d2376d47066bda5b4a8a871a09d4",
+      "replacementSha256": "498988428367f203edffd1dbe4338981d19254e059c927acbf4886e7a712a9fc",
+      "anchorBytes": 32,
+      "replacementBytes": 62
+    },
+    {
+      "insertAfterSha256": "4d57279dcaa5d80199a5194fbbf7547805caaf5364e2101471fc6e3982d6d7de",
+      "insertedHelpers": 9,
+      "insertedBytes": 3569
+    },
+    {
+      "anchorSha256": "20a6f73813df0b49aa611f6d6b27c2fe836ad31b6e080f8773061f41bda907e3",
+      "replacementSha256": "b1d0f140fa7b04f1a37eead82cd59aadfce38b7594cb492d0338edbc75dc31ed",
+      "anchorBytes": 107,
+      "replacementBytes": 163
+    },
+    {
+      "anchorSha256": "78811791e565dcb915d26978ae9dffc521832d9e4e7fea22eb3d1534a2f07e72",
+      "replacementSha256": "c6cc94c5460b2edb4865817e015980dd32bd1ec8f6bde892148207fa6e0455a6",
+      "anchorBytes": 88,
+      "replacementBytes": 268
+    },
+    {
+      "anchorSha256": "537abad42e7b37e507fe441ae5e521c47c840d7857f181c6cddf52812a6cc53c",
+      "replacementSha256": "20ca67213491e96a30892ce94d121701ee2ce6da7fa773f0b631e3a4648cb568",
+      "anchorBytes": 682,
+      "replacementBytes": 744
+    },
+    {
+      "anchorSha256": "f3cc86e96e651ab1a374aee360f47c37fbaf5927bc3e6e1baeff3e74a0148355",
+      "replacementSha256": "456af03c2a1ce6d0315fd4e4ad408e063fbfd79cc12d68369b0416cfde6efdff",
+      "anchorBytes": 40,
+      "replacementBytes": 231
+    },
+    {
+      "anchorSha256": "f50a41d5e7ad950c0aa01c844f7e1d047a78abc0d7faf8a81113bc44b9d875f8",
+      "replacementSha256": "bc3a1d33b4b4bf0cc2cfa79663d05e0ad13a097ca98beedb6b9d265744a438c3",
+      "anchorBytes": 196,
+      "replacementBytes": 221
+    },
+    {
+      "anchorSha256": "f5205c2c724c426b2c8597ea4b9c18da6c86757f00a6e3d4dde76169930f3330",
+      "replacementSha256": "1a12e5d7a9b4abea60807827700822177fdebcf247c61ddbb98b5ccd109919c8",
+      "anchorBytes": 2004,
+      "replacementBytes": 2523
+    },
+    {
+      "anchorSha256": "737a7cf81458951e80ee772fcbf8bfd122e4e495268e753c6d0d0239f7d3a6bd",
+      "replacementSha256": "1703f76b143b7b9b8b4e36fe46ed1d80abdbd8f12abc39266369503adcc979c3",
+      "anchorBytes": 191,
+      "replacementBytes": 306
+    }
+  ],
+  "unifiedDiff": {
+    "addedLines": 17,
+    "removedLines": 8,
+    "sha256": "51d8bf9400c30fec53edc92f085bdac8b05afc31895ef42c5fdd17dd59ed7c38"
+  },
+  "staticChecks": {
+    "outerNodeCheck": "pass",
+    "embeddedNodeCheck": "pass",
+    "helperFixtureNodeCheck": "pass"
+  },
+  "fixture": {
+    "schema": "causal-observer-synthetic-fixtures.v1",
+    "networkUsed": false,
+    "targetExecuted": false,
+    "expectedEventKinds": [
+      "request",
+      "response",
+      "document.write",
+      "createElement"
+    ],
+    "knownAnswerSha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+    "redactedFinal": {
+      "title": "Troubleshooting {number} {email}",
+      "text": "Visit {url} token {token} for support.",
+      "textLen": 79,
+      "textSha256": "a9ca93a22fc2987d272f444e533c70072792e4629990c17a7b47809d0eb6331a"
+    },
+    "sensitiveLeakCheck": "pass"
+  },
+  "constraints": {
+    "networkUsed": false,
+    "targetExecuted": false,
+    "factsChanged": false,
+    "receiptsChanged": false,
+    "bodyReplacementAdded": false,
+    "responseReplayAdded": false,
+    "environmentGetterAdded": false,
+    "vmOrOpcodeInstrumentationAdded": false,
+    "realRunAuthorized": false
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema": "psa-v8trace-bottleneck-summary.v1",
+  "slice": "20261003-v8trace-bottleneck",
+  "caseId": "psa-cf-5s-shield-20260815",
+  "status": "partial",
+  "cli": "D:\\reverse_ENV\\mcp\\v8trace-mcp\\dist\\cli.js",
+  "runtime": {
+    "patchedNode": "ready",
+    "chromiumLock": "ready",
+    "chromiumLaunch": "ready-with-caveats",
+    "chromiumLaunchReason": "lock-ready; elevated parent de-elevate plus worker mkdir capture/ still break CLI-owned capture-start; 152 locale pak not lock-blessed"
+  },
+  "handles": {
+    "v8traceRunId": "v8-20261003021537-lhw7em",
+    "chromiumRunId": "c266ff812e0facbf7",
+    "chromiumRunIdInteractiveFailed": "c0f25fc8705f7376f",
+    "chromiumRunIdHeadlessFailed": "c9aa53202a6309169",
+    "chromiumRunIdPostLocaleWorkerFailed": "cac97b133cb5c4acc"
+  },
+  "historical": [
+    {"runId": "v8-20260815070607-0a39cz", "records": 1415, "miss": 37, "throw": 1, "call": 14, "createElementEnvcall": 0, "xhrCount": 0},
+    {"runId": "v8-20260815071000-g8sotl", "records": 1418, "miss": 37, "throw": 1, "call": 14, "createElementEnvcall": 0, "xhrCount": 0},
+    {"runId": "v8-20260815075849-x7h32q", "records": 1421, "miss": 37, "throw": 1, "call": 14, "createElementEnvcall": 0, "xhrCount": 0}
+  ],
+  "newPatchedNode": {
+    "runId": "v8-20261003021537-lhw7em",
+    "profile": "challenge-fast",
+    "records": 1421,
+    "miss": 39,
+    "throw": 1,
+    "throwProp": "TypeError: T[rv(...)][rv(...)] is not a function",
+    "call": 14,
+    "createElementEnvcall": 0,
+    "formSubmitEnvcall": 0,
+    "xhrCount": 0,
+    "requestCall": "node:net open only",
+    "stubDom": true,
+    "cannotExplain3488": true
+  },
+  "chromiumCapture": {
+    "url": "https://www.psacard.com/cert/143963534/psa",
+    "preset": "env-hooks",
+    "durationSeconds": 90,
+    "gated": false,
+    "runId": "c266ff812e0facbf7",
+    "mode": "headless",
+    "interactive": "failed-no-window",
+    "headlessRetry": "collected-partial",
+    "stopReason": "capture-byte-budget",
+    "eventCount": 3185,
+    "indexedRecords": 3074,
+    "partitions": {"http": 159, "script": 266, "env": 2620, "console": 29},
+    "indexed": true,
+    "receipt": false,
+    "gates": {
+      "runtime-hash": "pass",
+      "evidence-index": "pass",
+      "evidence-receipt": "pending"
+    },
+    "certDocument": {"method": "GET", "status": 403, "cfMitigated": true},
+    "formBranchObserved": false,
+    "createElementForm": 0,
+    "submitEnvcall": 0,
+    "documentPost": 0,
+    "cfChlOut": 0,
+    "foXhr": [
+      {"host": "www.psacard.com", "pathClass": "/cdn-cgi/challenge-platform/h/b/fo", "status": 200, "encodedDataLength": 413},
+      {"host": "challenges.cloudflare.com", "pathClass": "/cdn-cgi/challenge-platform/h/b/fo", "status": 200, "encodedDataLength": 925},
+      {"host": "challenges.cloudflare.com", "pathClass": "/cdn-cgi/challenge-platform/h/b/fo", "status": 200, "encodedDataLength": 163}
+    ],
+    "createElementH2": [
+      "2026-10-03T02:33:49.256Z",
+      "2026-10-03T02:33:49.277Z"
+    ],
+    "h2RelativeToFo": "before-first-FO ~T+1.3s interstitial UI, not 10s diagnostic after 3488",
+    "pathClass": "HeadlessChrome turnstile XHR FO",
+    "integrityConclusion": "partial",
+    "secondaryWorkerBug": "mkdir capture/ then collector requires new directory",
+    "elevatedDeElevate": "chrome parent exits 0 before CDP unless --do-not-de-elevate shim"
+  },
+  "stopSearch": true,
+  "requestBoundaryMoved": false,
+  "serverAccepted": false,
+  "factSuggestion": {
+    "doNotSetBrowserFactPlane": "v8trace-chromium",
+    "optional": "record chromiumCapture=partial-headless-no-form; kernelCompare unsatisfied"
+  },
+  "notes": "D:\\reverse_ENV\\workspace\\psa_solve\\agent-notes\\20261003-v8trace-bottleneck.md"
+}

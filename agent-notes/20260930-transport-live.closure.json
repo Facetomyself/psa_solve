@@ -1,0 +1,124 @@
+{
+  "schema": "transport-two-phase-closure.v1",
+  "status": "done-transport-fixed-business-still-stuck",
+  "phases": [
+    {
+      "runId": "e0b71e462e87439696301f2b211a7ea1",
+      "startedAt": "2026-09-30T11:10:09.204162Z",
+      "endedAt": "2026-09-30T11:10:40.021323Z",
+      "exitCode": 0,
+      "argvSha256": "8ecf4b99293fdf8770e0769b0bbea2b1ef880950f66f65a2041e07c31ca2c84e",
+      "rawChecks": [
+        {
+          "path": "evidence/web/transport-diagnostic/e0b71e462e87439696301f2b211a7ea1/engine-stdout.json",
+          "sha256": "10715c7c2b8831624f50ff08a573d222f93af739ab7df2709ff0a09376d4531d",
+          "bytes": 26595,
+          "verified": true
+        },
+        {
+          "path": "evidence/web/transport-diagnostic/e0b71e462e87439696301f2b211a7ea1/engine-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
+          "verified": true
+        },
+        {
+          "path": "evidence/web/transport-diagnostic/e0b71e462e87439696301f2b211a7ea1/operation-binding.json",
+          "sha256": "2dc4cd953fefd9223dac45cc70e85437cde61164e8916e03ce71dee375d54127",
+          "bytes": 2483,
+          "verified": true
+        },
+        {
+          "path": "evidence/web/transport-diagnostic/e0b71e462e87439696301f2b211a7ea1/gecko-transport.log.child-1.moz_log",
+          "sha256": "f3058ec9b0aaff8c62d57c186e8db7eb399a8a0879e27d321384920ad6a87593",
+          "bytes": 4291,
+          "verified": true
+        },
+        {
+          "path": "evidence/web/transport-diagnostic/e0b71e462e87439696301f2b211a7ea1/gecko-transport.log.child-2.moz_log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
+          "verified": true
+        },
+        {
+          "path": "evidence/web/transport-diagnostic/e0b71e462e87439696301f2b211a7ea1/gecko-transport.log.moz_log",
+          "sha256": "54395c9682925b87c35c460b2652d5bfc7a2a5175f19dd5ce6a1cdc3e2126ef0",
+          "bytes": 31027347,
+          "verified": true
+        }
+      ]
+    },
+    {
+      "runId": "3355e716c80b4c60b07c8caa5c2d2a57",
+      "startedAt": "2026-09-30T11:16:53.048031Z",
+      "endedAt": "2026-09-30T11:17:23.812342Z",
+      "exitCode": 0,
+      "argvSha256": "6d532e7793216823c66b33ace166fffe559d5330e3e7b0e351b2df15f02e91d7",
+      "rawChecks": [
+        {
+          "path": "evidence/web/transport-diagnostic/3355e716c80b4c60b07c8caa5c2d2a57/engine-stdout.json",
+          "sha256": "d6c0b8ef9cf4c4041647a12ebb801b18d3dd4dbd869fee74cc8682bc9696362e",
+          "bytes": 25964,
+          "verified": true
+        },
+        {
+          "path": "evidence/web/transport-diagnostic/3355e716c80b4c60b07c8caa5c2d2a57/engine-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
+          "verified": true
+        },
+        {
+          "path": "evidence/web/transport-diagnostic/3355e716c80b4c60b07c8caa5c2d2a57/operation-binding.json",
+          "sha256": "c6bb5e130f78aeb3c2c5d5d215ac7aaf2d733621b9902ac5705ad137022df5cd",
+          "bytes": 2483,
+          "verified": true
+        },
+        {
+          "path": "evidence/web/transport-diagnostic/3355e716c80b4c60b07c8caa5c2d2a57/gecko-transport.log.child-1.moz_log",
+          "sha256": "86f716b681ba755e5ae682033a0707579782ae414dda6b16903b9f1816770676",
+          "bytes": 4291,
+          "verified": true
+        },
+        {
+          "path": "evidence/web/transport-diagnostic/3355e716c80b4c60b07c8caa5c2d2a57/gecko-transport.log.child-2.moz_log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
+          "verified": true
+        },
+        {
+          "path": "evidence/web/transport-diagnostic/3355e716c80b4c60b07c8caa5c2d2a57/gecko-transport.log.moz_log",
+          "sha256": "3d7f0389447740335c53fe69a7a4d61cd4d66a77f1aec27b24c498842905009a",
+          "bytes": 42637765,
+          "verified": true
+        }
+      ]
+    }
+  ],
+  "rawHashChecks": 12,
+  "allRawHashesValid": true,
+  "factsUnmodifiedBySlice": true,
+  "factsExpectedRevisionNow": 2,
+  "factsSha256Now": "b9c061d21069b3a19153943c1ca4bfb37c6453cbb8dd8b8d08cc3ef93263738a",
+  "stableCandidate": {
+    "path": "diagnostics/clean-baseline-20260930/ruyidom_bridge.stable-transport.js",
+    "sha256": "a6f0e51a8b8c99019678a508385cc21f66fd3205e08c512d3ccc8888a32433d6",
+    "bytes": 86278
+  },
+  "stableManifest": {
+    "path": "diagnostics/clean-baseline-20260930/stable-transport-manifest.json",
+    "sha256": "0989745d66429de4d195f8e4185d1bbd26ba58b783b1226c766f6d8c347cf8d3",
+    "bytes": 4112
+  },
+  "causeReceipt": {
+    "path": "agent-notes/20260930-transport-live.cause.json",
+    "sha256": "46c2f08246e4a6796be1f04c753538a67851f2225747ef442139982ec89aba79"
+  },
+  "repairReceipt": {
+    "path": "agent-notes/20260930-transport-live.repair.json",
+    "sha256": "7d9f3c348490722cfadc444cd2d01f9fb90b229ac48759b56cc511d99c5c3a42"
+  },
+  "transportFixed": true,
+  "businessRootCauseProven": false,
+  "requestBoundaryAligned": false,
+  "serverAccepted": false,
+  "currentMissingEvidence": "clearance-response-to-DOM causal receipt; no native cert document POST or same-session content readback"
+}

@@ -1,0 +1,8 @@
+{
+  "schema": "web-landing-method.v1",
+  "primary": "env-patch",
+  "action": "environment_patch",
+  "locked": false,
+  "updatedAt": "2026-10-20T15:23:43Z",
+  "reason": "RuyiDOM 未到请求边界：补 runner 宿主/资源/顺序，禁止改写 Node env.js"
+}

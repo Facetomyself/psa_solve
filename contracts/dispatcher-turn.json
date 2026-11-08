@@ -1,0 +1,11 @@
+{
+  "schema": "reverse-dispatcher-turn.v1",
+  "project": "D:\\reverse_ENV\\workspace\\psa_solve",
+  "source": "schedule",
+  "action": "hold_challenge",
+  "turnGate": "blocked",
+  "humanRequired": false,
+  "updatedAt": "2026-11-02T21:59:15Z",
+  "sessionId": "01a19ac1-28c9-7f60-bb3a-4af694731647",
+  "decisionId": "1dedebe04ef8d1c9cab8240da13cfad5"
+}

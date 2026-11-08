@@ -1,45 +1,1090 @@
 {
   "schema": "workflow-artifacts.v1",
   "caseId": "psa-cf-5s-shield-20260815",
-  "status": "draft",
+  "status": "blocked",
   "inputBaseline": {
-    "sourceHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "sourceHash": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
     "browserEvidence": {
       "schema": "evidence-pointer.v1",
       "caseId": "psa-cf-5s-shield-20260815",
       "plane": "ruyitrace",
-      "runId": "rt_template_001",
-      "artifactId": "browser-input-baseline",
-      "path": "evidence/web/ruyitrace/rt_template_001/browser-input-baseline.json",
-      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-      "bytes": 0,
+      "runId": "rt_20260929103550_341b734038",
+      "artifactId": "browser-evidence",
+      "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+      "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+      "bytes": 234116,
       "mediaType": "application/json",
-      "sensitivity": "public-synthetic",
-      "redaction": "synthetic"
+      "sensitivity": "private-redacted",
+      "redaction": "allowlist-summary"
     },
     "canonicalInput": {
       "schema": "evidence-pointer.v1",
       "caseId": "psa-cf-5s-shield-20260815",
-      "plane": "v8trace",
-      "runId": "v8_template_001",
+      "plane": "ruyitrace",
+      "runId": "rt_20260929103550_341b734038",
       "artifactId": "canonical-input",
-      "path": "evidence/web/v8trace/v8_template_001/canonical-input.json",
-      "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
-      "bytes": 0,
+      "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+      "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+      "bytes": 234116,
       "mediaType": "application/json",
-      "sensitivity": "public-synthetic",
-      "redaction": "synthetic"
+      "sensitivity": "private-redacted",
+      "redaction": "allowlist-summary"
     },
-    "redaction": "synthetic"
+    "redaction": "pending"
   },
-  "requestShapes": [],
-  "requestRoutes": [],
-  "dynamicStates": [],
-  "responsePipelines": [],
-  "transportAdmissions": [],
-  "resources": [],
-  "challenges": [],
-  "environmentCoverage": [],
+  "requestShapes": [
+    {
+      "id": "cert-document-get",
+      "method": "GET",
+      "path": "/cert/",
+      "orderedFields": [
+        {
+          "ordinal": 0,
+          "name": "cookie",
+          "location": "cookie",
+          "duplicateAllowed": false,
+          "valueClass": "session-bound"
+        }
+      ],
+      "serializer": {
+        "kind": "none",
+        "canonicalFormHash": "a060c0351dab292b070520247f8e89b974fdbf8dab6b1fc8b27cb0174f5c35d4",
+        "evidence": {
+          "schema": "evidence-pointer.v1",
+          "caseId": "psa-cf-5s-shield-20260815",
+          "plane": "ruyitrace",
+          "runId": "rt_20260929103550_341b734038",
+          "artifactId": "ser-cert-document-get",
+          "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+          "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+          "bytes": 234116,
+          "mediaType": "application/json",
+          "sensitivity": "private-redacted",
+          "redaction": "allowlist-summary"
+        }
+      },
+      "writerEvidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "writer-cert-document-get",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      },
+      "preconditions": [
+        {
+          "kind": "none",
+          "upstreamId": "navigation",
+          "stateScope": "none",
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "pre-navigation",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        }
+      ],
+      "verification": {
+        "browserObserved": "pass",
+        "localReproduced": "pass",
+        "serverAccepted": "fail"
+      }
+    },
+    {
+      "id": "orchestrate-get",
+      "method": "GET",
+      "path": "/cdn-cgi/challenge-platform/orchestrate",
+      "orderedFields": [
+        {
+          "ordinal": 0,
+          "name": "cookie",
+          "location": "cookie",
+          "duplicateAllowed": false,
+          "valueClass": "session-bound"
+        }
+      ],
+      "serializer": {
+        "kind": "none",
+        "canonicalFormHash": "141596d9390c6157a087391ad044df42d5515d7dcfe3a6598349280e5727f869",
+        "evidence": {
+          "schema": "evidence-pointer.v1",
+          "caseId": "psa-cf-5s-shield-20260815",
+          "plane": "ruyitrace",
+          "runId": "rt_20260929103550_341b734038",
+          "artifactId": "ser-orchestrate-get",
+          "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+          "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+          "bytes": 234116,
+          "mediaType": "application/json",
+          "sensitivity": "private-redacted",
+          "redaction": "allowlist-summary"
+        }
+      },
+      "writerEvidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "writer-orchestrate-get",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      },
+      "preconditions": [
+        {
+          "kind": "response",
+          "upstreamId": "cert-document-get",
+          "stateScope": "challenge-round",
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "pre-cert-document-get",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        }
+      ],
+      "verification": {
+        "browserObserved": "pass",
+        "localReproduced": "pass",
+        "serverAccepted": "fail"
+      }
+    },
+    {
+      "id": "page-fo",
+      "method": "POST",
+      "path": "/cdn-cgi/challenge-platform/fo/",
+      "orderedFields": [
+        {
+          "ordinal": 0,
+          "name": "content-type",
+          "location": "header",
+          "duplicateAllowed": false,
+          "valueClass": "static"
+        },
+        {
+          "ordinal": 1,
+          "name": "cookie",
+          "location": "cookie",
+          "duplicateAllowed": false,
+          "valueClass": "session-bound"
+        },
+        {
+          "ordinal": 2,
+          "name": "fo-body",
+          "location": "form",
+          "duplicateAllowed": false,
+          "valueClass": "challenge-bound"
+        }
+      ],
+      "serializer": {
+        "kind": "binary",
+        "canonicalFormHash": "b1894a90baffdf89cc898e712bfb611b6b5266aad1c1e206d8404c5375810c6a",
+        "evidence": {
+          "schema": "evidence-pointer.v1",
+          "caseId": "psa-cf-5s-shield-20260815",
+          "plane": "ruyitrace",
+          "runId": "rt_20260929103550_341b734038",
+          "artifactId": "ser-page-fo",
+          "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+          "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+          "bytes": 234116,
+          "mediaType": "application/json",
+          "sensitivity": "private-redacted",
+          "redaction": "allowlist-summary"
+        }
+      },
+      "writerEvidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "writer-page-fo",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      },
+      "preconditions": [
+        {
+          "kind": "resource",
+          "upstreamId": "orchestrate-get",
+          "stateScope": "challenge-round",
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "pre-orchestrate-get",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        }
+      ],
+      "verification": {
+        "browserObserved": "pass",
+        "localReproduced": "pass",
+        "serverAccepted": "fail"
+      }
+    },
+    {
+      "id": "turnstile-fo",
+      "method": "POST",
+      "path": "/cdn-cgi/challenge-platform/fo/",
+      "orderedFields": [
+        {
+          "ordinal": 0,
+          "name": "content-type",
+          "location": "header",
+          "duplicateAllowed": false,
+          "valueClass": "static"
+        },
+        {
+          "ordinal": 1,
+          "name": "fo-body",
+          "location": "form",
+          "duplicateAllowed": false,
+          "valueClass": "challenge-bound"
+        }
+      ],
+      "serializer": {
+        "kind": "binary",
+        "canonicalFormHash": "8d87d5ee744799d42b306fbc4760438612c6adf742cecf0012c5d724903ee219",
+        "evidence": {
+          "schema": "evidence-pointer.v1",
+          "caseId": "psa-cf-5s-shield-20260815",
+          "plane": "ruyitrace",
+          "runId": "rt_20260929103550_341b734038",
+          "artifactId": "ser-turnstile-fo",
+          "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+          "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+          "bytes": 234116,
+          "mediaType": "application/json",
+          "sensitivity": "private-redacted",
+          "redaction": "allowlist-summary"
+        }
+      },
+      "writerEvidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "writer-turnstile-fo",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      },
+      "preconditions": [
+        {
+          "kind": "challenge",
+          "upstreamId": "page-fo",
+          "stateScope": "challenge-round",
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "pre-page-fo",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        }
+      ],
+      "verification": {
+        "browserObserved": "pass",
+        "localReproduced": "pass",
+        "serverAccepted": "fail"
+      }
+    },
+    {
+      "id": "clearance-fo",
+      "method": "POST",
+      "path": "/cdn-cgi/challenge-platform/fo/",
+      "orderedFields": [
+        {
+          "ordinal": 0,
+          "name": "content-type",
+          "location": "header",
+          "duplicateAllowed": false,
+          "valueClass": "static"
+        },
+        {
+          "ordinal": 1,
+          "name": "cookie",
+          "location": "cookie",
+          "duplicateAllowed": false,
+          "valueClass": "session-bound"
+        },
+        {
+          "ordinal": 2,
+          "name": "fo-body",
+          "location": "form",
+          "duplicateAllowed": false,
+          "valueClass": "challenge-bound"
+        }
+      ],
+      "serializer": {
+        "kind": "binary",
+        "canonicalFormHash": "586bb77c8f9096b3e43cc252080d73c93c72500c752a4981713f80976ded569f",
+        "evidence": {
+          "schema": "evidence-pointer.v1",
+          "caseId": "psa-cf-5s-shield-20260815",
+          "plane": "ruyitrace",
+          "runId": "rt_20260929103550_341b734038",
+          "artifactId": "ser-clearance-fo",
+          "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+          "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+          "bytes": 234116,
+          "mediaType": "application/json",
+          "sensitivity": "private-redacted",
+          "redaction": "allowlist-summary"
+        }
+      },
+      "writerEvidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "writer-clearance-fo",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      },
+      "preconditions": [
+        {
+          "kind": "async-callback",
+          "upstreamId": "turnstile-fo",
+          "stateScope": "challenge-round",
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "pre-turnstile-fo",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        }
+      ],
+      "verification": {
+        "browserObserved": "pass",
+        "localReproduced": "fail",
+        "serverAccepted": "fail"
+      }
+    },
+    {
+      "id": "cert-document-post",
+      "method": "POST",
+      "path": "/cert/",
+      "orderedFields": [
+        {
+          "ordinal": 0,
+          "name": "content-type",
+          "location": "header",
+          "duplicateAllowed": false,
+          "valueClass": "static"
+        },
+        {
+          "ordinal": 1,
+          "name": "cf_clearance",
+          "location": "cookie",
+          "duplicateAllowed": false,
+          "valueClass": "challenge-bound"
+        },
+        {
+          "ordinal": 2,
+          "name": "form-body",
+          "location": "form",
+          "duplicateAllowed": false,
+          "valueClass": "challenge-bound"
+        }
+      ],
+      "serializer": {
+        "kind": "form",
+        "canonicalFormHash": "5a343c90de22e32f8fa2c6d87a84beb4a94c5bd124422d26c02ee47c2b5d89fd",
+        "evidence": {
+          "schema": "evidence-pointer.v1",
+          "caseId": "psa-cf-5s-shield-20260815",
+          "plane": "ruyitrace",
+          "runId": "rt_20260929103550_341b734038",
+          "artifactId": "ser-cert-document-post",
+          "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+          "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+          "bytes": 234116,
+          "mediaType": "application/json",
+          "sensitivity": "private-redacted",
+          "redaction": "allowlist-summary"
+        }
+      },
+      "writerEvidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "writer-cert-document-post",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      },
+      "preconditions": [
+        {
+          "kind": "challenge",
+          "upstreamId": "clearance-fo",
+          "stateScope": "challenge-round",
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "pre-clearance-fo",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        }
+      ],
+      "verification": {
+        "browserObserved": "pass",
+        "localReproduced": "fail",
+        "serverAccepted": "fail"
+      }
+    }
+  ],
+  "requestRoutes": [
+    {
+      "id": "cert-document-get-route",
+      "requestShapeId": "cert-document-get",
+      "relation": "verified-wire",
+      "origin": "network-observed",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "route-cert-document-get",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "orchestrate-get-route",
+      "requestShapeId": "orchestrate-get",
+      "relation": "verified-wire",
+      "origin": "network-observed",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "route-orchestrate-get",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "page-fo-route",
+      "requestShapeId": "page-fo",
+      "relation": "verified-wire",
+      "origin": "network-observed",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "route-page-fo",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "turnstile-fo-route",
+      "requestShapeId": "turnstile-fo",
+      "relation": "sibling",
+      "origin": "network-observed",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "route-turnstile-fo",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "clearance-fo-route",
+      "requestShapeId": "clearance-fo",
+      "relation": "verified-wire",
+      "origin": "network-observed",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "route-clearance-fo",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "cert-document-post-route",
+      "requestShapeId": "cert-document-post",
+      "relation": "verified-wire",
+      "origin": "network-observed",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "route-cert-document-post",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    }
+  ],
+  "dynamicStates": [
+    {
+      "id": "cf-bm",
+      "kind": "cookie",
+      "writer": "response-header",
+      "refreshTrigger": "response",
+      "scope": "session",
+      "consumerRequestShapeIds": [
+        "orchestrate-get",
+        "page-fo",
+        "clearance-fo"
+      ],
+      "egressEvidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "state-cf-bm",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      },
+      "verification": {
+        "browserObserved": "pass",
+        "localReproduced": "pass",
+        "serverAccepted": "fail"
+      }
+    },
+    {
+      "id": "cf-clearance",
+      "kind": "cookie",
+      "writer": "response-header",
+      "refreshTrigger": "challenge",
+      "scope": "challenge-round",
+      "consumerRequestShapeIds": [
+        "cert-document-post"
+      ],
+      "egressEvidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "state-cf-clearance",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      },
+      "verification": {
+        "browserObserved": "pass",
+        "localReproduced": "fail",
+        "serverAccepted": "fail"
+      }
+    }
+  ],
+  "responsePipelines": [
+    {
+      "id": "clearance-decode",
+      "requestShapeId": "clearance-fo",
+      "rawPayloadEvidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "pipe-clearance",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      },
+      "stages": [
+        {
+          "ordinal": 0,
+          "kind": "base64",
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "pipe-b64-1",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        },
+        {
+          "ordinal": 1,
+          "kind": "base64",
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "pipe-b64-2",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        }
+      ],
+      "verification": {
+        "browserObserved": "pass",
+        "localReproduced": "fail",
+        "serverAccepted": "fail"
+      }
+    }
+  ],
+  "transportAdmissions": [
+    {
+      "id": "page-fo-h3",
+      "requestShapeId": "page-fo",
+      "scope": "route-local",
+      "clientStack": "browser",
+      "httpVersion": "http-3",
+      "uaFamily": "desktop",
+      "result": "admitted",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "admit-page-fo",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "cert-get-challenge",
+      "requestShapeId": "cert-document-get",
+      "scope": "route-local",
+      "clientStack": "browser",
+      "httpVersion": "unknown",
+      "uaFamily": "desktop",
+      "result": "challenged",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "admit-cert-get",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    }
+  ],
+  "resources": [
+    {
+      "id": "challenge-html",
+      "role": "html",
+      "urlHash": "e0e06e8e63262ab33b34cac82b86d727babe5245488679b7271d3e7ff8bded2b",
+      "contentHash": "cf9d0c21de3099503660abefd908b1a9d2fbe49ccba825a984942e4ed9f070dc",
+      "retrievalEpoch": 1759100000,
+      "freshness": "current",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "res-challenge-html",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "orchestrate-script",
+      "role": "script",
+      "urlHash": "fd405c53a4135effa6612600f7bb849efb009aa537ba47cadb580b1ae320c8fd",
+      "contentHash": "5accbecb1110517ce1024b70da08f11776a592ef9e882c176f8e578d09a3a5d9",
+      "retrievalEpoch": 1759100000,
+      "freshness": "current",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "res-orchestrate-script",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "turnstile-frame",
+      "role": "iframe",
+      "urlHash": "6936ed783c7e502a318785d0d0199dd474a6518a1975ef8603b928b8712492e0",
+      "contentHash": "5d0655dbf88a39e91441efa098588fa0709e3b2377e68456fc5690f47dbc011f",
+      "retrievalEpoch": 1759100000,
+      "freshness": "current",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "res-turnstile-frame",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    }
+  ],
+  "challenges": [
+    {
+      "id": "cf-managed-click",
+      "kind": "browser-integrity",
+      "roundScope": "single-round",
+      "phases": [
+        {
+          "name": "trigger",
+          "status": "pass",
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "phase-trigger",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        },
+        {
+          "name": "initialize",
+          "status": "pass",
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "phase-initialize",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        },
+        {
+          "name": "prompt",
+          "status": "pass",
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "phase-prompt",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        },
+        {
+          "name": "answer",
+          "status": "pass",
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "phase-answer",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        },
+        {
+          "name": "proof",
+          "status": "pass",
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "phase-proof",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        },
+        {
+          "name": "token-inject",
+          "status": "pass",
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "phase-token-inject",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        },
+        {
+          "name": "submit",
+          "status": "fail",
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "phase-submit",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        },
+        {
+          "name": "business-readback",
+          "status": "fail",
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "phase-business-readback",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        },
+        {
+          "name": "transport",
+          "status": "pass",
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "phase-transport",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        }
+      ],
+      "finalAcceptance": "blocked"
+    }
+  ],
+  "environmentCoverage": [
+    {
+      "id": "ua-155",
+      "api": "general.useragent.override",
+      "classification": "implemented",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "cov-ua",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      },
+      "resolution": "pending"
+    },
+    {
+      "id": "http3-mapping",
+      "api": "network.http.http3.alt-svc-mapping-for-testing",
+      "classification": "implemented",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "cov-h3",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      },
+      "resolution": "pending"
+    },
+    {
+      "id": "trusted-pointer-move",
+      "api": "Window.synthesizeMouseEvent",
+      "classification": "implemented",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "cov-pointer",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      },
+      "resolution": "pending"
+    },
+    {
+      "id": "form-submit",
+      "api": "HTMLFormElement.submit",
+      "classification": "not-reached",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "cov-form",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      },
+      "resolution": "triage-only"
+    }
+  ],
   "environmentPatchGate": {
     "status": "not-ready",
     "patchScope": "external-host-only",
@@ -52,21 +1097,421 @@
       "schema": "evidence-pointer.v1",
       "caseId": "psa-cf-5s-shield-20260815",
       "plane": "ruyitrace",
-      "runId": "rt_template_001",
-      "artifactId": "environment-patch-scope",
-      "path": "evidence/web/ruyitrace/rt_template_001/environment-patch-scope.json",
-      "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-      "bytes": 0,
+      "runId": "rt_20260929103550_341b734038",
+      "artifactId": "patch-scope",
+      "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+      "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+      "bytes": 234116,
       "mediaType": "application/json",
-      "sensitivity": "public-synthetic",
-      "redaction": "synthetic"
+      "sensitivity": "private-redacted",
+      "redaction": "allowlist-summary"
     }
   },
-  "fingerprintProfiles": [],
-  "statefulFlows": [],
-  "experiments": [],
-  "minimalFacts": [],
+  "fingerprintProfiles": [
+    {
+      "id": "firefox-155-baseline",
+      "profileHash": "2d97f6be185c8d6732037c4fdeda1a560eecc525e320135ea2de6c363b0ba40c",
+      "mode": "whole",
+      "stateScopeKey": "4ee7cbd69833e684b382212eb3ebc1e9695f56fdd4d978b61ae1af9a4357c377",
+      "transportScopeHash": "d12ab540cf14dc70c9f50cb38e83971be27f1dc30d6e278d8a92320fbb4ebdb2",
+      "validation": "not-run"
+    }
+  ],
+  "statefulFlows": [
+    {
+      "id": "cert-challenge-flow",
+      "transport": "http",
+      "states": [
+        {
+          "id": "cert-get",
+          "role": "bootstrap",
+          "next": [
+            "orchestrate"
+          ],
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "flow-cert-get",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        },
+        {
+          "id": "orchestrate",
+          "role": "challenge",
+          "next": [
+            "page-fo-state"
+          ],
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "flow-orchestrate",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        },
+        {
+          "id": "page-fo-state",
+          "role": "challenge",
+          "next": [
+            "widget-fo"
+          ],
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "flow-page-fo-state",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        },
+        {
+          "id": "widget-fo",
+          "role": "challenge",
+          "next": [
+            "clearance"
+          ],
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "flow-widget-fo",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        },
+        {
+          "id": "clearance",
+          "role": "challenge",
+          "next": [
+            "cert-post"
+          ],
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "flow-clearance",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        },
+        {
+          "id": "cert-post",
+          "role": "action",
+          "next": [
+            "business-readback"
+          ],
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "flow-cert-post",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        },
+        {
+          "id": "business-readback",
+          "role": "readback",
+          "next": [],
+          "evidence": {
+            "schema": "evidence-pointer.v1",
+            "caseId": "psa-cf-5s-shield-20260815",
+            "plane": "ruyitrace",
+            "runId": "rt_20260929103550_341b734038",
+            "artifactId": "flow-business-readback",
+            "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+            "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+            "bytes": 234116,
+            "mediaType": "application/json",
+            "sensitivity": "private-redacted",
+            "redaction": "allowlist-summary"
+          }
+        }
+      ],
+      "verification": "triage-only"
+    }
+  ],
+  "experiments": [
+    {
+      "id": "exp-ua-h3",
+      "baseline": "shell-135-h2",
+      "changedVariable": "Firefox/155 and quoted h3 mapping",
+      "result": "pass",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "exp-exp-ua-h3",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "exp-fresh-profile",
+      "baseline": "imported-cookie-hypothesis",
+      "changedVariable": "empty headed profile",
+      "result": "pass",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "exp-exp-fresh-profile",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "exp-pointer-trail",
+      "baseline": "single-mouse-triplet",
+      "changedVariable": "spaced trusted pointer moves",
+      "result": "fail",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "exp-exp-pointer-trail",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "exp-opaque-byte",
+      "baseline": "first-decode-byte",
+      "changedVariable": "stop scoring the opaque byte",
+      "result": "inconclusive",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "exp-exp-opaque-byte",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "exp-iv8-offline",
+      "baseline": "ruyidom-live-3488",
+      "changedVariable": "iv8 0.1.4 offline page.load of the same snapshot",
+      "result": "fail",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "iv8",
+        "runId": "iv8_20260929_offline_01",
+        "artifactId": "exp-exp-iv8-offline",
+        "path": "evidence/web/iv8/iv8_20260929_offline_01/probe-summary.json",
+        "sha256": "96a2b323bb0a1d64ce80c9695237fc358ace5cf99f9c6889344ed8a78cd263e7",
+        "bytes": 986,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    }
+  ],
+  "minimalFacts": [
+    {
+      "id": "fact-trigger",
+      "category": "bootstrap",
+      "statement": "Certificate document GET returns 403 and sets cookie name __cf_bm.",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "fact-fact-trigger",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "fact-chain",
+      "category": "wire-path",
+      "statement": "Page /fo/, three Turnstile-host /fo/, then the page clearance /fo/.",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "fact-fact-chain",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "fact-h3",
+      "category": "transport",
+      "statement": "Headed and local first page /fo/ are h3. UA token is Firefox/155, length 80.",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "fact-fact-h3",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "fact-cookie",
+      "category": "session",
+      "statement": "cf_clearance is site-partitioned and HttpOnly. document.cookie stays empty.",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "fact-fact-cookie",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "fact-headed-class",
+      "category": "artifact-shape",
+      "statement": "Headed clearance body class 3792 is followed by the certificate document POST.",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "fact-fact-headed-class",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "fact-local-class",
+      "category": "decode",
+      "statement": "Local clearance body class 3488 is base64 twice, then an interstitial, forms 0.",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "fact-fact-local-class",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "fact-widget",
+      "category": "placement",
+      "statement": "A trusted pointer trail still yields widget complete and cf_clearance.",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "fact-fact-widget",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    },
+    {
+      "id": "fact-accept",
+      "category": "acceptance",
+      "statement": "Cookie name and /fo/ 200 are not serverAccepted. Business readback is still absent.",
+      "evidence": {
+        "schema": "evidence-pointer.v1",
+        "caseId": "psa-cf-5s-shield-20260815",
+        "plane": "ruyitrace",
+        "runId": "rt_20260929103550_341b734038",
+        "artifactId": "fact-fact-accept",
+        "path": "evidence/web/ruyitrace/rt_20260929103550_341b734038/evidence-run.json",
+        "sha256": "7429c76e812f0ee62f9bd7b7139a56f112d708497392952b137cd5167467218e",
+        "bytes": 234116,
+        "mediaType": "application/json",
+        "sensitivity": "private-redacted",
+        "redaction": "allowlist-summary"
+      }
+    }
+  ],
   "limitations": [
-    "Populate only from current evidence; historical request values and browser state are not inputs."
+    "Blocker: local clearance body class 3488 does not build a form, so the certificate document POST never starts. Headed class 3792 does. serverAccepted stays false.",
+    "experimentHygiene is stop-search. The opaque decode byte is not a score. Do not add the next host getter.",
+    "Resource contentHash, serializer canonicalFormHash, and profile hashes are class-label hashes. Orchestrate bytes rotate and are not stored here.",
+    "Paths are class templates. The certificate id, rays, tokens, and /fo bodies stay in the evidence run.",
+    "environment-patch stage is running while environmentPatchGate stays not-ready. That mismatch is intentional until a new request-boundary difference appears."
   ]
 }
