@@ -84,15 +84,22 @@ async def fetch_page_async(asession, sn, cookies=None, timeout=10):
     return r.status_code, blocked, meta, r.content
 
 
-async def solve_ruyijs_async(outdir):
+async def solve_ruyijs_async(outdir, counters_rewrite: bool = False):
     """ruyijs 自含求解（对照 run2_022 已验证链）。子进程隔离，cookie 经临时文件传递。
-    成功返回 (ck, meta)；失败返回 (None, reason)。UA 用生产 UA_FF 保持 clearance 绑定一致。"""
+    成功返回 (ck, meta)；失败返回 (None, reason)。UA 用生产 UA_FF 保持 clearance 绑定一致。
+    counters_rewrite：v0 入口 MZ 计数器模板改写（OV2 已验证；失败 solver 内部自动降级原生）。"""
     cookie_path = os.path.join(outdir, "ruyijs-cookies.json")
     env = dict(os.environ)
     env.pop("HTTP_PROXY", None); env.pop("HTTPS_PROXY", None)
     env.pop("http_proxy", None); env.pop("https_proxy", None)
+    if counters_rewrite:
+        env["PSA_COUNTERS_REWRITE"] = "1"
+    cmd = [RUYIJS_PY, "-I", RUYIJS_SOLVER, "--out", cookie_path]
+    if counters_rewrite:
+        cmd.append("--counters-rewrite")
+    cmd.append(UA_FF)
     proc = await asyncio.create_subprocess_exec(
-        RUYIJS_PY, "-I", RUYIJS_SOLVER, "--out", cookie_path, UA_FF,
+        *cmd,
         stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, env=env)
     try:
         out, err = await asyncio.wait_for(proc.communicate(), timeout=300)
@@ -117,8 +124,8 @@ async def solve_ruyijs_async(outdir):
         except OSError:
             pass
     ck = {k: v for k, v in cookies.items() if k in ("__cf_bm", "cf_clearance", "env", "psa-locale")}
-    meta = (f"{summary.get('foRounds', '?')} fo 轮, {summary.get('wallS', '?')}s, "
-            f"certOk={summary.get('certOk')}")
+    meta = (f"mode={summary.get('mode', '?')}, {summary.get('foRounds', '?')} fo 轮, "
+            f"{summary.get('wallS', '?')}s, certOk={summary.get('certOk')}")
     return ck, meta
 
 
@@ -264,6 +271,7 @@ async def main_async(args):
     ck = None
     asess = AsyncSession(impersonate=IMPERSONATE)  # 当前采集会话（干净）
     solve_durations = []
+    solve_modes = []  # ruyijs 求解 mode 分布（templated/templated-fallback/native）
 
     log(f"生产采集启动：目标 {args.count} 请求，gap {args.gap}s，"
         f"恢复窗口 {args.recover_age}s，求解上限 {args.max_solves}", "step")
@@ -312,10 +320,14 @@ async def main_async(args):
             os.makedirs(outdir, exist_ok=True)
             log(f"{args.solver} 求解 -> 异步执行", "step")
             if getattr(args, "solver", "ruyijs") == "ruyijs":
-                ck_new, reason = await solve_ruyijs_async(outdir)
+                ck_new, reason = await solve_ruyijs_async(
+                    outdir, counters_rewrite=getattr(args, "counters_rewrite", False))
             else:
                 ck_new, reason = await solve_bridge_async(asess, content, outdir)
             solve_durations.append(time.time() - t_trig)
+            mode_m = re.search(r"mode=([\w-]+)", str(reason))
+            if mode_m:
+                solve_modes.append(mode_m.group(1))
             if not ck_new:
                 log(f"求解失败：{reason}，冷却 60s", "bad")
                 await asyncio.sleep(60)
@@ -356,6 +368,11 @@ async def main_async(args):
         log(f"段通过数（两次被拦之间）: {streaks}  平均 {sum(streaks)/len(streaks):.1f}")
     if solve_durations:
         log(f"求解耗时: {solve_durations}  平均 {sum(solve_durations)/len(solve_durations):.1f}s")
+    if solve_modes:
+        from collections import Counter
+        dist = Counter(solve_modes)
+        log(f"求解 mode 分布: {dict(dist)}  "
+            f"templated 成功率 {dist.get('templated', 0)}/{len(solve_modes)}")
     valid = ok_count + not_found
     if valid > 0 and elapsed > 0:
         qps = valid / elapsed
@@ -380,6 +397,9 @@ def main():
     parser.add_argument("--max-solves", type=int, default=5, help="求解次数上限")
     parser.add_argument("--solver", choices=["ruyijs", "bridge"], default="ruyijs",
                         help="挑战求解器：ruyijs 自含引擎（默认）或 capture-only bridge")
+    parser.add_argument("--counters-rewrite", action="store_true",
+                        help="ruyijs 求解启用 v0 入口 MZ 计数器模板改写（OV2 已验证："
+                             "服务端不校验计时值；定位失败自动降级原生模式）")
     parser.add_argument("--sn", type=int, default=143963534, help="起始证书编号")
     args = parser.parse_args()
 
