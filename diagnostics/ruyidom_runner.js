@@ -101,11 +101,30 @@ RuyiDOM.main(function () {
         if (kind === "xhr" || kind === "fetch") {
           return { status: 200, headers: { "content-type": "application/json" }, body: "{}" };
         }
+        // 页面源站：内存里的挑战页 URL 回本地 HTML，不放行 www.psacard.com。
+        var pagePath = String(challengeUrl || "").split("?")[0];
+        var reqPath = url.split("?")[0];
+        if (pagePath && reqPath === pagePath) {
+          observedWire.push({
+            kind: "local-html",
+            method: request && request.method ? String(request.method) : "",
+            url: reqPath.slice(0, 200),
+          });
+          return { status: 200, headers: { "content-type": "text/html" }, body: challengeHtml };
+        }
         return null;
       },
     };
 
-    // 页面组装：移除 meta CSP + 注入补环境脚本（code.js 模块）+ 会话 cookie
+    // 2026-08-15 外部宿主缺口，不是新算法：about:blank viewer 上
+    // history.replaceState/pushState 抛 SecurityError。只抽这两条包装。
+    // 不依赖 Storage，也不带 v1 的 opcode/UpvLO0/ZHfDS6 插桩。原包装无 toString。
+    var historyHost = "(function(){" +
+      "try{var __rs=history.replaceState.bind(history);history.replaceState=function(){try{return __rs.apply(history,arguments);}catch(e){return undefined;}};}catch(e){}" +
+      "try{var __ps=history.pushState.bind(history);history.pushState=function(){try{return __ps.apply(history,arguments);}catch(e){return undefined;}};}catch(e){}" +
+      "})();";
+
+    // 页面组装：移除 meta CSP + history 宿主包装。codeJs 仅在显式读到时注入。
     var cookieScript = "";
     try {
       if (String(input.cookie || "")) {
@@ -114,10 +133,11 @@ RuyiDOM.main(function () {
           ";}catch(e){}</" + "script>";
       }
     } catch (error) {}
+    var codeScript = codeJs ? "<script>" + codeJs + "</" + "script>" : "";
     var pageHtml = String(challengeHtml)
       .replace(/<meta\s+http-equiv=["']content-security-policy["'][^>]*>/gi, "")
       .replace("<head>", function () {
-        return "<head><script>" + codeJs + "</" + "script>" + cookieScript;
+        return "<head><script>" + historyHost + "</" + "script>" + codeScript + cookieScript;
       });
 
     var options = {

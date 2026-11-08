@@ -86,6 +86,14 @@ function install(g, cfg) {
           catch (e) {}
           finally { if (g.document) g.document.currentScript = previous; }
         }
+        // 外链脚本：真 DOM 在插入时发起加载，加载完成后执行（script.onload 时序）。
+        // 此前 appendChild 对外链 script 是空操作——页面 loader 的
+        // head.appendChild(<script src=orchestrate>) 不会触发加载，orchestrate
+        // 仅由 run.js 同步执行且 currentScript 为 null（2026-11-07 补齐）。
+        if (c && typeof c === "object" &&
+            String(c.tagName || "").toUpperCase() === "SCRIPT" && c.src) {
+          scheduleScript(c);
+        }
         return c;
       },
       removeChild(c) {
@@ -224,19 +232,30 @@ function install(g, cfg) {
     const XHR = g.XMLHttpRequest;
     if (typeof XHR !== "function") return;
     el.__scriptStarted = true;
+    // 已由 run.js 预执行的脚本（orchestrate）：跳过二次执行，但保留
+    // script.onload 时序（页面 loader 的 onload 会恢复 history URL）。
+    // 该脚本的 performance resource 条目已由 run.js step 4.5 按 ruyijs 真值
+    // 形状预登记（name/initiatorType/encodedBodySize），真实 XHR 若再记一条
+    // 会重复——挑战代码在解码窗口遍历 getEntries，条目数多 1 即键控流错位。
+    const preExecuted = g.__psaPreExecutedScripts;
+    const skip = preExecuted && typeof preExecuted.has === "function" && preExecuted.has(src);
     const xhr = new XHR();
     xhr.open("GET", src);
+    xhr.__perfInitiator = "script";  // performance resource 条目 initiatorType
+    if (skip) xhr.__psaSkipPerfRecord = true;  // 预登记条目的去重标记
     xhr.setRequestHeader("Sec-Fetch-Dest", "script");
     xhr.setRequestHeader("Sec-Fetch-Mode", "no-cors");
     xhr.onload = function () {
       if (xhr.status !== 200) return;
       const code = String(xhr.responseText || "");
-      if (!code) return;
-      const previous = g.document.currentScript;
-      g.document.currentScript = el;
-      try { runPageScript(code); }
-      catch (e) {}
-      finally { g.document.currentScript = previous; }
+      if (code && !skip) {
+        const previous = g.document.currentScript;
+        g.document.currentScript = el;
+        try { runPageScript(code); }
+        catch (e) {}
+        finally { g.document.currentScript = previous; }
+      }
+      try { if (typeof el.onload === "function") el.onload(); } catch (e) {}
     };
     xhr.send(null);
   }

@@ -12,9 +12,22 @@
  */
 "use strict";
 
+const fs = require("fs");
 const https = require("https");
 const http = require("http");
 const { URL: URLImpl } = require("url");
+
+// CF_WATCHDOG=1：XHR 回调同步打点（fd2 直写）——定位响应驱动代码的同步挂死。
+const WATCHDOG = process.env.CF_WATCHDOG === "1";
+let wdSeq = 0;
+function wdRun(label, fn) {
+  if (!WATCHDOG) return fn();
+  const seq = ++wdSeq;
+  fs.writeSync(2, "[wd] enter " + seq + " " + label + "\n");
+  const t0 = Date.now();
+  try { return fn(); }
+  finally { fs.writeSync(2, "[wd] exit " + seq + " " + label + " " + (Date.now() - t0) + "ms\n"); }
+}
 
 function install(g, cfg) {
   g.__patchXhr = [];
@@ -101,6 +114,39 @@ function install(g, cfg) {
       return;
     }
 
+    // 资源时序条目（2026-11-07 补环境缺口）：真实 Firefox / ruyijs 对每次 XHR
+    // 生成 performance resource 条目（initiatorType=xmlhttprequest，script 加载
+    // 为 script）。挑战代码在 FO 响应回调里读条目时序/名字参与键控解码；缺条目
+    // → 键控流错位（修复前表现 vm-default 崩溃，补条目表后表现为长解码不收敛）。
+    const perfT0 = g.performance && typeof g.performance.now === "function"
+      ? g.performance.now() : Date.now();
+    const perfInitiator = self.__perfInitiator || "xmlhttprequest";
+    function perfRecordResource() {
+      // 预登记条目去重：run.js step 4.5 已按 ruyijs 真值登记 orchestrate 脚本的
+      // resource 条目；页面 loader 触发的真实脚本加载若再记一条，getEntries 遍历
+      // 会多出条目 → 挑战代码编码进 FO 载荷的条目数错位。
+      if (self.__psaSkipPerfRecord) return;
+      if (typeof g.__perfRecord !== "function") return;
+      try {
+        const t1 = g.performance && typeof g.performance.now === "function"
+          ? g.performance.now() : Date.now();
+        g.__perfRecord("resource", {
+          name: parsed.href,
+          entryType: "resource",
+          startTime: perfT0,
+          duration: t1 - perfT0,
+          initiatorType: perfInitiator,
+          fetchStart: perfT0,
+          requestStart: perfT0,
+          responseStart: t1,
+          responseEnd: t1,
+          transferSize: 0,
+          encodedBodySize: 0,
+          decodedBodySize: 0,
+        });
+      } catch (e) {}
+    }
+
     applyAutomaticRequestHeaders(self, parsed);
 
     // 浏览器行为：默认 UA/Referer + 同源自动携带 document.cookie
@@ -161,6 +207,7 @@ function install(g, cfg) {
             break;
           }
         }
+        perfRecordResource();
         try { self.onreadystatechange && self.onreadystatechange(); }
         catch (e) {
           if (cfg.CF_DIAGNOSTICS) process.stderr.write(
@@ -204,8 +251,40 @@ function install(g, cfg) {
           setCookie: String(sc || ""),
           bodyHead: text.slice(0, 300),
         });
-        try { self.onreadystatechange && self.onreadystatechange(); } catch (e) {}
-        try { self.onload && self.onload(); } catch (e) {}
+        // FO 请求/响应原始字节落盘（诊断域，CF_DUMP_FO_DIR 指定）：供离线回放
+        // 与 ruyijs 真值对比。响应按原始 Buffer 写，避免 UTF-8 解码损伤字节流。
+        if (process.env.CF_DUMP_FO_DIR && /\/fo\//.test(String(u))) {
+          try {
+            fs.mkdirSync(process.env.CF_DUMP_FO_DIR, { recursive: true });
+            const seq = (g.__foDumpSeq = (g.__foDumpSeq || 0) + 1);
+            const dir = process.env.CF_DUMP_FO_DIR;
+            fs.writeFileSync(dir + "/fo-req-" + seq + ".bin",
+              Buffer.concat([Buffer.from(String(self._method) + " " + u + "\n", "utf8"),
+                Buffer.from(String(body == null ? "" : body), "utf8")]));
+            fs.writeFileSync(dir + "/fo-resp-" + seq + "-" + (res.statusCode || 0) + ".bin",
+              Buffer.concat(buf));
+            fs.writeFileSync(dir + "/fo-resp-" + seq + ".json",
+              JSON.stringify({ url: u, status: res.statusCode, headers: res.headers }));
+          } catch (e) {}
+        }
+        // 与 capture 分支对齐：真实分支的异常不再静默（CF_DIAGNOSTICS 时落 stderr）
+        perfRecordResource();
+        const labelBase = self._method + " " + String(parsed.href).slice(0, 120);
+        try {
+          wdRun(labelBase + " onreadystatechange",
+            () => { self.onreadystatechange && self.onreadystatechange(); });
+        } catch (e) {
+          if (cfg.CF_DIAGNOSTICS) process.stderr.write(
+            "[diag] xhr onreadystatechange threw: " + String(e && e.name || "") + ": " +
+            String(e && e.message || "") + " | " + String(e && e.stack || e).slice(0, 1200) + "\n");
+        }
+        try {
+          wdRun(labelBase + " onload", () => { self.onload && self.onload(); });
+        } catch (e) {
+          if (cfg.CF_DIAGNOSTICS) process.stderr.write(
+            "[diag] xhr onload threw: " + String(e && e.name || "") + ": " +
+            String(e && e.message || "") + " | " + String(e && e.stack || e).slice(0, 1200) + "\n");
+        }
       });
     });
     req.on("error", (e) => {

@@ -85,6 +85,140 @@ if (process.env.CF_DIAGNOSTICS === "1") {
     "default:throw new Error('vm-default opcode='+(typeof km!=='undefined'?km:'?')+' hex='+(typeof km==='number'?(km>>>0).toString(16):'-'))}");
 }
 
+// 同步死循环看门狗（CF_LOOPGUARD=<迭代上限>）：挑战代码的 VM 程序执行器用
+// `for(;;)` 调度（orchestrate 中常见唯一/少量 for(;;)；变量名每变体不同，不能
+// 用定点锚）。FO r1 响应驱动的挑战代码在此挂死 >150s（2026-11-07 在线探测，
+// CF_WATCHDOG 定位到 FO onreadystatechange 后不返回）。通用改写：
+//   for(;;)<body>  →  for(var __lgN=0;;)if(++__lgN>limit)throw;else <body>
+// 超限抛错 → transport/全局兜底记录 → 拿到挂死栈而非静默挂起。
+if (process.env.CF_LOOPGUARD) {
+  const limit = Number(process.env.CF_LOOPGUARD) || 5000000;
+  // CF_OP_TRACE：逐 opcode 落盘（与 make_instrumented.js 相同的第二遍改写）。
+  // "*" 记录所有匹配 switch(TABLE[PTR++]) 的循环；逗号分隔记录指定 id。
+  // 每条序列限长 CF_OP_TRACE_LIMIT（默认 20000），防止热循环 12M 条爆内存。
+  const opTraceAll = process.env.CF_OP_TRACE === "*";
+  const opTraceIds = new Set((process.env.CF_OP_TRACE || "").split(",")
+    .map((s) => s.trim()).filter((s) => s && s !== "*").map(Number));
+  const opTraceLimit = Number(process.env.CF_OP_TRACE_LIMIT) || 20000;
+  const opTargets = [];
+  let loopId = 0;
+  const before = orchJs;
+  orchJs = orchJs.replace(/for\s*\(\s*;\s*;\s*\)/g, () => {
+    loopId += 1;
+    const v = "__lg" + loopId;
+    return "for(var " + v + "=0;;)if(++" + v + ">" + limit +
+      ")throw new Error('loopguard#" + loopId + " iter='+" + v + ");else ";
+  });
+  // for(...;true;/!0;) 循环计数（不抛错，仅累计到 globalThis.__lc[id]）：
+  // VM 驱动循环常用这种形式，for(;;) 覆盖不到。扫描平衡括号，只改条件段。
+  const loopMeta = [];
+  {
+    let out = "";
+    let i = 0;
+    const n = orchJs.length;
+    while (i < n) {
+      const idx = orchJs.indexOf("for", i);
+      if (idx < 0) { out += orchJs.slice(i); break; }
+      const prev = idx > 0 ? orchJs[idx - 1] : "";
+      const after = orchJs.slice(idx + 3, idx + 40);
+      if (/[A-Za-z0-9_$]/.test(prev) || !/^\s*\(/.test(after)) {
+        out += orchJs.slice(i, idx + 3);
+        i = idx + 3;
+        continue;
+      }
+      let j = idx + 3;
+      while (j < n && /\s/.test(orchJs[j])) j++;
+      if (orchJs[j] !== "(") { out += orchJs.slice(i, idx + 3); i = idx + 3; continue; }
+      let depth = 0, k = j, inStr = null, esc = false;
+      for (; k < n; k++) {
+        const ch = orchJs[k];
+        if (inStr) {
+          if (esc) { esc = false; continue; }
+          if (ch === "\\") { esc = true; continue; }
+          if (ch === inStr) inStr = null;
+          continue;
+        }
+        if (ch === "'" || ch === '"' || ch === "`") { inStr = ch; continue; }
+        if (ch === "(") depth++;
+        else if (ch === ")") { depth--; if (depth === 0) break; }
+      }
+      if (depth !== 0) { out += orchJs.slice(i, k + 1); i = k + 1; continue; }
+      const header = orchJs.slice(j + 1, k);
+      const parts = [];
+      let cur = "";
+      depth = 0; inStr = null; esc = false;
+      for (let q = 0; q < header.length; q++) {
+        const ch = header[q];
+        if (inStr) {
+          cur += ch;
+          if (esc) esc = false;
+          else if (ch === "\\") esc = true;
+          else if (ch === inStr) inStr = null;
+          continue;
+        }
+        if (ch === "'" || ch === '"' || ch === "`") { inStr = ch; cur += ch; continue; }
+        if ("([{".includes(ch)) depth++;
+        if (")]}".includes(ch)) depth--;
+        if (ch === ";" && depth === 0) { parts.push(cur); cur = ""; continue; }
+        cur += ch;
+      }
+      parts.push(cur);
+      if (parts.length !== 3) { out += orchJs.slice(i, k + 1); i = k + 1; continue; }
+      const cond = parts[1].trim();
+      if (cond === "true" || cond === "!0") {
+        const id = loopMeta.length;
+        // CF_HOT_SNAPSHOT=1：低频（每 65536 次）把该循环的指令指针与指令表长度
+        // 写入 globalThis.__hotp，供 inspector 在挂死窗口 evaluate 读取。用于判定
+        // "有限推进（指针递增、表长有限）"vs"原地死循环（指针不动/回绕）"。
+        // 循环体形如 {switch(TABLE[PTR++])...}，PTR 可能是成员表达式（nJ[1]）。
+        const bodyHead = orchJs.slice(k + 1, k + 600);
+        const hm = bodyHead.match(
+          /switch\s*\(\s*(.+?)\[\s*([A-Za-z_$][\w$]*(?:\[[^\[\]]*\])?)\s*\+\+\s*\]\s*\)/);
+        let hotExpr = "";
+        if (process.env.CF_HOT_SNAPSHOT === "1" && hm) {
+          const tbl = hm[1].trim();
+          const ptr = hm[2];
+          hotExpr = ",((globalThis.__lc[" + id + "]&65535)===1&&(function(){try{" +
+            "globalThis.__hotp=[" + id + "," + ptr + ",(" + tbl + "||[]).length];" +
+            "}catch(e){}}).call(this))";
+        }
+        if (hm && (opTraceAll || opTraceIds.has(id))) {
+          opTargets.push({ id: id, expr: hm[0], table: hm[1].trim(), ptr: hm[2] });
+        }
+        const wrapped = "((globalThis.__lc=globalThis.__lc||[]),(globalThis.__lc[" + id +
+          "]=(globalThis.__lc[" + id + "]||0)+1)" + hotExpr + ",(" + cond + "))";
+        loopMeta.push({ id: id, at: j, head: "for(" + header.slice(0, 70) });
+        out += orchJs.slice(i, j + 1) + parts[0] + ";" + wrapped + ";" + parts[2] + ")";
+        i = k + 1;
+        continue;
+      }
+      out += orchJs.slice(i, k + 1);
+      i = k + 1;
+    }
+    orchJs = out;
+  }
+  // CF_OP_TRACE 第二遍：把目标循环的 switch(TABLE[PTR++]) 改写为记录版，
+  // 保留原求值与 PTR 自增副作用，限长写入 globalThis.__op<id>。
+  let opApplied = 0;
+  for (const target of opTargets) {
+    if (orchJs.split(target.expr).length - 1 !== 1) continue;
+    const rec = "switch((globalThis.__opTmp=" + target.table + "[" + target.ptr + "++]," +
+      "(globalThis.__op" + target.id + "=globalThis.__op" + target.id + "||[]).length<" +
+      opTraceLimit + "&&globalThis.__op" + target.id +
+      ".push(globalThis.__opTmp),globalThis.__opTmp))";
+    orchJs = orchJs.replace(target.expr, rec);
+    opApplied += 1;
+  }
+  if (opTargets.length) {
+    process.stderr.write("[diag] opTrace requested=" +
+      (opTraceAll ? "*" : Array.from(opTraceIds).join(",")) +
+      " applied=" + opApplied + " limit=" + opTraceLimit + "\n");
+  }
+  process.stderr.write("[diag] loopguard " + (orchJs === before ? "NOT-APPLIED" : "applied x" + loopId) +
+    " limit=" + limit + " loopcounters=" + loopMeta.length + "\n" +
+    loopMeta.slice(0, 8).map((m) => "  #" + m.id + " at " + m.at + " " + m.head).join("\n") + "\n");
+}
+
 // eb 状态机函数调用追踪（诊断）：j[Jx(1853)] 是 eb 提交状态机（case 8 构造 eb URL）
 // 记录调用次数与首参（program 串）——判断 Node 里 eb 链路为何未触发
 {
@@ -99,6 +233,17 @@ if (process.env.CF_DIAGNOSTICS === "1") {
 
 // 1. 加载补环境（code.js）
 require(path.join(__dirname, "code.js"));
+
+// 1.5 预执行脚本登记：页面 loader 会 appendChild(<script src=orchestrate>)，host-dom
+// 现在会真实发起加载并执行。run.js 在 step 5 已同步执行同一份 orchestrate，登记
+// 该 URL 让 host-dom 跳过二次执行（但保留 script.onload 时序——loader 的 onload
+// 负责 history.replaceState 恢复原 URL，与浏览器/ruyijs 一致）。
+let orchUrlEarly = "";
+try {
+  const lm = pageHtml.match(/a\.src\s*=\s*['"]([^'"]*orchestrate[^'"]*)['"]/);
+  if (lm) orchUrlEarly = new URL(lm[1], "https://www.psacard.com").href;
+} catch (e) { /* URL 解析失败则不登记 */ }
+global.__psaPreExecutedScripts = new Set(orchUrlEarly ? [orchUrlEarly] : []);
 
 // 2. 会话 cookie
 let initialCookie = cookieArg;
@@ -187,10 +332,33 @@ if (typeof global.__perfRecord === "function") {
 }
 
 // 5. 执行 orchestrate（求解主流程）
+//    document.currentScript：浏览器/ruyijs 里 orchestrate 由页面 loader 的
+//    <script src=...ray=...> 元素加载执行，执行期 currentScript 指向该元素
+//    （含 src/nonce）。run.js 直接 vm 执行等效脚本，需合成同构元素；否则挑战
+//    读 currentScript 得到 null（api_log 证据：Document.currentScript 47 次，
+//    解码窗口 45 次），键控流与环境期望不一致。
+let orchCurrentScript = null;
+try {
+  if (global.document && typeof global.document.createElement === "function") {
+    orchCurrentScript = global.document.createElement("script");
+    const lm2 = pageHtml.match(/a\.src\s*=\s*['"]([^'"]*orchestrate[^'"]*)['"]/);
+    if (lm2) {
+      try { orchCurrentScript.setAttribute("src", new URL(lm2[1], "https://www.psacard.com").href); }
+      catch (e) { orchCurrentScript.setAttribute("src", lm2[1]); }
+    }
+    const nm = pageHtml.match(/a\.nonce\s*=\s*['"]([^'"]+)['"]/);
+    if (nm) orchCurrentScript.nonce = nm[1];
+    global.document.currentScript = orchCurrentScript;
+  }
+} catch (e) { /* 合成失败不阻断 */ }
 try {
   vm.runInContext(orchJs, ctx, { filename: "orchestrate.js", timeout: 60000 });
 } catch (e) {
   errors.push({ stage: "orchestrate", message: String(e && e.message || e).slice(0, 200) });
+} finally {
+  try {
+    if (orchCurrentScript && global.document) global.document.currentScript = null;
+  } catch (e) {}
 }
 
 // 5.5 文档生命周期（2026-11-07 消变体对拍实测撤回）：ruyijs 引擎
@@ -355,6 +523,8 @@ function sameLeaseRead(out) {
 }
 
 // 轮询完成检测：500ms 间隔，clearance 出现或提交稳定 3s 即退出，30s 兜底
+// CF_STABLE_MS 可覆盖"提交静默"阈值（探测/诊断用）：挑战 FO 轮间有 ~5s 定时器
+//（PoW/Ot 回调），3s 静默会把正常的轮间等待误判为完成（2026-11-07 在线探测）。
 function pollSolve() {
   const responses = global.__patchResponses || [];
   const hasClearance = responses.some((r) => /cf_clearance/.test(String(r.setCookie || "")));
@@ -363,7 +533,8 @@ function pollSolve() {
   if (hasClearance || global.__captureHasClearance) return finishOutput();
   // capture 模式不用"提交静默 3s"早退：FO 轮间静默属正常（PoW/定时器驱动），
   // 且 submits 计数含 orchestrate GET，非完成信号。交由 clearance / deadline 收口。
-  if (!captureOnly && submits.length >= 2 && Date.now() - lastSubmitAt > 3000) return finishOutput();
+  const stableMs = Number(process.env.CF_STABLE_MS || 3000);
+  if (!captureOnly && submits.length >= 2 && Date.now() - lastSubmitAt > stableMs) return finishOutput();
   if (Date.now() > solveDeadline) return finishOutput();
   setTimeout(pollSolve, 500);
 }

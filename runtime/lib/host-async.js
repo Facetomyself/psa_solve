@@ -5,9 +5,25 @@
  */
 "use strict";
 
+const fs = require("fs");
 const vm = require("vm");
 const blobSources = new Map();
 const workerState = new WeakMap();
+
+// CF_WATCHDOG=1：定时器回调进入/退出同步打点（fd2 直写，extern kill 也不丢）。
+// 用途：定位同步挂死——最后一条 enter 没有对应 exit 即挂死回调。
+const WATCHDOG = process.env.CF_WATCHDOG === "1";
+let wdSeq = 0;
+function wdWrap(fn, kind) {
+  if (!WATCHDOG || typeof fn !== "function") return fn;
+  return function (...args) {
+    const seq = ++wdSeq;
+    fs.writeSync(2, "[wd] enter " + seq + " " + kind + "\n");
+    const t0 = Date.now();
+    try { return fn.apply(this, args); }
+    finally { fs.writeSync(2, "[wd] exit " + seq + " " + kind + " " + (Date.now() - t0) + "ms\n"); }
+  };
+}
 
 function blobText(blob) {
   const parts = blob && blob._parts;
@@ -171,9 +187,13 @@ function install(g) {
   // ---- 定时器（原生透传；orchestrate 用 setTimeout(fn, delay, ...args) 传上下文） ----
   {
     const origST = g.setTimeout;
-    g.setTimeout = function (...args) { return origST(...args); };
+    g.setTimeout = function (fn, delay, ...rest) {
+      return origST(wdWrap(fn, "setTimeout delay=" + String(delay)), delay, ...rest);
+    };
     const origSI = g.setInterval;
-    g.setInterval = function (...args) { return origSI(...args); };
+    g.setInterval = function (fn, delay, ...rest) {
+      return origSI(wdWrap(fn, "setInterval delay=" + String(delay)), delay, ...rest);
+    };
   }
   g.requestAnimationFrame = (cb) => setTimeout(() => cb(performance.now()), 16);
   g.cancelAnimationFrame = clearTimeout;

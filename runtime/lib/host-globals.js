@@ -68,7 +68,29 @@ function install(g, cfg) {
   };
 
   // ---- history ----
-  g.history = { replaceState: () => {}, pushState: () => {}, go: () => {}, back: () => {} };
+  // 浏览器语义（2026-11-07 补齐）：页面 loader 在 orchestrate 加载前执行
+  // history.replaceState(null,null,"/cert/...?__cf_chl_rt_tk=...")，随后
+  // script.onload 恢复原 URL。挑战解码窗口读 location×19；no-op 会让
+  // location.href/search 与引擎真值不一致。同源才允许改写（浏览器语义）。
+  function applyHistoryUrl(raw) {
+    if (raw == null) return;
+    try {
+      const next = new URL(String(raw), g.location.href || cfg.CF_TARGET_URL);
+      const origin = g.location.origin || cfg.TARGET.origin;
+      if (next.origin !== origin) return;
+      g.location.href = next.href;
+      g.location.pathname = next.pathname;
+      g.location.search = next.search;
+      g.location.hash = next.hash;
+    } catch (e) { /* 保持原 location */ }
+  }
+  g.history = {
+    replaceState: (state, title, url) => applyHistoryUrl(url),
+    pushState: (state, title, url) => applyHistoryUrl(url),
+    go: () => {},
+    back: () => {},
+    forward: () => {},
+  };
 
   // ---- navigator ----
   function gpuLimits() {
