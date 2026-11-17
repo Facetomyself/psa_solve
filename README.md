@@ -3,15 +3,18 @@
 目标：`https://www.psacard.com`（Cloudflare managed challenge，"Just a moment" 5s 盾）的求解与采集。
 
 **主线已生产化（ruyijs 引擎求解）**：`python scripts\demo6.py --solver ruyijs`——fresh-navigate 全链约 12s 到 cert readback，导出 `cf_clearance/__cf_bm` 给 curl_cffi（Firefox impersonate）同 IP+UA 复用，业务页 200。**clearance 跨引擎转移成立**（IP + UA 对齐即可）。
-Node 补环境线已定性为 capture-only 事实采集（不收敛根因见下）；静态 payload 组装链研究进行中。当前状态与分析总览：`docs/status-20261107.md`。
+Node 运行时补环境线已定性为 capture-only 事实采集（不收敛根因见 §3）；静态 payload 组装链已闭环，但每份材料仍需一次运行时捕获。候选优化 `--counters-rewrite` 已集成，但在 2026-11-08 的在线变体上 `templated 0/10`，全部按预案降级原生。当前状态与分析总览：`docs/status-20261107.md`；11-17 复核以本 README 状态表为准。
 
-## 当前状态（2026-11-07）
+## 当前状态（2026-11-17 复核）
 
-| 线 | 状态 | 一句话 |
+本轮只核对已落盘证据与状态文件，未重跑联网求解。
+
+| 线 | 状态 | 证据 |
 |---|---|---|
-| ruyijs 求解（主线） | **生产可用** | `runtime/solve_ruyijs.py`（独立 venv `D:\reverse_ENV\temp\ruyijs-test-env`，inner 0.2.2）；每解 ~12s；clearance 可跨引擎转移 |
-| Node 补环境求解 | 已定性，不作为完成门 | 同字节同插桩下死于 FO r1 后第二层 VM 的键控解码（调用方 f8 无界自旋），非"慢"；维持 RuyiTrace/对照事实采集定位 |
-| 静态 payload 组装 | **核心缺口已闭合** | v0 已隔离为离线加密器：纯 Node 零网络复现 FO r1 body（3,148B/7,042B 字节级相等）；剩 MZ 字段模板化（R2） |
+| ruyijs 求解（主线） | **已达成，生产可用** | `temp/acceptance-10wins.log`：13 次触发 / 10 次求解成功 / 0 失败；单次 12.2–13.3s 为主，均值 16.8s（两次 38s 抖动）；`certOk=true`，clearance 可导出复用 |
+| `--counters-rewrite`（可选优化） | **已集成，生产变体未命中** | 同轮验收 `mode` 全为 `templated-fallback`，`templated 0/10`；根因是第 5 种入口形态超出定位器覆盖，降级预案正常 |
+| Node 补环境求解 | **已定性，capture-only** | 同字节同插桩下死于 FO r1 后第二层 VM 键控解码：f8 第 4 次进入无界自旋（12,090,925 次 IW），非"慢" |
+| 静态 payload 组装 | **全链闭合（R1–R2c/P1/OV/OV2）** | 纯 Node 零网络复现 FO r1 body（3,148B/7,042B 字节级相等）；MZ call1 24/24 + call2 62/62；模板 body 被 FO 层接受并串到 clearance 200 |
 
 ## 核心结论（实验证据）
 
@@ -71,6 +74,22 @@ env `PSA_COUNTERS_TEMPLATE=<json 路径>` 覆盖。
 
 要求：ruyijs 独立 venv（`D:\reverse_ENV\temp\ruyijs-test-env`，不装 repo `.venv`）。
 
+### 验收与自检
+
+```powershell
+# 1) 依赖与求解器可导入
+D:\reverse_ENV\temp\ruyijs-test-env\Scripts\python.exe -c "import ruyijs; print('ruyijs ok')"
+
+# 2) 单次生产形态（约 12-15s）
+python scripts\demo6.py --max-solves 1
+
+# 3) 批量验收：看成功率和 mode 分布
+python scripts\demo6.py --max-solves 10 --counters-rewrite
+```
+
+判据：日志出现 `certOk=True` 且 `clearance 已收集`；批量跑最后一行给出 `mode` 分布。
+`templated 0/N` 不是求解失败，只说明当日变体触发了降级。
+
 ### Node 桥（capture-only，诊断用）
 
 ```powershell
@@ -111,17 +130,21 @@ Windows Clash TUN 对 gateway 3010 明文 CONNECT 系统性挂起——必须走
 
 - ruyijs 0.2.2 有 document 切换竞态缺陷（advance 抛 JSError 但 context 存活，调用方容错继续泵；详见 docs/ruyijs-0.2.2-document-swap-race.md）
 - Node 求解不收敛是结构性的（键控流分歧在宿主读数值级，无 ground truth 不闭合），不再作为完成门
-- 静态链：v0 加密器已离线复现（R1 完成）；剩余 R2 = MZ 24 键字段值来源模板化；D 类闭包键的跨变体稳定性未验证；turnstile widget 自有脚本（api.js/rch）载荷未覆盖（5,260B body 归属，独立 alphabet 实例）
+- `--counters-rewrite` 的模板化只在历史 4 份材料上全过；2026-11-08 在线变体为第 5 种入口形态（逗号组合声明 + dispatcher 间接调用 + 793B 精简体），定位器未覆盖，生产上始终走降级。这是当前唯一影响 `templated` 命中率的缺口
+- 静态链：v0 加密器已离线复现（R1 完成）；MZ/R2 系列与 E2E/OV/OV2 已闭；严格重生成 s268/s334 仍需 R3 级语义恢复，当前按"每材料一捕"运行
+- turnstile widget 自有脚本（api.js/rch）载荷未覆盖（5,260B body 归属，独立 alphabet 实例）
 - 行为指纹字段（性能基准/时间戳）为 Node 真实值而非浏览器值——收紧期可能成为下一变量
-- `web_case.py next` 调度器当前因 facts 键（ruyijsLiveEmit）版本不匹配崩溃（工作区 HEAD 版 web_case.py 落后于 contracts）
+- 调度事实与工程证据存在版本差：`contracts/auto-decision-facts.json` 仍记录 `challengePhase=stuck`、`serverAccepted=false`，因此 `schedule.py next` 返回 `hold_challenge/blocked`；这不代表求解能力回退，需要回填 facts 才能解除空转
+- 历史记录里"`web_case.py next` 因 `ruyijsLiveEmit` 崩溃"的条目已过时；2026-11-17 实测 `skill/reverse-coordinator/scripts/schedule.py next --task ...` 可正常返回
 
 ## 文档地图
 
 | 文档 | 角色 |
 |---|---|
-| `docs/status-20261107.md` | 当前状态与分析总览（先读这个） |
+| `docs/status-20261107.md` | 2026-11-07 权威状态快照（11-17 复核见本 README 状态表） |
 | `补环境进展清单.md` | 时间线流水（新条目在顶部） |
 | `analysis-progress.md` | 历史证据链（2026-09~11） |
 | `docs/web/index.md` | web-reverse 流程状态索引 |
+| `docs/web/ruyijs-process.md` | 2026-11-02 ruyijs 调度主线记录（历史） |
 | `triage.md` / `report.md` / `findings.json` | case 流程文件（10-05 快照，头部有更新注记） |
 | `archive/20261107/` | 已归档过时文档 |

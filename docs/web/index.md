@@ -17,6 +17,14 @@ Read only the files in `web_case.py next` → `docs.read`. Use this index for cu
 | experiments.md | named rejected route only |
 | index.md | current status only |
 
+## 2026-11-17 复核（人工）
+
+- 工程主线：ruyijs 求解已生产可用——`scripts/demo6.py --solver ruyijs` fresh-navigate 约 12s 到 cert readback，导出 clearance 给 curl_cffi（Firefox）同 IP+UA 复用，业务页 200。
+- 验收：`temp/acceptance-10wins.log` 记录 13 触发 / 10 解 / 0 失败，均值 16.8s；`--counters-rewrite` 全部 `templated-fallback`，`templated 0/10`。
+- Node 运行时求解：capture-only，已不作为完成门（根因见 `../../docs/status-20261107.md` §3）。
+- 静态 payload 链：R1–R2c/P1/OV/OV2 全闭；每份材料仍需一次运行时捕获。
+- 机器契约仍未回填：`web-case.json` 状态 `patching`、`contracts/auto-decision-facts.json` 的 `challengePhase=stuck`，所以 `schedule.py next` 返回 `hold_challenge/blocked`。这是记账滞后，不是求解回退。
+
 ## Current State
 
 - 2026-11-07：**状态迁移（权威总览见 `../../docs/status-20261107.md`）**。ruyijs 线已生产化（fresh-navigate ~12s 全链到 cert readback；clearance 导出给 curl_cffi 同 IP+UA 复用 → 业务 200），workspace.json 的 hold_challenge/patching 状态未同步（调度器 `web_case.py next` 因 facts 键 ruyijsLiveEmit 版本不匹配崩溃）。Node 桥定性为 capture-only：消变体同字节下 FO r1 后第二层键控解码不收敛（调用方 f8 无界自旋，非慢），不再作为完成门；10-23 及以前的 form.submit/blocker 记录属旧路线，被 11-07 变体轮换实锤重新定性（跨会话材料不可混用）。静态 payload 链：FO r1 body = 明文对象 → v0 内部加密 → 自定义 base64；alphabet 可静态提取；CfReverse LZ 配方不适用。诊断产物 `diagnostics/atob-diff-20261107/`。
@@ -24,7 +32,7 @@ Read only the files in `web_case.py next` → `docs.read`. Use this index for cu
 - 2026-10-21：同一改动的前一回 `c9e876f152f046e483ce6d7c89228cba` 在 helper 里扫描整段空白，慢脚本落在 helper 第 830 行，已收成只看首尾。更早的 `d05075ea12b04dc29246d5ecd148db78` 仍是源文件外第 1337364 列。scope 都没变。完成轴没有写。
 - 2026-10-20：探针记为 `boundary-unchanged`。11:48Z 两次新鲜 Node 重跑没有证书 document POST，同租约读回仍是 403 挑战页。完成轴保持 false。见 `diagnostics/shadowroot-repair-20261020/node-rerun-receipt.json`。
 - 2026-10-20：两次新鲜 Node 求解都没有证书 document POST，同租约读回仍是挑战页。`serverAccepted` 保持 false。见 `agent-notes/20261020-node-solver-sessions.md`。
-- Case status: `patching`
+- Case status: `patching`（机器契约；工程主线条目见上方 2026-11-17 复核）
 - Current stage: `environment-patch`
 - Current hypothesis: 分叉位于顶层 clearance FO response → DOM branch。旧有头样本创建 form 并提交；本轮本地转到排障 DOM。3488/3792 只是长度标签，不能作为通过判据或根因。
 - Exit criterion for this stage: 同一会话业务页 readback 200，再写 `serverAccepted`。
@@ -53,6 +61,8 @@ Read only the files in `web_case.py next` → `docs.read`. Use this index for cu
 - Scope: 不执行 orchestrate 字符串表或 VM opcode，不以第二份脚本完整性为前提；Worker 旧零计数仅限被观察域。真实清理基线、能力快照、response→DOM 因果 live receipt 均已完成；因果链仍无 form/submit。
 
 ## Next Minimal Action
+
+> 2026-11-17：以下内容属 Node 补环境旧线，不作为 ruyijs 主线下一步；当前下一步见上方复核段。
 
 - Action: `refuse_host_enumeration`。causal-observer receipt 仍是 `executed-hold`，这是已有证据，不是任务次数上限。链已 `complete-to-diagnostic`，不恢复相邻字段搜索，不写 `serverAccepted`。
 - Required evidence: 同一外部宿主缺口的 browser-fact receipt，然后 `environmentPatchGate` 才能 ready；请求边界要到 cert document；独立 readback 200 之后才写 `serverAccepted`。这四项现在都缺。已有受限因果分类不能当业务通过。
