@@ -10,7 +10,7 @@
   },
   "goal": "先用 ruyijs 完成 PSA managed challenge 求解：同一 fresh 输入与 session 下由 ruyijs 自然完成请求响应、目标提交、parity 及约 5 秒后同 lease 独立业务 readback 200。浏览器仅作行为 oracle。纯 Node 补环境作为后续扩展，不作为本分支完成门。按 web-reverse dispatcher 推进，不以浏览器成功替代 ruyijs 完成。",
   "next": "hold_challenge",
-  "updatedAt": "2026-11-02T21:59:15Z",
+  "updatedAt": "2026-11-17T13:52:40Z",
   "known": {
     "caseId": "psa-cf-5s-shield-20260815",
     "caseFile": "D:\\reverse_ENV\\workspace\\psa_solve\\web-case.json",
@@ -1342,10 +1342,10 @@
       "receipts": "contracts/receipts.json",
       "planner": "evidence/planner/c13aa134cb5a2168d544982472d0a311.json"
     },
-    "decisionId": "1dedebe04ef8d1c9cab8240da13cfad5",
-    "decisionKey": "9006284fb7a5bdb7241ad3a94e61e2093b770d13785120725cb1c66d4f138c42",
+    "decisionId": "9ec5a2641f0c0ef1d982625ece0d950f",
+    "decisionKey": "776b59bc95ce15922cc25c423e1a9235286ea6f091faf194e0cdc231d74afe74",
     "inputDigest": "9e1590b03d9534df7dfd7e80c5eb2c6814fe3bcd682020518e1eaa499cbec52f",
-    "sessionId": "01a19ac1-28c9-7f60-bb3a-4af694731647"
+    "sessionId": null
   },
   "legacyDispatch": {
     "action": "ruyijs_parameter_analysis",
@@ -1406,6 +1406,6 @@
     "handle": "01a19ac1-28c9-7f60-bb3a-4af694731647-planner-c13aa134",
     "evidence": "evidence/planner/c13aa134cb5a2168d544982472d0a311.json"
   },
-  "dispatcherDecisionId": "1dedebe04ef8d1c9cab8240da13cfad5",
-  "dispatcherSessionId": "01a19ac1-28c9-7f60-bb3a-4af694731647"
+  "dispatcherDecisionId": "9ec5a2641f0c0ef1d982625ece0d950f",
+  "dispatcherInputDigest": "9e1590b03d9534df7dfd7e80c5eb2c6814fe3bcd682020518e1eaa499cbec52f"
 }

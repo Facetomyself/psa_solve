@@ -5,7 +5,7 @@
   "action": "hold_challenge",
   "turnGate": "blocked",
   "humanRequired": false,
-  "updatedAt": "2026-11-02T21:59:15Z",
-  "sessionId": "01a19ac1-28c9-7f60-bb3a-4af694731647",
-  "decisionId": "1dedebe04ef8d1c9cab8240da13cfad5"
+  "updatedAt": "2026-11-17T13:52:40Z",
+  "decisionId": "9ec5a2641f0c0ef1d982625ece0d950f",
+  "inputDigest": "9e1590b03d9534df7dfd7e80c5eb2c6814fe3bcd682020518e1eaa499cbec52f"
 }
